@@ -1,0 +1,8 @@
+<seelog>
+	<outputs formatid="common">
+		<file path="log.log" />
+	</outputs>
+    <formats>
+        <format id="common" format="%Date/%Time [%LEV] %Msg%n" />
+    </formats>
+</seelog>

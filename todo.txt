@@ -1,0 +1,19 @@
+- ignored articles
+- check where to use pointers
+- add indexes to db
+- logging
+- tests
+- duration etc
+- auth
+- add album count to genres
+- improve scanner
+- image resizing
+- albums by genre fix
+- transcoding
+- scheduling
+- https://golang.org/pkg/sync/#Pool
+- Fix ping XML
+- Interface with beets
+- Deploy to web server
+- Web UI
+- Db tests with docker??

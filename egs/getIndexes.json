@@ -1,0 +1,4049 @@
+{
+    "subsonic-response": {
+        "status": "ok",
+        "version": "1.15.0",
+        "indexes": {
+            "lastModified": 1536837105000,
+            "ignoredArticles": "The El La Los Las Le Les",
+            "index": [
+                {
+                    "name": "A",
+                    "artist": [
+                        {
+                            "id": "48",
+                            "name": "The A.K.s"
+                        },
+                        {
+                            "id": "756",
+                            "name": "ABBA"
+                        },
+                        {
+                            "id": "280",
+                            "name": "Abe Kaoru"
+                        },
+                        {
+                            "id": "759",
+                            "name": "The Abyssinians"
+                        },
+                        {
+                            "id": "481",
+                            "name": "Adele"
+                        },
+                        {
+                            "id": "354",
+                            "name": "Aerosmith"
+                        },
+                        {
+                            "id": "676",
+                            "name": "The Ahmad Jamal Trio"
+                        },
+                        {
+                            "id": "9",
+                            "name": "Ahmed Abdul-Malik"
+                        },
+                        {
+                            "id": "942",
+                            "name": "Aimee Mann"
+                        },
+                        {
+                            "id": "10",
+                            "name": "Air"
+                        },
+                        {
+                            "id": "102",
+                            "name": "Akron_Family"
+                        },
+                        {
+                            "id": "482",
+                            "name": "Alabama 3"
+                        },
+                        {
+                            "id": "718",
+                            "name": "Alanis Morissette"
+                        },
+                        {
+                            "id": "355",
+                            "name": "Albert King"
+                        },
+                        {
+                            "id": "938",
+                            "name": "Alexi Murdoch"
+                        },
+                        {
+                            "id": "749",
+                            "name": "Al Green"
+                        },
+                        {
+                            "id": "356",
+                            "name": "Alice Cooper"
+                        },
+                        {
+                            "id": "688",
+                            "name": "All India Radio"
+                        },
+                        {
+                            "id": "442",
+                            "name": "The Allman Brothers Band"
+                        },
+                        {
+                            "id": "223",
+                            "name": "Aloe Blacc"
+                        },
+                        {
+                            "id": "637",
+                            "name": "Alpha Male Tea Party"
+                        },
+                        {
+                            "id": "139",
+                            "name": "alt-J"
+                        },
+                        {
+                            "id": "831",
+                            "name": "America"
+                        },
+                        {
+                            "id": "939",
+                            "name": "Ameriie"
+                        },
+                        {
+                            "id": "407",
+                            "name": "Amy Winehouse"
+                        },
+                        {
+                            "id": "225",
+                            "name": "Andrew Hale"
+                        },
+                        {
+                            "id": "719",
+                            "name": "Andrew Jackson Jihad"
+                        },
+                        {
+                            "id": "357",
+                            "name": "Andrew W.K_"
+                        },
+                        {
+                            "id": "931",
+                            "name": "Animal Collective"
+                        },
+                        {
+                            "id": "358",
+                            "name": "Annie"
+                        },
+                        {
+                            "id": "301",
+                            "name": "The Antlers"
+                        },
+                        {
+                            "id": "127",
+                            "name": "Antônio Carlos Jobim"
+                        },
+                        {
+                            "id": "270",
+                            "name": "Antonio Sánchez"
+                        },
+                        {
+                            "id": "224",
+                            "name": "Antony and the Johnsons"
+                        },
+                        {
+                            "id": "7",
+                            "name": "Aphex Twin"
+                        },
+                        {
+                            "id": "908",
+                            "name": "Aphrodite's Child"
+                        },
+                        {
+                            "id": "274",
+                            "name": "Arcade Fire"
+                        },
+                        {
+                            "id": "686",
+                            "name": "Arctic Monkeys"
+                        },
+                        {
+                            "id": "746",
+                            "name": "Aretha Franklin"
+                        },
+                        {
+                            "id": "616",
+                            "name": "Ariel Pink"
+                        },
+                        {
+                            "id": "32268",
+                            "name": "Ariel Pink's Haunted Graffiti"
+                        },
+                        {
+                            "id": "32266",
+                            "name": "Ariel Pink With Added Pizzazz"
+                        },
+                        {
+                            "id": "787",
+                            "name": "Ariel Pink’s Haunted Graffiti"
+                        },
+                        {
+                            "id": "173",
+                            "name": "Arnold Schönberg"
+                        },
+                        {
+                            "id": "152",
+                            "name": "Arrested Development"
+                        },
+                        {
+                            "id": "812",
+                            "name": "Art Blakey & The Jazz Messengers"
+                        },
+                        {
+                            "id": "832",
+                            "name": "Arthur Lee"
+                        },
+                        {
+                            "id": "389",
+                            "name": "Arthur Lee & Love"
+                        },
+                        {
+                            "id": "111",
+                            "name": "The Asteroids Galaxy Tour"
+                        },
+                        {
+                            "id": "785",
+                            "name": "Atomic Kitten"
+                        },
+                        {
+                            "id": "568",
+                            "name": "Atoms for Peace"
+                        },
+                        {
+                            "id": "390",
+                            "name": "A Tribe Called Quest"
+                        },
+                        {
+                            "id": "391",
+                            "name": "At the Drive‐In"
+                        },
+                        {
+                            "id": "260",
+                            "name": "The Avalanches"
+                        },
+                        {
+                            "id": "359",
+                            "name": "Awesome New Republic"
+                        },
+                        {
+                            "id": "863",
+                            "name": "Aydio"
+                        }
+                    ]
+                },
+                {
+                    "name": "B",
+                    "artist": [
+                        {
+                            "id": "130",
+                            "name": "The B‐52s"
+                        },
+                        {
+                            "id": "803",
+                            "name": "Baby Huey"
+                        },
+                        {
+                            "id": "69",
+                            "name": "Babylon Zoo"
+                        },
+                        {
+                            "id": "837",
+                            "name": "BADBADNOTGOOD"
+                        },
+                        {
+                            "id": "453",
+                            "name": "Badly Drawn Boy"
+                        },
+                        {
+                            "id": "31909",
+                            "name": "Balam Acab"
+                        },
+                        {
+                            "id": "649",
+                            "name": "Balmorhea"
+                        },
+                        {
+                            "id": "804",
+                            "name": "The Band"
+                        },
+                        {
+                            "id": "575",
+                            "name": "Baroness"
+                        },
+                        {
+                            "id": "636",
+                            "name": "Barry White"
+                        },
+                        {
+                            "id": "291",
+                            "name": "The Baseballs"
+                        },
+                        {
+                            "id": "25",
+                            "name": "Basement Jaxx"
+                        },
+                        {
+                            "id": "103",
+                            "name": "Bastille"
+                        },
+                        {
+                            "id": "515",
+                            "name": "Battles"
+                        },
+                        {
+                            "id": "403",
+                            "name": "The Beach Boys"
+                        },
+                        {
+                            "id": "70",
+                            "name": "Beach House"
+                        },
+                        {
+                            "id": "27",
+                            "name": "Beastie Boys"
+                        },
+                        {
+                            "id": "302",
+                            "name": "The Beatles"
+                        },
+                        {
+                            "id": "235",
+                            "name": "The Beau Brummels"
+                        },
+                        {
+                            "id": "112",
+                            "name": "The Beautiful South"
+                        },
+                        {
+                            "id": "527",
+                            "name": "Beck"
+                        },
+                        {
+                            "id": "516",
+                            "name": "Bee Gees"
+                        },
+                        {
+                            "id": "670",
+                            "name": "The Bees"
+                        },
+                        {
+                            "id": "313",
+                            "name": "Beirut"
+                        },
+                        {
+                            "id": "871",
+                            "name": "Belle and Sebastian"
+                        },
+                        {
+                            "id": "579",
+                            "name": "Bernard Herrmann"
+                        },
+                        {
+                            "id": "315",
+                            "name": "Bert Jansch"
+                        },
+                        {
+                            "id": "833",
+                            "name": "Best Coast"
+                        },
+                        {
+                            "id": "236",
+                            "name": "The Beta Band"
+                        },
+                        {
+                            "id": "20",
+                            "name": "Beyoncé"
+                        },
+                        {
+                            "id": "519",
+                            "name": "Bhangra Knights vs. Husan"
+                        },
+                        {
+                            "id": "186",
+                            "name": "Bhi Bhiman"
+                        },
+                        {
+                            "id": "665",
+                            "name": "Bidziliba"
+                        },
+                        {
+                            "id": "539",
+                            "name": "Big Black"
+                        },
+                        {
+                            "id": "494",
+                            "name": "Big Boi"
+                        },
+                        {
+                            "id": "629",
+                            "name": "Big Brother & The Holding Company"
+                        },
+                        {
+                            "id": "304",
+                            "name": "Big Thief"
+                        },
+                        {
+                            "id": "505",
+                            "name": "Bikini Kill"
+                        },
+                        {
+                            "id": "16",
+                            "name": "Bill Brewster"
+                        },
+                        {
+                            "id": "187",
+                            "name": "Bill Evans Trio"
+                        },
+                        {
+                            "id": "454",
+                            "name": "Bill Withers"
+                        },
+                        {
+                            "id": "577",
+                            "name": "Billy Idol"
+                        },
+                        {
+                            "id": "188",
+                            "name": "Billy Joe Royal"
+                        },
+                        {
+                            "id": "3",
+                            "name": "Björk"
+                        },
+                        {
+                            "id": "113",
+                            "name": "The Black Eyed Peas"
+                        },
+                        {
+                            "id": "898",
+                            "name": "Black Flag"
+                        },
+                        {
+                            "id": "420",
+                            "name": "The Black Keys"
+                        },
+                        {
+                            "id": "455",
+                            "name": "Black Kids"
+                        },
+                        {
+                            "id": "138",
+                            "name": "Black Moth Super Rainbow"
+                        },
+                        {
+                            "id": "742",
+                            "name": "Bleached"
+                        },
+                        {
+                            "id": "576",
+                            "name": "Blind Willie Johnson"
+                        },
+                        {
+                            "id": "316",
+                            "name": "Blondie vs. The Doors"
+                        },
+                        {
+                            "id": "71",
+                            "name": "Bloodhound Gang"
+                        },
+                        {
+                            "id": "114",
+                            "name": "The Blue Nile"
+                        },
+                        {
+                            "id": "765",
+                            "name": "Blur"
+                        },
+                        {
+                            "id": "144",
+                            "name": "Boards of Canada"
+                        },
+                        {
+                            "id": "18",
+                            "name": "Bob Dylan"
+                        },
+                        {
+                            "id": "902",
+                            "name": "Bob Marley & The Wailers"
+                        },
+                        {
+                            "id": "153",
+                            "name": "Bone Thugs‐n‐Harmony"
+                        },
+                        {
+                            "id": "891",
+                            "name": "Bon Iver"
+                        },
+                        {
+                            "id": "656",
+                            "name": "Bon Jovi"
+                        },
+                        {
+                            "id": "131",
+                            "name": "Bonobo"
+                        },
+                        {
+                            "id": "177",
+                            "name": "The Books"
+                        },
+                        {
+                            "id": "317",
+                            "name": "Bootsy Collins"
+                        },
+                        {
+                            "id": "318",
+                            "name": "Boredoms"
+                        },
+                        {
+                            "id": "901",
+                            "name": "Boris"
+                        },
+                        {
+                            "id": "189",
+                            "name": "Brad Mehldau Trio"
+                        },
+                        {
+                            "id": "430",
+                            "name": "Brand New"
+                        },
+                        {
+                            "id": "682",
+                            "name": "Brian Eno"
+                        },
+                        {
+                            "id": "595",
+                            "name": "The Brian Jonestown Massacre"
+                        },
+                        {
+                            "id": "483",
+                            "name": "Brian Wilson"
+                        },
+                        {
+                            "id": "534",
+                            "name": "Bright Eyes"
+                        },
+                        {
+                            "id": "31790",
+                            "name": "Bring Me the Horizon"
+                        },
+                        {
+                            "id": "860",
+                            "name": "Broken Social Scene"
+                        },
+                        {
+                            "id": "731",
+                            "name": "The Brothers & Sisters"
+                        },
+                        {
+                            "id": "881",
+                            "name": "The Brothers Johnson"
+                        },
+                        {
+                            "id": "72",
+                            "name": "Bruce Springsteen"
+                        },
+                        {
+                            "id": "190",
+                            "name": "Bryan Adams"
+                        },
+                        {
+                            "id": "73",
+                            "name": "Bryan Ferry"
+                        },
+                        {
+                            "id": "626",
+                            "name": "Buddy Holly & The Crickets"
+                        },
+                        {
+                            "id": "29",
+                            "name": "Buddy Rich"
+                        },
+                        {
+                            "id": "191",
+                            "name": "Buena Vista Social Club"
+                        },
+                        {
+                            "id": "299",
+                            "name": "Bullion"
+                        },
+                        {
+                            "id": "30",
+                            "name": "Burial"
+                        },
+                        {
+                            "id": "272",
+                            "name": "Busdriver"
+                        },
+                        {
+                            "id": "586",
+                            "name": "Buzzcocks"
+                        },
+                        {
+                            "id": "115",
+                            "name": "The Byrds"
+                        }
+                    ]
+                },
+                {
+                    "name": "C",
+                    "artist": [
+                        {
+                            "id": "544",
+                            "name": "C418"
+                        },
+                        {
+                            "id": "617",
+                            "name": "The C90s"
+                        },
+                        {
+                            "id": "909",
+                            "name": "Calvin Harris"
+                        },
+                        {
+                            "id": "523",
+                            "name": "Can"
+                        },
+                        {
+                            "id": "921",
+                            "name": "Cannonball Adderley"
+                        },
+                        {
+                            "id": "456",
+                            "name": "Captain Beefheart"
+                        },
+                        {
+                            "id": "521",
+                            "name": "Captain Beefheart & His Magic Band"
+                        },
+                        {
+                            "id": "802",
+                            "name": "Captain Murphy"
+                        },
+                        {
+                            "id": "952",
+                            "name": "The Cardigans"
+                        },
+                        {
+                            "id": "281",
+                            "name": "Caribou"
+                        },
+                        {
+                            "id": "360",
+                            "name": "Carole King"
+                        },
+                        {
+                            "id": "457",
+                            "name": "Casiopea"
+                        },
+                        {
+                            "id": "283",
+                            "name": "Casiotone for the Painfully Alone"
+                        },
+                        {
+                            "id": "829",
+                            "name": "The Castaways"
+                        },
+                        {
+                            "id": "660",
+                            "name": "Cat Power"
+                        },
+                        {
+                            "id": "74",
+                            "name": "Cat Stevens"
+                        },
+                        {
+                            "id": "572",
+                            "name": "Chad VanGaalen"
+                        },
+                        {
+                            "id": "801",
+                            "name": "Chance the Rapper"
+                        },
+                        {
+                            "id": "775",
+                            "name": "Charles Mingus"
+                        },
+                        {
+                            "id": "583",
+                            "name": "Charlie Parker"
+                        },
+                        {
+                            "id": "259",
+                            "name": "Charlotte Gainsbourg"
+                        },
+                        {
+                            "id": "24",
+                            "name": "The Chemical Brothers"
+                        },
+                        {
+                            "id": "22",
+                            "name": "Childish Gambino"
+                        },
+                        {
+                            "id": "524",
+                            "name": "Chris Brown"
+                        },
+                        {
+                            "id": "761",
+                            "name": "Chris Cornell"
+                        },
+                        {
+                            "id": "303",
+                            "name": "Chris Isaak"
+                        },
+                        {
+                            "id": "821",
+                            "name": "Christina Rosenvinge"
+                        },
+                        {
+                            "id": "935",
+                            "name": "Christine and the Queens"
+                        },
+                        {
+                            "id": "537",
+                            "name": "Christopher Young"
+                        },
+                        {
+                            "id": "903",
+                            "name": "Chromatics"
+                        },
+                        {
+                            "id": "940",
+                            "name": "Chromeo"
+                        },
+                        {
+                            "id": "401",
+                            "name": "Chuck Berry"
+                        },
+                        {
+                            "id": "116",
+                            "name": "The Church"
+                        },
+                        {
+                            "id": "31",
+                            "name": "CHVRCHΞS"
+                        },
+                        {
+                            "id": "253",
+                            "name": "The Cinematic Orchestra"
+                        },
+                        {
+                            "id": "859",
+                            "name": "The City"
+                        },
+                        {
+                            "id": "104",
+                            "name": "Civil Twilight"
+                        },
+                        {
+                            "id": "443",
+                            "name": "The Clash"
+                        },
+                        {
+                            "id": "77",
+                            "name": "Claude Debussy; Jean‐Yves Thibaudet"
+                        },
+                        {
+                            "id": "689",
+                            "name": "Claude Debussy; Pascal Rogé"
+                        },
+                        {
+                            "id": "571",
+                            "name": "The Click Five"
+                        },
+                        {
+                            "id": "941",
+                            "name": "Cliff Martinez"
+                        },
+                        {
+                            "id": "484",
+                            "name": "Clint Mansell feat. Kronos Quartet"
+                        },
+                        {
+                            "id": "31913",
+                            "name": "Clipse"
+                        },
+                        {
+                            "id": "600",
+                            "name": "Coconut Records"
+                        },
+                        {
+                            "id": "265",
+                            "name": "Coldplay"
+                        },
+                        {
+                            "id": "286",
+                            "name": "The Comfortable Chair"
+                        },
+                        {
+                            "id": "780",
+                            "name": "Common"
+                        },
+                        {
+                            "id": "526",
+                            "name": "Compilations"
+                        },
+                        {
+                            "id": "61",
+                            "name": "The Congos"
+                        },
+                        {
+                            "id": "805",
+                            "name": "Connan Mockasin"
+                        },
+                        {
+                            "id": "319",
+                            "name": "Coolio"
+                        },
+                        {
+                            "id": "320",
+                            "name": "Cornershop"
+                        },
+                        {
+                            "id": "75",
+                            "name": "Count Five"
+                        },
+                        {
+                            "id": "958",
+                            "name": "Courtney Barnett"
+                        },
+                        {
+                            "id": "305",
+                            "name": "Courtney Barnett & Kurt Vile"
+                        },
+                        {
+                            "id": "663",
+                            "name": "The Cramps"
+                        },
+                        {
+                            "id": "953",
+                            "name": "The Cranberries"
+                        },
+                        {
+                            "id": "106",
+                            "name": "Crazy Town"
+                        },
+                        {
+                            "id": "814",
+                            "name": "Cream"
+                        },
+                        {
+                            "id": "924",
+                            "name": "Creedence Clearwater Revival"
+                        },
+                        {
+                            "id": "192",
+                            "name": "Crosby, Stills, Nash & Young"
+                        },
+                        {
+                            "id": "321",
+                            "name": "Crosby, Stills & Nash"
+                        },
+                        {
+                            "id": "216",
+                            "name": "The Cure"
+                        },
+                        {
+                            "id": "458",
+                            "name": "Curtis Mayfield"
+                        },
+                        {
+                            "id": "451",
+                            "name": "Cut Killer"
+                        },
+                        {
+                            "id": "193",
+                            "name": "Cypress Hill"
+                        }
+                    ]
+                },
+                {
+                    "name": "D",
+                    "artist": [
+                        {
+                            "id": "915",
+                            "name": "Daft Punk"
+                        },
+                        {
+                            "id": "770",
+                            "name": "Damien Rice"
+                        },
+                        {
+                            "id": "794",
+                            "name": "Danger Mouse"
+                        },
+                        {
+                            "id": "322",
+                            "name": "Danger Mouse & Daniele Luppi"
+                        },
+                        {
+                            "id": "680",
+                            "name": "Daniel Johnston"
+                        },
+                        {
+                            "id": "657",
+                            "name": "Danny Elfman"
+                        },
+                        {
+                            "id": "919",
+                            "name": "Daphni"
+                        },
+                        {
+                            "id": "954",
+                            "name": "The Darkness"
+                        },
+                        {
+                            "id": "248",
+                            "name": "The Dave Brubeck Quartet"
+                        },
+                        {
+                            "id": "694",
+                            "name": "David Bowie"
+                        },
+                        {
+                            "id": "323",
+                            "name": "David Byrne"
+                        },
+                        {
+                            "id": "662",
+                            "name": "David Gray"
+                        },
+                        {
+                            "id": "551",
+                            "name": "Dead Kennedys"
+                        },
+                        {
+                            "id": "684",
+                            "name": "deadmau5"
+                        },
+                        {
+                            "id": "287",
+                            "name": "Death Cab for Cutie"
+                        },
+                        {
+                            "id": "76",
+                            "name": "Death From Above"
+                        },
+                        {
+                            "id": "414",
+                            "name": "Death From Above 1979"
+                        },
+                        {
+                            "id": "750",
+                            "name": "Death Grips"
+                        },
+                        {
+                            "id": "237",
+                            "name": "The Decemberists"
+                        },
+                        {
+                            "id": "620",
+                            "name": "Deep Purple"
+                        },
+                        {
+                            "id": "194",
+                            "name": "Deerhoof"
+                        },
+                        {
+                            "id": "271",
+                            "name": "Dela"
+                        },
+                        {
+                            "id": "633",
+                            "name": "De La Soul"
+                        },
+                        {
+                            "id": "195",
+                            "name": "Dennis Wilson"
+                        },
+                        {
+                            "id": "818",
+                            "name": "Derek and the Dominos"
+                        },
+                        {
+                            "id": "217",
+                            "name": "The Desert Sessions"
+                        },
+                        {
+                            "id": "691",
+                            "name": "Devendra Banhart"
+                        },
+                        {
+                            "id": "252",
+                            "name": "DEVO"
+                        },
+                        {
+                            "id": "324",
+                            "name": "Digitalism"
+                        },
+                        {
+                            "id": "764",
+                            "name": "Dire Straits"
+                        },
+                        {
+                            "id": "393",
+                            "name": "The Dismemberment Plan"
+                        },
+                        {
+                            "id": "622",
+                            "name": "The Divine Comedy"
+                        },
+                        {
+                            "id": "536",
+                            "name": "Dizzee Rascal"
+                        },
+                        {
+                            "id": "879",
+                            "name": "Dizzy Gillespie"
+                        },
+                        {
+                            "id": "13",
+                            "name": "Django Django"
+                        },
+                        {
+                            "id": "432",
+                            "name": "DJ Jazzy Jeff & The Fresh Prince"
+                        },
+                        {
+                            "id": "196",
+                            "name": "DJ Shadow"
+                        },
+                        {
+                            "id": "911",
+                            "name": "DNA"
+                        },
+                        {
+                            "id": "530",
+                            "name": "DNA feat. Suzanne Vega"
+                        },
+                        {
+                            "id": "955",
+                            "name": "The Dodos"
+                        },
+                        {
+                            "id": "553",
+                            "name": "Donald Byrd"
+                        },
+                        {
+                            "id": "197",
+                            "name": "Donald Fagen"
+                        },
+                        {
+                            "id": "644",
+                            "name": "Don Ellis"
+                        },
+                        {
+                            "id": "886",
+                            "name": "The Doobie Brothers"
+                        },
+                        {
+                            "id": "19",
+                            "name": "The Doors"
+                        },
+                        {
+                            "id": "813",
+                            "name": "Dr. Dre"
+                        },
+                        {
+                            "id": "34",
+                            "name": "Dr. John"
+                        },
+                        {
+                            "id": "35",
+                            "name": "Drake"
+                        },
+                        {
+                            "id": "154",
+                            "name": "Dudley Moore"
+                        },
+                        {
+                            "id": "640",
+                            "name": "Duffy"
+                        },
+                        {
+                            "id": "632",
+                            "name": "Duke Ellington & John Coltrane"
+                        },
+                        {
+                            "id": "892",
+                            "name": "The Dukes of Stratosphear"
+                        },
+                        {
+                            "id": "570",
+                            "name": "Dum Dum Girls"
+                        },
+                        {
+                            "id": "956",
+                            "name": "The Dust Brothers"
+                        },
+                        {
+                            "id": "819",
+                            "name": "Dusty Springfield"
+                        },
+                        {
+                            "id": "459",
+                            "name": "DyE"
+                        },
+                        {
+                            "id": "852",
+                            "name": "D’Angelo"
+                        }
+                    ]
+                },
+                {
+                    "name": "E",
+                    "artist": [
+                        {
+                            "id": "460",
+                            "name": "Eagles"
+                        },
+                        {
+                            "id": "405",
+                            "name": "Earl Sweatshirt"
+                        },
+                        {
+                            "id": "78",
+                            "name": "Easy Star All‐Stars"
+                        },
+                        {
+                            "id": "540",
+                            "name": "Echo & The Bunnymen"
+                        },
+                        {
+                            "id": "517",
+                            "name": "Eddie Vedder"
+                        },
+                        {
+                            "id": "630",
+                            "name": "Editors"
+                        },
+                        {
+                            "id": "702",
+                            "name": "Edward Sharpe and the Magnetic Zeros"
+                        },
+                        {
+                            "id": "743",
+                            "name": "Eek-A-Mouse"
+                        },
+                        {
+                            "id": "461",
+                            "name": "EELS"
+                        },
+                        {
+                            "id": "155",
+                            "name": "Elastica"
+                        },
+                        {
+                            "id": "37",
+                            "name": "Electric Light Orchestra"
+                        },
+                        {
+                            "id": "38",
+                            "name": "Electric Masada"
+                        },
+                        {
+                            "id": "282",
+                            "name": "Electric Wizard"
+                        },
+                        {
+                            "id": "854",
+                            "name": "Elliott Smith"
+                        },
+                        {
+                            "id": "149",
+                            "name": "Elton John"
+                        },
+                        {
+                            "id": "394",
+                            "name": "Elvis Costello"
+                        },
+                        {
+                            "id": "655",
+                            "name": "Elvis Presley"
+                        },
+                        {
+                            "id": "415",
+                            "name": "Emerson, Lake & Palmer"
+                        },
+                        {
+                            "id": "325",
+                            "name": "Eminem"
+                        },
+                        {
+                            "id": "890",
+                            "name": "Empire of the Sun"
+                        },
+                        {
+                            "id": "79",
+                            "name": "Enigma"
+                        },
+                        {
+                            "id": "700",
+                            "name": "Ennio Morricone"
+                        },
+                        {
+                            "id": "156",
+                            "name": "Eric B. & Rakim"
+                        },
+                        {
+                            "id": "198",
+                            "name": "Eric Dolphy"
+                        },
+                        {
+                            "id": "477",
+                            "name": "Erik Satie; Aldo Ciccolini"
+                        },
+                        {
+                            "id": "671",
+                            "name": "Estelle feat. Kanye West"
+                        },
+                        {
+                            "id": "874",
+                            "name": "Example"
+                        }
+                    ]
+                },
+                {
+                    "name": "F",
+                    "artist": [
+                        {
+                            "id": "462",
+                            "name": "Fairport Convention"
+                        },
+                        {
+                            "id": "567",
+                            "name": "The Fall"
+                        },
+                        {
+                            "id": "264",
+                            "name": "Fatboy Slim"
+                        },
+                        {
+                            "id": "247",
+                            "name": "Fat White Family"
+                        },
+                        {
+                            "id": "683",
+                            "name": "FC Kahuna"
+                        },
+                        {
+                            "id": "410",
+                            "name": "Fedde Le Grand"
+                        },
+                        {
+                            "id": "31912",
+                            "name": "Feist"
+                        },
+                        {
+                            "id": "128",
+                            "name": "Fine Young Cannibals"
+                        },
+                        {
+                            "id": "424",
+                            "name": "First Aid Kit"
+                        },
+                        {
+                            "id": "39",
+                            "name": "FKA twigs"
+                        },
+                        {
+                            "id": "326",
+                            "name": "Flairs"
+                        },
+                        {
+                            "id": "136",
+                            "name": "The Flaming Lips _ Tame Impala"
+                        },
+                        {
+                            "id": "266",
+                            "name": "The Flaming Lips"
+                        },
+                        {
+                            "id": "98",
+                            "name": "The Flamingos"
+                        },
+                        {
+                            "id": "256",
+                            "name": "Fleet Foxes"
+                        },
+                        {
+                            "id": "916",
+                            "name": "Fleetwood Mac"
+                        },
+                        {
+                            "id": "199",
+                            "name": "Florence + the Machine"
+                        },
+                        {
+                            "id": "40",
+                            "name": "Flume"
+                        },
+                        {
+                            "id": "446",
+                            "name": "The Flying Burrito Brothers"
+                        },
+                        {
+                            "id": "4",
+                            "name": "Flying Lotus"
+                        },
+                        {
+                            "id": "463",
+                            "name": "Foals"
+                        },
+                        {
+                            "id": "528",
+                            "name": "Focus"
+                        },
+                        {
+                            "id": "464",
+                            "name": "Foo Fighters"
+                        },
+                        {
+                            "id": "815",
+                            "name": "Foster the People"
+                        },
+                        {
+                            "id": "793",
+                            "name": "Four Tet"
+                        },
+                        {
+                            "id": "853",
+                            "name": "Frank Ocean"
+                        },
+                        {
+                            "id": "426",
+                            "name": "Frank Sinatra"
+                        },
+                        {
+                            "id": "678",
+                            "name": "Frank Zappa"
+                        },
+                        {
+                            "id": "548",
+                            "name": "Franz Ferdinand"
+                        },
+                        {
+                            "id": "723",
+                            "name": "Frazey Ford"
+                        },
+                        {
+                            "id": "361",
+                            "name": "Fred Neil"
+                        },
+                        {
+                            "id": "404",
+                            "name": "Friendly Fires"
+                        },
+                        {
+                            "id": "429",
+                            "name": "Fugazi"
+                        },
+                        {
+                            "id": "513",
+                            "name": "Funkadelic"
+                        },
+                        {
+                            "id": "42",
+                            "name": "Future Islands"
+                        }
+                    ]
+                },
+                {
+                    "name": "G",
+                    "artist": [
+                        {
+                            "id": "943",
+                            "name": "Gals And Pals"
+                        },
+                        {
+                            "id": "327",
+                            "name": "Gang of Four"
+                        },
+                        {
+                            "id": "503",
+                            "name": "Garbage"
+                        },
+                        {
+                            "id": "425",
+                            "name": "Gary Clark, Jr_"
+                        },
+                        {
+                            "id": "929",
+                            "name": "Genesis"
+                        },
+                        {
+                            "id": "554",
+                            "name": "Gentle Giant"
+                        },
+                        {
+                            "id": "200",
+                            "name": "George Benson"
+                        },
+                        {
+                            "id": "869",
+                            "name": "George Harrison"
+                        },
+                        {
+                            "id": "444",
+                            "name": "George Russell"
+                        },
+                        {
+                            "id": "618",
+                            "name": "Geto Boys"
+                        },
+                        {
+                            "id": "592",
+                            "name": "Giacomo Puccini; Andrea Bocelli, Jennifer Wilson, Zubin Mehta, Orquestra de la Comunitat Valenciana"
+                        },
+                        {
+                            "id": "476",
+                            "name": "Giacomo Puccini; Leontyne Price, Giuseppe Di Stefano, Giuseppe Taddei, Fernando Corena, Wiener Philharmoniker, Herbert von Karajan"
+                        },
+                        {
+                            "id": "475",
+                            "name": "Giacomo Puccini; Mirella Freni, Luciano Pavarotti, Christa Ludwig, Robert Kerns, Wiener Philharmoniker, Herbert von Karajan"
+                        },
+                        {
+                            "id": "257",
+                            "name": "Gillian Welch"
+                        },
+                        {
+                            "id": "382",
+                            "name": "Girl Ray"
+                        },
+                        {
+                            "id": "728",
+                            "name": "Girls’ Generation"
+                        },
+                        {
+                            "id": "418",
+                            "name": "Glen Campbell"
+                        },
+                        {
+                            "id": "80",
+                            "name": "Gnarls Barkley"
+                        },
+                        {
+                            "id": "883",
+                            "name": "Goat"
+                        },
+                        {
+                            "id": "251",
+                            "name": "Godspeed You! Black Emperor"
+                        },
+                        {
+                            "id": "81",
+                            "name": "Goldfrapp"
+                        },
+                        {
+                            "id": "107",
+                            "name": "Goldie"
+                        },
+                        {
+                            "id": "669",
+                            "name": "Gorillaz"
+                        },
+                        {
+                            "id": "328",
+                            "name": "Gotye"
+                        },
+                        {
+                            "id": "779",
+                            "name": "Grace Jones"
+                        },
+                        {
+                            "id": "202",
+                            "name": "Graham Coxon"
+                        },
+                        {
+                            "id": "157",
+                            "name": "Gramatik"
+                        },
+                        {
+                            "id": "788",
+                            "name": "Gram Parsons"
+                        },
+                        {
+                            "id": "307",
+                            "name": "Grandmaster Flash & The Furious Five"
+                        },
+                        {
+                            "id": "634",
+                            "name": "Grateful Dead"
+                        },
+                        {
+                            "id": "751",
+                            "name": "Green Day"
+                        },
+                        {
+                            "id": "827",
+                            "name": "Greg Haines"
+                        },
+                        {
+                            "id": "363",
+                            "name": "Grimes"
+                        },
+                        {
+                            "id": "239",
+                            "name": "Grimes & D'eon"
+                        },
+                        {
+                            "id": "732",
+                            "name": "Grimes × Bleachers"
+                        },
+                        {
+                            "id": "383",
+                            "name": "Grimes Feat. Blood Diamonds"
+                        },
+                        {
+                            "id": "82",
+                            "name": "Grizzly Bear"
+                        },
+                        {
+                            "id": "763",
+                            "name": "Groove Armada"
+                        },
+                        {
+                            "id": "28",
+                            "name": "Guided by Voices"
+                        },
+                        {
+                            "id": "619",
+                            "name": "Guns N’ Roses"
+                        },
+                        {
+                            "id": "652",
+                            "name": "Gustav Holst"
+                        },
+                        {
+                            "id": "44",
+                            "name": "Gustav Holst, Berliner Philharmoniker,Herbert von Karajan"
+                        },
+                        {
+                            "id": "203",
+                            "name": "Gustav Holst; Len Vorster, Richard Chamberlain"
+                        },
+                        {
+                            "id": "944",
+                            "name": "Gustav Holst - Berliner Philharmoniker • Herbert von Karajan"
+                        },
+                        {
+                            "id": "269",
+                            "name": "Gustav Mahler; Mariss Jansons, Koninklijk Concertgebouworkest"
+                        }
+                    ]
+                },
+                {
+                    "name": "H",
+                    "artist": [
+                        {
+                            "id": "625",
+                            "name": "Handsome Furs"
+                        },
+                        {
+                            "id": "134",
+                            "name": "Hank Williams"
+                        },
+                        {
+                            "id": "329",
+                            "name": "Hanoi Rocks"
+                        },
+                        {
+                            "id": "565",
+                            "name": "Hans Zimmer"
+                        },
+                        {
+                            "id": "465",
+                            "name": "Happy Mondays"
+                        },
+                        {
+                            "id": "509",
+                            "name": "Harold Budd_Brian Eno"
+                        },
+                        {
+                            "id": "520",
+                            "name": "Harry Nilsson"
+                        },
+                        {
+                            "id": "766",
+                            "name": "Have a Nice Life"
+                        },
+                        {
+                            "id": "254",
+                            "name": "Herbie Hancock"
+                        },
+                        {
+                            "id": "849",
+                            "name": "Hige Driver"
+                        },
+                        {
+                            "id": "841",
+                            "name": "The Hives"
+                        },
+                        {
+                            "id": "877",
+                            "name": "Hollywood Rose"
+                        },
+                        {
+                            "id": "32267",
+                            "name": "Holy Shit"
+                        },
+                        {
+                            "id": "276",
+                            "name": "Honeycut"
+                        },
+                        {
+                            "id": "32163",
+                            "name": "Hookworms"
+                        },
+                        {
+                            "id": "201",
+                            "name": "The Horrors"
+                        },
+                        {
+                            "id": "501",
+                            "name": "Hot Chip"
+                        },
+                        {
+                            "id": "555",
+                            "name": "Hot Chocolate"
+                        },
+                        {
+                            "id": "747",
+                            "name": "Howlin’ Wolf"
+                        },
+                        {
+                            "id": "741",
+                            "name": "Hugh Laurie"
+                        },
+                        {
+                            "id": "289",
+                            "name": "Hurray for the Riff Raff"
+                        },
+                        {
+                            "id": "914",
+                            "name": "Hüsker Dü"
+                        },
+                        {
+                            "id": "522",
+                            "name": "Husky Rescue"
+                        }
+                    ]
+                },
+                {
+                    "name": "I",
+                    "artist": [
+                        {
+                            "id": "677",
+                            "name": "Ice Cube"
+                        },
+                        {
+                            "id": "417",
+                            "name": "Iggy and The Stooges"
+                        },
+                        {
+                            "id": "658",
+                            "name": "Iggy Pop"
+                        },
+                        {
+                            "id": "158",
+                            "name": "iLoveMakonnen"
+                        },
+                        {
+                            "id": "204",
+                            "name": "Imagine Dragons"
+                        },
+                        {
+                            "id": "466",
+                            "name": "Imogen Heap"
+                        },
+                        {
+                            "id": "957",
+                            "name": "The Incredible String Band"
+                        },
+                        {
+                            "id": "628",
+                            "name": "Incubus"
+                        },
+                        {
+                            "id": "560",
+                            "name": "Interpol"
+                        },
+                        {
+                            "id": "399",
+                            "name": "Iris DeMent"
+                        },
+                        {
+                            "id": "781",
+                            "name": "Iron Maiden"
+                        },
+                        {
+                            "id": "467",
+                            "name": "Isaac Hayes"
+                        },
+                        {
+                            "id": "284",
+                            "name": "Ital"
+                        },
+                        {
+                            "id": "558",
+                            "name": "iTAL tEK"
+                        }
+                    ]
+                },
+                {
+                    "name": "J",
+                    "artist": [
+                        {
+                            "id": "26",
+                            "name": "The J. Geils Band"
+                        },
+                        {
+                            "id": "870",
+                            "name": "j.viewz"
+                        },
+                        {
+                            "id": "288",
+                            "name": "Jack Kerouac"
+                        },
+                        {
+                            "id": "159",
+                            "name": "Jack Kerouac & Steve Allen"
+                        },
+                        {
+                            "id": "160",
+                            "name": "Jackson and His Computer Band"
+                        },
+                        {
+                            "id": "549",
+                            "name": "Jaco Pastorius"
+                        },
+                        {
+                            "id": "774",
+                            "name": "Jacqueline Taieb"
+                        },
+                        {
+                            "id": "933",
+                            "name": "Jacqueline Taïeb"
+                        },
+                        {
+                            "id": "532",
+                            "name": "The Jam"
+                        },
+                        {
+                            "id": "769",
+                            "name": "James Blake"
+                        },
+                        {
+                            "id": "45",
+                            "name": "James Brown"
+                        },
+                        {
+                            "id": "84",
+                            "name": "James Horner"
+                        },
+                        {
+                            "id": "161",
+                            "name": "Jamie xx"
+                        },
+                        {
+                            "id": "411",
+                            "name": "Jamiroquai"
+                        },
+                        {
+                            "id": "550",
+                            "name": "Janis Joplin"
+                        },
+                        {
+                            "id": "913",
+                            "name": "Jay Dee"
+                        },
+                        {
+                            "id": "502",
+                            "name": "Jay Dee aka J Dilla"
+                        },
+                        {
+                            "id": "263",
+                            "name": "Jaylib"
+                        },
+                        {
+                            "id": "918",
+                            "name": "JAY Z"
+                        },
+                        {
+                            "id": "85",
+                            "name": "JAY-Z"
+                        },
+                        {
+                            "id": "143",
+                            "name": "J Dilla"
+                        },
+                        {
+                            "id": "889",
+                            "name": "Jean-Michel Jarre"
+                        },
+                        {
+                            "id": "907",
+                            "name": "Jeff Buckley"
+                        },
+                        {
+                            "id": "672",
+                            "name": "Jefferson Airplane"
+                        },
+                        {
+                            "id": "811",
+                            "name": "Jeffrey Lewis"
+                        },
+                        {
+                            "id": "783",
+                            "name": "Jelly Roll Morton"
+                        },
+                        {
+                            "id": "306",
+                            "name": "Jeremy Soule"
+                        },
+                        {
+                            "id": "782",
+                            "name": "Jerry Goldsmith"
+                        },
+                        {
+                            "id": "275",
+                            "name": "Jessica Pratt"
+                        },
+                        {
+                            "id": "842",
+                            "name": "The Jesus and Mary Chain"
+                        },
+                        {
+                            "id": "468",
+                            "name": "Jimi Hendrix"
+                        },
+                        {
+                            "id": "469",
+                            "name": "The Jimi Hendrix Experience"
+                        },
+                        {
+                            "id": "218",
+                            "name": "Jim Morrison, music by The Doors"
+                        },
+                        {
+                            "id": "720",
+                            "name": "Joan Armatrading"
+                        },
+                        {
+                            "id": "627",
+                            "name": "Joanna Newsom"
+                        },
+                        {
+                            "id": "369",
+                            "name": "Joe Goddard"
+                        },
+                        {
+                            "id": "545",
+                            "name": "Joe Walsh"
+                        },
+                        {
+                            "id": "362",
+                            "name": "Johann Sebastian Bach; Glenn Gould"
+                        },
+                        {
+                            "id": "408",
+                            "name": "John Coltrane"
+                        },
+                        {
+                            "id": "105",
+                            "name": "John Harle"
+                        },
+                        {
+                            "id": "834",
+                            "name": "John Lee Hooker"
+                        },
+                        {
+                            "id": "486",
+                            "name": "John Legend"
+                        },
+                        {
+                            "id": "330",
+                            "name": "John Lennon"
+                        },
+                        {
+                            "id": "835",
+                            "name": "John Lennon & Yoko Ono"
+                        },
+                        {
+                            "id": "745",
+                            "name": "John Mayer"
+                        },
+                        {
+                            "id": "721",
+                            "name": "John Mayer Trio"
+                        },
+                        {
+                            "id": "364",
+                            "name": "Johnny Cash"
+                        },
+                        {
+                            "id": "713",
+                            "name": "John Tavener; Academy of Ancient Music & Paul Goodwin"
+                        },
+                        {
+                            "id": "279",
+                            "name": "John Tavener - The Academy Of Ancient Music, Paul Goodwin"
+                        },
+                        {
+                            "id": "685",
+                            "name": "Jon Hopkins"
+                        },
+                        {
+                            "id": "722",
+                            "name": "Joni Mitchell"
+                        },
+                        {
+                            "id": "135",
+                            "name": "Jonny Greenwood"
+                        },
+                        {
+                            "id": "546",
+                            "name": "Jonny Greenwood _ Krzysztof Penderecki"
+                        },
+                        {
+                            "id": "365",
+                            "name": "Jorge Ben Jor"
+                        },
+                        {
+                            "id": "366",
+                            "name": "Joseph"
+                        },
+                        {
+                            "id": "226",
+                            "name": "Journey"
+                        },
+                        {
+                            "id": "46",
+                            "name": "Joy Division"
+                        },
+                        {
+                            "id": "47",
+                            "name": "Jungle"
+                        },
+                        {
+                            "id": "800",
+                            "name": "Jurassic 5"
+                        },
+                        {
+                            "id": "470",
+                            "name": "Justice"
+                        },
+                        {
+                            "id": "704",
+                            "name": "Justice vs. Simian"
+                        },
+                        {
+                            "id": "255",
+                            "name": "Justin Bieber"
+                        },
+                        {
+                            "id": "675",
+                            "name": "Justin Hurwitz"
+                        },
+                        {
+                            "id": "645",
+                            "name": "Justin Timberlake"
+                        },
+                        {
+                            "id": "83",
+                            "name": "J-Walk"
+                        }
+                    ]
+                },
+                {
+                    "name": "K",
+                    "artist": [
+                        {
+                            "id": "439",
+                            "name": "Kaikhosru Shapurji Sorabji; John Ogdon"
+                        },
+                        {
+                            "id": "810",
+                            "name": "Kanuni"
+                        },
+                        {
+                            "id": "250",
+                            "name": "Kanye West"
+                        },
+                        {
+                            "id": "278",
+                            "name": "Karlheinz Stockhausen"
+                        },
+                        {
+                            "id": "945",
+                            "name": "Kasabian"
+                        },
+                        {
+                            "id": "601",
+                            "name": "Kate Bush"
+                        },
+                        {
+                            "id": "487",
+                            "name": "Kate Rusby"
+                        },
+                        {
+                            "id": "588",
+                            "name": "Kathy McCarty"
+                        },
+                        {
+                            "id": "367",
+                            "name": "Katy Perry"
+                        },
+                        {
+                            "id": "227",
+                            "name": "Kavinsky"
+                        },
+                        {
+                            "id": "807",
+                            "name": "Keane"
+                        },
+                        {
+                            "id": "86",
+                            "name": "Keith Jarrett"
+                        },
+                        {
+                            "id": "589",
+                            "name": "Kelis"
+                        },
+                        {
+                            "id": "817",
+                            "name": "Kendrick Lamar"
+                        },
+                        {
+                            "id": "422",
+                            "name": "Kenna"
+                        },
+                        {
+                            "id": "862",
+                            "name": "Kennedy"
+                        },
+                        {
+                            "id": "478",
+                            "name": "Kenny Rogers & The First Edition"
+                        },
+                        {
+                            "id": "865",
+                            "name": "kent"
+                        },
+                        {
+                            "id": "912",
+                            "name": "Kevin McDermott Orchestra"
+                        },
+                        {
+                            "id": "31803",
+                            "name": "Khruangbin"
+                        },
+                        {
+                            "id": "798",
+                            "name": "Khun Narin"
+                        },
+                        {
+                            "id": "228",
+                            "name": "Kid's Garden"
+                        },
+                        {
+                            "id": "162",
+                            "name": "Kidnap Kid"
+                        },
+                        {
+                            "id": "493",
+                            "name": "The Killers"
+                        },
+                        {
+                            "id": "368",
+                            "name": "Kimbra"
+                        },
+                        {
+                            "id": "419",
+                            "name": "King Crimson"
+                        },
+                        {
+                            "id": "370",
+                            "name": "King Krule"
+                        },
+                        {
+                            "id": "836",
+                            "name": "Kings of Leon"
+                        },
+                        {
+                            "id": "380",
+                            "name": "The Kinks"
+                        },
+                        {
+                            "id": "880",
+                            "name": "Kirin J. Callinan"
+                        },
+                        {
+                            "id": "246",
+                            "name": "Kishi Bashi"
+                        },
+                        {
+                            "id": "946",
+                            "name": "KISS"
+                        },
+                        {
+                            "id": "384",
+                            "name": "Klaxons"
+                        },
+                        {
+                            "id": "421",
+                            "name": "Kraftwerk"
+                        },
+                        {
+                            "id": "290",
+                            "name": "Kurt Vile"
+                        },
+                        {
+                            "id": "624",
+                            "name": "Kurt Vile and The Violators"
+                        },
+                        {
+                            "id": "452",
+                            "name": "Kyuss"
+                        }
+                    ]
+                },
+                {
+                    "name": "L",
+                    "artist": [
+                        {
+                            "id": "724",
+                            "name": "Lady Gaga"
+                        },
+                        {
+                            "id": "277",
+                            "name": "Lamb"
+                        },
+                        {
+                            "id": "654",
+                            "name": "Lana Del Rey"
+                        },
+                        {
+                            "id": "695",
+                            "name": "Laraaji"
+                        },
+                        {
+                            "id": "825",
+                            "name": "Late of the Pier"
+                        },
+                        {
+                            "id": "564",
+                            "name": "Laura Marling"
+                        },
+                        {
+                            "id": "428",
+                            "name": "Laurie Spiegel"
+                        },
+                        {
+                            "id": "262",
+                            "name": "Lauryn Hill"
+                        },
+                        {
+                            "id": "381",
+                            "name": "The La’s"
+                        },
+                        {
+                            "id": "141",
+                            "name": "LCD Soundsystem"
+                        },
+                        {
+                            "id": "773",
+                            "name": "Lead Belly"
+                        },
+                        {
+                            "id": "117",
+                            "name": "The Leaves"
+                        },
+                        {
+                            "id": "396",
+                            "name": "Led Zeppelin"
+                        },
+                        {
+                            "id": "485",
+                            "name": "Lee “Scratch” Perry"
+                        },
+                        {
+                            "id": "607",
+                            "name": "The Left Banke"
+                        },
+                        {
+                            "id": "936",
+                            "name": "Lemon Jelly"
+                        },
+                        {
+                            "id": "416",
+                            "name": "The Lemon Twigs"
+                        },
+                        {
+                            "id": "947",
+                            "name": "LEN"
+                        },
+                        {
+                            "id": "525",
+                            "name": "Leonard Cohen"
+                        },
+                        {
+                            "id": "423",
+                            "name": "Lewis"
+                        },
+                        {
+                            "id": "349",
+                            "name": "The Libertines"
+                        },
+                        {
+                            "id": "87",
+                            "name": "Lightnin' Hopkins"
+                        },
+                        {
+                            "id": "733",
+                            "name": "The Like"
+                        },
+                        {
+                            "id": "14",
+                            "name": "Lindstrøm"
+                        },
+                        {
+                            "id": "163",
+                            "name": "Link Wray"
+                        },
+                        {
+                            "id": "792",
+                            "name": "Lionel Richie"
+                        },
+                        {
+                            "id": "725",
+                            "name": "Lisa Miskovsky"
+                        },
+                        {
+                            "id": "826",
+                            "name": "Los Lobos"
+                        },
+                        {
+                            "id": "873",
+                            "name": "The Locust"
+                        },
+                        {
+                            "id": "387",
+                            "name": "London Symphony Orchestra"
+                        },
+                        {
+                            "id": "50",
+                            "name": "Lorde"
+                        },
+                        {
+                            "id": "582",
+                            "name": "Loscil"
+                        },
+                        {
+                            "id": "488",
+                            "name": "Lou Reed"
+                        },
+                        {
+                            "id": "693",
+                            "name": "Love"
+                        },
+                        {
+                            "id": "552",
+                            "name": "Low"
+                        },
+                        {
+                            "id": "331",
+                            "name": "Lucinda Williams"
+                        },
+                        {
+                            "id": "205",
+                            "name": "Ludovico Einaudi"
+                        },
+                        {
+                            "id": "563",
+                            "name": "Ludwig van Beethoven; Berliner Philharmoniker, Herbert von Karajan"
+                        }
+                    ]
+                },
+                {
+                    "name": "M",
+                    "artist": [
+                        {
+                            "id": "206",
+                            "name": "M.I.A_"
+                        },
+                        {
+                            "id": "705",
+                            "name": "M83"
+                        },
+                        {
+                            "id": "734",
+                            "name": "The Maccabees"
+                        },
+                        {
+                            "id": "777",
+                            "name": "Mac Demarco"
+                        },
+                        {
+                            "id": "332",
+                            "name": "Macintosh Plus"
+                        },
+                        {
+                            "id": "861",
+                            "name": "Macklemore & Ryan Lewis"
+                        },
+                        {
+                            "id": "504",
+                            "name": "Madvillain"
+                        },
+                        {
+                            "id": "5",
+                            "name": "The Magnetic Fields"
+                        },
+                        {
+                            "id": "333",
+                            "name": "Majestic"
+                        },
+                        {
+                            "id": "32",
+                            "name": "Major Lazer x DJ Snake feat. MØ"
+                        },
+                        {
+                            "id": "101",
+                            "name": "Makaveli"
+                        },
+                        {
+                            "id": "240",
+                            "name": "The Mamas & the Papas"
+                        },
+                        {
+                            "id": "706",
+                            "name": "Manic Street Preachers"
+                        },
+                        {
+                            "id": "674",
+                            "name": "Manitoba"
+                        },
+                        {
+                            "id": "590",
+                            "name": "Manu Chao"
+                        },
+                        {
+                            "id": "471",
+                            "name": "MarchFourth Marching Band"
+                        },
+                        {
+                            "id": "88",
+                            "name": "Marc Romboy vs. Stephan Bodzin"
+                        },
+                        {
+                            "id": "822",
+                            "name": "Margo Guryan"
+                        },
+                        {
+                            "id": "51",
+                            "name": "Marina and the Diamonds"
+                        },
+                        {
+                            "id": "32162",
+                            "name": "Mariya Takeuchi"
+                        },
+                        {
+                            "id": "8",
+                            "name": "Mark Morrison"
+                        },
+                        {
+                            "id": "796",
+                            "name": "Mark Ronson"
+                        },
+                        {
+                            "id": "413",
+                            "name": "Marlena Shaw"
+                        },
+                        {
+                            "id": "229",
+                            "name": "Maroon 5"
+                        },
+                        {
+                            "id": "385",
+                            "name": "The Mars Volta"
+                        },
+                        {
+                            "id": "507",
+                            "name": "Marvin Gaye"
+                        },
+                        {
+                            "id": "133",
+                            "name": "Massive Attack"
+                        },
+                        {
+                            "id": "856",
+                            "name": "Matt & Kim"
+                        },
+                        {
+                            "id": "398",
+                            "name": "Matt Helders"
+                        },
+                        {
+                            "id": "868",
+                            "name": "Max Richter"
+                        },
+                        {
+                            "id": "142",
+                            "name": "Mazzy Star"
+                        },
+                        {
+                            "id": "334",
+                            "name": "MC Solaar"
+                        },
+                        {
+                            "id": "207",
+                            "name": "Meat Loaf"
+                        },
+                        {
+                            "id": "409",
+                            "name": "Melody’s Echo Chamber"
+                        },
+                        {
+                            "id": "32161",
+                            "name": "Menahan Street Band"
+                        },
+                        {
+                            "id": "335",
+                            "name": "Metallica"
+                        },
+                        {
+                            "id": "541",
+                            "name": "The Meters"
+                        },
+                        {
+                            "id": "893",
+                            "name": "Methyl Ethel"
+                        },
+                        {
+                            "id": "150",
+                            "name": "Metronomy"
+                        },
+                        {
+                            "id": "21",
+                            "name": "MF DOOM"
+                        },
+                        {
+                            "id": "574",
+                            "name": "MGMT"
+                        },
+                        {
+                            "id": "472",
+                            "name": "Michael Andrews"
+                        },
+                        {
+                            "id": "923",
+                            "name": "Michael Jackson"
+                        },
+                        {
+                            "id": "52",
+                            "name": "Michael McDonald"
+                        },
+                        {
+                            "id": "495",
+                            "name": "The Microphones"
+                        },
+                        {
+                            "id": "15",
+                            "name": "Midlake"
+                        },
+                        {
+                            "id": "32164",
+                            "name": "Midnight Juggernauts"
+                        },
+                        {
+                            "id": "533",
+                            "name": "Miles Davis"
+                        },
+                        {
+                            "id": "285",
+                            "name": "The Miles Davis Quintet"
+                        },
+                        {
+                            "id": "573",
+                            "name": "The Miles Davis Sextet & The Thelonious Monk Quartet"
+                        },
+                        {
+                            "id": "959",
+                            "name": "The Millennium"
+                        },
+                        {
+                            "id": "884",
+                            "name": "Mini Viva"
+                        },
+                        {
+                            "id": "53",
+                            "name": "Mint Julep"
+                        },
+                        {
+                            "id": "767",
+                            "name": "Minutemen"
+                        },
+                        {
+                            "id": "89",
+                            "name": "Miranda y Tobar"
+                        },
+                        {
+                            "id": "90",
+                            "name": "Misfits"
+                        },
+                        {
+                            "id": "397",
+                            "name": "Mobb Deep"
+                        },
+                        {
+                            "id": "755",
+                            "name": "Moby"
+                        },
+                        {
+                            "id": "431",
+                            "name": "Moderat"
+                        },
+                        {
+                            "id": "447",
+                            "name": "The Modern Lovers"
+                        },
+                        {
+                            "id": "888",
+                            "name": "Modest Mouse"
+                        },
+                        {
+                            "id": "511",
+                            "name": "Mogwai"
+                        },
+                        {
+                            "id": "681",
+                            "name": "Moloko"
+                        },
+                        {
+                            "id": "118",
+                            "name": "The Monkees"
+                        },
+                        {
+                            "id": "164",
+                            "name": "Moodoïd"
+                        },
+                        {
+                            "id": "386",
+                            "name": "The Moody Blues"
+                        },
+                        {
+                            "id": "580",
+                            "name": "Moodymann"
+                        },
+                        {
+                            "id": "701",
+                            "name": "Morrissey"
+                        },
+                        {
+                            "id": "165",
+                            "name": "Mos Def"
+                        },
+                        {
+                            "id": "926",
+                            "name": "Motor City Drum Ensemble"
+                        },
+                        {
+                            "id": "308",
+                            "name": "The Mountain Goats"
+                        },
+                        {
+                            "id": "855",
+                            "name": "Mount Eerie"
+                        },
+                        {
+                            "id": "824",
+                            "name": "Mount Eerie with Julie Doiron & Frederick Squire"
+                        },
+                        {
+                            "id": "621",
+                            "name": "Mount Kimbie"
+                        },
+                        {
+                            "id": "336",
+                            "name": "Mr. Bungle"
+                        },
+                        {
+                            "id": "698",
+                            "name": "Mr. Oizo & Gaspard Augé"
+                        },
+                        {
+                            "id": "208",
+                            "name": "Ms. Dynamite"
+                        },
+                        {
+                            "id": "927",
+                            "name": "Muddy Waters"
+                        },
+                        {
+                            "id": "808",
+                            "name": "My Bloody Valentine"
+                        },
+                        {
+                            "id": "293",
+                            "name": "Mychael Danna"
+                        },
+                        {
+                            "id": "531",
+                            "name": "Mychael Danna, DeVotchKa"
+                        },
+                        {
+                            "id": "294",
+                            "name": "Mylo"
+                        }
+                    ]
+                },
+                {
+                    "name": "N",
+                    "artist": [
+                        {
+                            "id": "273",
+                            "name": "N_E_R_D"
+                        },
+                        {
+                            "id": "875",
+                            "name": "N.W.A"
+                        },
+                        {
+                            "id": "638",
+                            "name": "Nas"
+                        },
+                        {
+                            "id": "538",
+                            "name": "The National"
+                        },
+                        {
+                            "id": "36",
+                            "name": "The Necks"
+                        },
+                        {
+                            "id": "337",
+                            "name": "Necropolis of Love"
+                        },
+                        {
+                            "id": "54",
+                            "name": "Neil Young"
+                        },
+                        {
+                            "id": "209",
+                            "name": "Neil Young & Crazy Horse"
+                        },
+                        {
+                            "id": "786",
+                            "name": "NERO"
+                        },
+                        {
+                            "id": "338",
+                            "name": "Neu!"
+                        },
+                        {
+                            "id": "920",
+                            "name": "Neutral Milk Hotel"
+                        },
+                        {
+                            "id": "642",
+                            "name": "New Order"
+                        },
+                        {
+                            "id": "372",
+                            "name": "New Radicals"
+                        },
+                        {
+                            "id": "12",
+                            "name": "Nick Drake"
+                        },
+                        {
+                            "id": "843",
+                            "name": "Nick Hakim"
+                        },
+                        {
+                            "id": "872",
+                            "name": "Nicki Bluhm and The Gramblers"
+                        },
+                        {
+                            "id": "249",
+                            "name": "Nick Mulvey"
+                        },
+                        {
+                            "id": "427",
+                            "name": "Night Beats"
+                        },
+                        {
+                            "id": "699",
+                            "name": "Nightmares on Wax"
+                        },
+                        {
+                            "id": "894",
+                            "name": "Nikka Costa"
+                        },
+                        {
+                            "id": "295",
+                            "name": "Nikki Yanofsky"
+                        },
+                        {
+                            "id": "646",
+                            "name": "Nils Frahm"
+                        },
+                        {
+                            "id": "651",
+                            "name": "Nina Simone"
+                        },
+                        {
+                            "id": "412",
+                            "name": "Nine Inch Nails"
+                        },
+                        {
+                            "id": "210",
+                            "name": "Nirvana"
+                        },
+                        {
+                            "id": "166",
+                            "name": "Noah and the Whale"
+                        },
+                        {
+                            "id": "339",
+                            "name": "No Doubt"
+                        },
+                        {
+                            "id": "820",
+                            "name": "Northcape"
+                        },
+                        {
+                            "id": "596",
+                            "name": "The Notorious B.I.G_"
+                        },
+                        {
+                            "id": "799",
+                            "name": "Nouvelle Vague"
+                        },
+                        {
+                            "id": "99",
+                            "name": "The Noveltones"
+                        },
+                        {
+                            "id": "707",
+                            "name": "Nujabes"
+                        },
+                        {
+                            "id": "55",
+                            "name": "Nuyorican Soul"
+                        }
+                    ]
+                },
+                {
+                    "name": "O",
+                    "artist": [
+                        {
+                            "id": "340",
+                            "name": "Oasis"
+                        },
+                        {
+                            "id": "309",
+                            "name": "The Octopus Project & Black Moth Super Rainbow"
+                        },
+                        {
+                            "id": "489",
+                            "name": "Odd Future Wolf Gang Kill Them All"
+                        },
+                        {
+                            "id": "178",
+                            "name": "The Offspring"
+                        },
+                        {
+                            "id": "341",
+                            "name": "of Montreal"
+                        },
+                        {
+                            "id": "31911",
+                            "name": "Oh Sees"
+                        },
+                        {
+                            "id": "776",
+                            "name": "Okkervil River"
+                        },
+                        {
+                            "id": "559",
+                            "name": "Olive"
+                        },
+                        {
+                            "id": "433",
+                            "name": "Oliver Schories"
+                        },
+                        {
+                            "id": "33",
+                            "name": "Oneohtrix Point Never"
+                        },
+                        {
+                            "id": "735",
+                            "name": "The Ones"
+                        },
+                        {
+                            "id": "496",
+                            "name": "The Only Ones"
+                        },
+                        {
+                            "id": "342",
+                            "name": "Opeth"
+                        },
+                        {
+                            "id": "119",
+                            "name": "The Orb"
+                        },
+                        {
+                            "id": "762",
+                            "name": "Orbit Service"
+                        },
+                        {
+                            "id": "167",
+                            "name": "Oregon"
+                        },
+                        {
+                            "id": "790",
+                            "name": "Os Mutantes"
+                        },
+                        {
+                            "id": "168",
+                            "name": "Otis Redding"
+                        },
+                        {
+                            "id": "148",
+                            "name": "OutKast"
+                        },
+                        {
+                            "id": "851",
+                            "name": "Ozzy Osbourne"
+                        },
+                        {
+                            "id": "241",
+                            "name": "The O’Jays"
+                        }
+                    ]
+                },
+                {
+                    "name": "P",
+                    "artist": [
+                        {
+                            "id": "296",
+                            "name": "Panda Bear"
+                        },
+                        {
+                            "id": "343",
+                            "name": "Pantera"
+                        },
+                        {
+                            "id": "32159",
+                            "name": "Parcels"
+                        },
+                        {
+                            "id": "137",
+                            "name": "Parliament"
+                        },
+                        {
+                            "id": "899",
+                            "name": "Passenger"
+                        },
+                        {
+                            "id": "344",
+                            "name": "Passion Pit"
+                        },
+                        {
+                            "id": "297",
+                            "name": "Patrick Watson"
+                        },
+                        {
+                            "id": "434",
+                            "name": "Patti Smith"
+                        },
+                        {
+                            "id": "56",
+                            "name": "Paul Giovanni"
+                        },
+                        {
+                            "id": "758",
+                            "name": "Paul Hindemith - Ensemble Modern, Markus Stenz"
+                        },
+                        {
+                            "id": "211",
+                            "name": "Paul McCartney"
+                        },
+                        {
+                            "id": "435",
+                            "name": "Paul Nice"
+                        },
+                        {
+                            "id": "212",
+                            "name": "Paul Oakenfold"
+                        },
+                        {
+                            "id": "635",
+                            "name": "Paul Simon"
+                        },
+                        {
+                            "id": "298",
+                            "name": "Paul Thomas Saunders"
+                        },
+                        {
+                            "id": "864",
+                            "name": "Paul Weller"
+                        },
+                        {
+                            "id": "648",
+                            "name": "Pavement"
+                        },
+                        {
+                            "id": "591",
+                            "name": "Pearl Jam"
+                        },
+                        {
+                            "id": "795",
+                            "name": "Pekka Pohjola"
+                        },
+                        {
+                            "id": "120",
+                            "name": "The Pentangle"
+                        },
+                        {
+                            "id": "647",
+                            "name": "Perfume Genius"
+                        },
+                        {
+                            "id": "213",
+                            "name": "Peter Bjorn and John"
+                        },
+                        {
+                            "id": "92",
+                            "name": "Peter Frampton"
+                        },
+                        {
+                            "id": "687",
+                            "name": "Peter Gabriel"
+                        },
+                        {
+                            "id": "214",
+                            "name": "Phantom Limb"
+                        },
+                        {
+                            "id": "473",
+                            "name": "Phantom Planet"
+                        },
+                        {
+                            "id": "100",
+                            "name": "The Pharcyde"
+                        },
+                        {
+                            "id": "897",
+                            "name": "Pharrell Williams"
+                        },
+                        {
+                            "id": "436",
+                            "name": "Phil Collins"
+                        },
+                        {
+                            "id": "169",
+                            "name": "Philip Glass"
+                        },
+                        {
+                            "id": "215",
+                            "name": "Philip Selway"
+                        },
+                        {
+                            "id": "708",
+                            "name": "Phil Phillips"
+                        },
+                        {
+                            "id": "508",
+                            "name": "Phil Spector"
+                        },
+                        {
+                            "id": "653",
+                            "name": "Phoenix"
+                        },
+                        {
+                            "id": "631",
+                            "name": "Pink Floyd"
+                        },
+                        {
+                            "id": "93",
+                            "name": "Pixies"
+                        },
+                        {
+                            "id": "643",
+                            "name": "PJ Harvey"
+                        },
+                        {
+                            "id": "94",
+                            "name": "Plastic Ono Band"
+                        },
+                        {
+                            "id": "709",
+                            "name": "Pogo"
+                        },
+                        {
+                            "id": "219",
+                            "name": "The Police"
+                        },
+                        {
+                            "id": "744",
+                            "name": "Pond"
+                        },
+                        {
+                            "id": "736",
+                            "name": "The Pop Group"
+                        },
+                        {
+                            "id": "838",
+                            "name": "Portishead"
+                        },
+                        {
+                            "id": "771",
+                            "name": "Prefab Sprout"
+                        },
+                        {
+                            "id": "395",
+                            "name": "Pretenders"
+                        },
+                        {
+                            "id": "179",
+                            "name": "The Pretenders"
+                        },
+                        {
+                            "id": "937",
+                            "name": "The Pretty Things"
+                        },
+                        {
+                            "id": "499",
+                            "name": "LA Priest"
+                        },
+                        {
+                            "id": "726",
+                            "name": "Primal Scream"
+                        },
+                        {
+                            "id": "895",
+                            "name": "Prince"
+                        },
+                        {
+                            "id": "543",
+                            "name": "Prince & The Revolution"
+                        },
+                        {
+                            "id": "925",
+                            "name": "Prince and The Revolution"
+                        },
+                        {
+                            "id": "474",
+                            "name": "Procol Harum"
+                        },
+                        {
+                            "id": "597",
+                            "name": "The Prodigy"
+                        },
+                        {
+                            "id": "506",
+                            "name": "Public Enemy"
+                        },
+                        {
+                            "id": "791",
+                            "name": "Public Service Broadcasting"
+                        },
+                        {
+                            "id": "930",
+                            "name": "PUFFY"
+                        },
+                        {
+                            "id": "31910",
+                            "name": "Pusha T"
+                        },
+                        {
+                            "id": "789",
+                            "name": "Pyotr Ilyich Tchaikovsky, Valery Gergiev, The London Symphony Orchestra"
+                        }
+                    ]
+                },
+                {
+                    "name": "Q",
+                    "artist": [
+                        {
+                            "id": "261",
+                            "name": "Queen"
+                        },
+                        {
+                            "id": "697",
+                            "name": "Queens of the Stone Age"
+                        },
+                        {
+                            "id": "917",
+                            "name": "Quincy Jones"
+                        }
+                    ]
+                },
+                {
+                    "name": "R",
+                    "artist": [
+                        {
+                            "id": "928",
+                            "name": "R.E.M_"
+                        },
+                        {
+                            "id": "180",
+                            "name": "The Radio Dept_"
+                        },
+                        {
+                            "id": "6",
+                            "name": "Radiohead"
+                        },
+                        {
+                            "id": "650",
+                            "name": "Radkey"
+                        },
+                        {
+                            "id": "696",
+                            "name": "Rae & Christian"
+                        },
+                        {
+                            "id": "221",
+                            "name": "Ralph Vaughan Williams; Sir Adrian Boult"
+                        },
+                        {
+                            "id": "593",
+                            "name": "Ramones"
+                        },
+                        {
+                            "id": "823",
+                            "name": "Ratatat"
+                        },
+                        {
+                            "id": "170",
+                            "name": "Ravi Shankar"
+                        },
+                        {
+                            "id": "230",
+                            "name": "Ray Charles"
+                        },
+                        {
+                            "id": "710",
+                            "name": "Ray Parker Jr_"
+                        },
+                        {
+                            "id": "314",
+                            "name": "realpeople"
+                        },
+                        {
+                            "id": "171",
+                            "name": "Red Hot Chili Peppers"
+                        },
+                        {
+                            "id": "108",
+                            "name": "Regina Spektor"
+                        },
+                        {
+                            "id": "49",
+                            "name": "The Replacements"
+                        },
+                        {
+                            "id": "752",
+                            "name": "Richard & Linda Thompson"
+                        },
+                        {
+                            "id": "57",
+                            "name": "Richard Wagner; Orchester der Bayreuther Festspiele, Karl Böhm, Birgit Nilsson, Wolfgang Windgassen, Christa Ludwig, Martti Talvela, Eberhard Wächter"
+                        },
+                        {
+                            "id": "639",
+                            "name": "RJD2"
+                        },
+                        {
+                            "id": "602",
+                            "name": "Robert Johnson"
+                        },
+                        {
+                            "id": "692",
+                            "name": "Robert Schumann; Святослав Теофилович Рихтер"
+                        },
+                        {
+                            "id": "58",
+                            "name": "Robert Wyatt"
+                        },
+                        {
+                            "id": "948",
+                            "name": "Rodrigo y Gabriela"
+                        },
+                        {
+                            "id": "231",
+                            "name": "Rodriguez"
+                        },
+                        {
+                            "id": "172",
+                            "name": "Rogue Wave"
+                        },
+                        {
+                            "id": "32160",
+                            "name": "Rolling Blackouts Coastal Fever"
+                        },
+                        {
+                            "id": "350",
+                            "name": "The Rolling Stones"
+                        },
+                        {
+                            "id": "95",
+                            "name": "Ronald Jenkees"
+                        },
+                        {
+                            "id": "768",
+                            "name": "Ronnie Foster"
+                        },
+                        {
+                            "id": "850",
+                            "name": "The Roots"
+                        },
+                        {
+                            "id": "809",
+                            "name": "Rotary Connection"
+                        },
+                        {
+                            "id": "373",
+                            "name": "Roxy Music"
+                        },
+                        {
+                            "id": "882",
+                            "name": "Roy Ayers Ubiquity"
+                        },
+                        {
+                            "id": "17",
+                            "name": "Röyksopp"
+                        },
+                        {
+                            "id": "828",
+                            "name": "Rufus Wainwright"
+                        },
+                        {
+                            "id": "900",
+                            "name": "Run‐D.M.C_"
+                        },
+                        {
+                            "id": "603",
+                            "name": "Rush"
+                        },
+                        {
+                            "id": "374",
+                            "name": "Rusted Root"
+                        },
+                        {
+                            "id": "371",
+                            "name": "Les Rythmes Digitales"
+                        }
+                    ]
+                },
+                {
+                    "name": "S",
+                    "artist": [
+                        {
+                            "id": "375",
+                            "name": "Sagittarius"
+                        },
+                        {
+                            "id": "437",
+                            "name": "SAINT PEPSI"
+                        },
+                        {
+                            "id": "376",
+                            "name": "Sam Cooke"
+                        },
+                        {
+                            "id": "445",
+                            "name": "Sampha"
+                        },
+                        {
+                            "id": "535",
+                            "name": "Sam Rivers"
+                        },
+                        {
+                            "id": "857",
+                            "name": "Santana"
+                        },
+                        {
+                            "id": "848",
+                            "name": "Sasha"
+                        },
+                        {
+                            "id": "784",
+                            "name": "Savages"
+                        },
+                        {
+                            "id": "949",
+                            "name": "School of Fish"
+                        },
+                        {
+                            "id": "377",
+                            "name": "Scissor Sisters"
+                        },
+                        {
+                            "id": "347",
+                            "name": "Sébastien Tellier"
+                        },
+                        {
+                            "id": "490",
+                            "name": "Semisonic"
+                        },
+                        {
+                            "id": "232",
+                            "name": "Serge Gainsbourg"
+                        },
+                        {
+                            "id": "566",
+                            "name": "Sex Pistols"
+                        },
+                        {
+                            "id": "562",
+                            "name": "The Shaggs"
+                        },
+                        {
+                            "id": "518",
+                            "name": "Shapeshifter"
+                        },
+                        {
+                            "id": "581",
+                            "name": "Sharon Jones and the Dap‐Kings"
+                        },
+                        {
+                            "id": "690",
+                            "name": "Sharon Van Etten"
+                        },
+                        {
+                            "id": "109",
+                            "name": "She & Him"
+                        },
+                        {
+                            "id": "491",
+                            "name": "Sheryl Crow"
+                        },
+                        {
+                            "id": "32265",
+                            "name": "Shits and Giggles"
+                        },
+                        {
+                            "id": "950",
+                            "name": "Shocking Blue"
+                        },
+                        {
+                            "id": "906",
+                            "name": "Sibylle Baier"
+                        },
+                        {
+                            "id": "132",
+                            "name": "Sigur Rós"
+                        },
+                        {
+                            "id": "174",
+                            "name": "Silver Jews"
+                        },
+                        {
+                            "id": "754",
+                            "name": "Silversun Pickups"
+                        },
+                        {
+                            "id": "878",
+                            "name": "Simon & Garfunkel"
+                        },
+                        {
+                            "id": "59",
+                            "name": "Skee-Lo"
+                        },
+                        {
+                            "id": "60",
+                            "name": "Slayer"
+                        },
+                        {
+                            "id": "300",
+                            "name": "Sleater‐Kinney"
+                        },
+                        {
+                            "id": "816",
+                            "name": "Sleep"
+                        },
+                        {
+                            "id": "727",
+                            "name": "Slint"
+                        },
+                        {
+                            "id": "510",
+                            "name": "Slow Magic"
+                        },
+                        {
+                            "id": "905",
+                            "name": "Slum Village"
+                        },
+                        {
+                            "id": "268",
+                            "name": "Sly & Robbie"
+                        },
+                        {
+                            "id": "587",
+                            "name": "Sly & The Family Stone"
+                        },
+                        {
+                            "id": "711",
+                            "name": "Small Faces"
+                        },
+                        {
+                            "id": "960",
+                            "name": "The Smashing Pumpkins"
+                        },
+                        {
+                            "id": "737",
+                            "name": "The Smiths"
+                        },
+                        {
+                            "id": "175",
+                            "name": "Smog"
+                        },
+                        {
+                            "id": "31914",
+                            "name": "Snail Mail"
+                        },
+                        {
+                            "id": "43",
+                            "name": "Snarky Puppy"
+                        },
+                        {
+                            "id": "922",
+                            "name": "Snoop Dogg"
+                        },
+                        {
+                            "id": "885",
+                            "name": "Snow Patrol"
+                        },
+                        {
+                            "id": "932",
+                            "name": "Soft Hair"
+                        },
+                        {
+                            "id": "830",
+                            "name": "Solange"
+                        },
+                        {
+                            "id": "345",
+                            "name": "Solar Fields"
+                        },
+                        {
+                            "id": "839",
+                            "name": "Songhoy Blues"
+                        },
+                        {
+                            "id": "392",
+                            "name": "Sonic Youth"
+                        },
+                        {
+                            "id": "378",
+                            "name": "Spandau Ballet"
+                        },
+                        {
+                            "id": "951",
+                            "name": "Sparks"
+                        },
+                        {
+                            "id": "346",
+                            "name": "Spirit"
+                        },
+                        {
+                            "id": "110",
+                            "name": "Spiritualized"
+                        },
+                        {
+                            "id": "840",
+                            "name": "Spın̈al Tap"
+                        },
+                        {
+                            "id": "557",
+                            "name": "Squarepusher"
+                        },
+                        {
+                            "id": "664",
+                            "name": "Squeeze"
+                        },
+                        {
+                            "id": "844",
+                            "name": "St. Vincent"
+                        },
+                        {
+                            "id": "594",
+                            "name": "Stardust"
+                        },
+                        {
+                            "id": "604",
+                            "name": "Stars of the Lid"
+                        },
+                        {
+                            "id": "400",
+                            "name": "Steely Dan"
+                        },
+                        {
+                            "id": "934",
+                            "name": "Stefon Harris _ David Sánchez _ Christian Scott"
+                        },
+                        {
+                            "id": "492",
+                            "name": "Stephan Bodzin"
+                        },
+                        {
+                            "id": "729",
+                            "name": "Stephan Bodzin vs. Marc Romboy"
+                        },
+                        {
+                            "id": "11",
+                            "name": "Steve Harley & Cockney Rebel"
+                        },
+                        {
+                            "id": "673",
+                            "name": "Stevie Wonder"
+                        },
+                        {
+                            "id": "497",
+                            "name": "The Stone Roses"
+                        },
+                        {
+                            "id": "668",
+                            "name": "The Stooges"
+                        },
+                        {
+                            "id": "715",
+                            "name": "The Strand"
+                        },
+                        {
+                            "id": "845",
+                            "name": "The Stranglers"
+                        },
+                        {
+                            "id": "242",
+                            "name": "The Streets"
+                        },
+                        {
+                            "id": "910",
+                            "name": "The Strokes"
+                        },
+                        {
+                            "id": "605",
+                            "name": "Suede"
+                        },
+                        {
+                            "id": "585",
+                            "name": "Sufjan Stevens"
+                        },
+                        {
+                            "id": "606",
+                            "name": "Sum 41"
+                        },
+                        {
+                            "id": "584",
+                            "name": "Sun Araw"
+                        },
+                        {
+                            "id": "440",
+                            "name": "Sunny Day Real Estate"
+                        },
+                        {
+                            "id": "896",
+                            "name": "Sun Ra"
+                        },
+                        {
+                            "id": "233",
+                            "name": "Supertramp"
+                        },
+                        {
+                            "id": "578",
+                            "name": "Suzanne Vega"
+                        },
+                        {
+                            "id": "176",
+                            "name": "Swans"
+                        },
+                        {
+                            "id": "238",
+                            "name": "SZA"
+                        }
+                    ]
+                },
+                {
+                    "name": "T",
+                    "artist": [
+                        {
+                            "id": "712",
+                            "name": "Talking Heads"
+                        },
+                        {
+                            "id": "666",
+                            "name": "Talk Talk"
+                        },
+                        {
+                            "id": "151",
+                            "name": "Tame Impala"
+                        },
+                        {
+                            "id": "448",
+                            "name": "Tangerine Dream, Woody Jackson, The Alchemist & Oh No"
+                        },
+                        {
+                            "id": "714",
+                            "name": "Tears For Fears"
+                        },
+                        {
+                            "id": "234",
+                            "name": "Teenage Fanclub"
+                        },
+                        {
+                            "id": "348",
+                            "name": "Teitur"
+                        },
+                        {
+                            "id": "402",
+                            "name": "Television"
+                        },
+                        {
+                            "id": "547",
+                            "name": "Texan Girlfriend"
+                        },
+                        {
+                            "id": "379",
+                            "name": "Texas"
+                        },
+                        {
+                            "id": "31908",
+                            "name": "Thee Oh Sees"
+                        },
+                        {
+                            "id": "181",
+                            "name": "Thelonious Monk"
+                        },
+                        {
+                            "id": "351",
+                            "name": "They Might Be Giants"
+                        },
+                        {
+                            "id": "244",
+                            "name": "Thin Lizzy"
+                        },
+                        {
+                            "id": "388",
+                            "name": "Thomas Newman"
+                        },
+                        {
+                            "id": "887",
+                            "name": "Thom Yorke"
+                        },
+                        {
+                            "id": "123",
+                            "name": "Thunder & Roses"
+                        },
+                        {
+                            "id": "748",
+                            "name": "Thundercat"
+                        },
+                        {
+                            "id": "352",
+                            "name": "Thunderclap Newman"
+                        },
+                        {
+                            "id": "64",
+                            "name": "Tigers Jaw"
+                        },
+                        {
+                            "id": "661",
+                            "name": "Timber Timbre"
+                        },
+                        {
+                            "id": "449",
+                            "name": "Todd Rundgren"
+                        },
+                        {
+                            "id": "31805",
+                            "name": "Todd Terje"
+                        },
+                        {
+                            "id": "866",
+                            "name": "Together"
+                        },
+                        {
+                            "id": "182",
+                            "name": "Tom Findlay"
+                        },
+                        {
+                            "id": "129",
+                            "name": "Tommy Guerrero"
+                        },
+                        {
+                            "id": "41",
+                            "name": "Tom Petty"
+                        },
+                        {
+                            "id": "667",
+                            "name": "Tom Petty and the Heartbreakers"
+                        },
+                        {
+                            "id": "450",
+                            "name": "Tom Waits"
+                        },
+                        {
+                            "id": "184",
+                            "name": "Toots & The Maytals"
+                        },
+                        {
+                            "id": "353",
+                            "name": "TOPAZ"
+                        },
+                        {
+                            "id": "609",
+                            "name": "Tori Amos"
+                        },
+                        {
+                            "id": "679",
+                            "name": "Toro y Moi"
+                        },
+                        {
+                            "id": "529",
+                            "name": "Townes Van Zandt"
+                        },
+                        {
+                            "id": "245",
+                            "name": "Tracy Chapman"
+                        },
+                        {
+                            "id": "147",
+                            "name": "Trentemøller"
+                        },
+                        {
+                            "id": "500",
+                            "name": "Tricky"
+                        },
+                        {
+                            "id": "65",
+                            "name": "tUnE-yArDs"
+                        },
+                        {
+                            "id": "258",
+                            "name": "Turin Brakes"
+                        },
+                        {
+                            "id": "124",
+                            "name": "Two Door Cinema Club"
+                        },
+                        {
+                            "id": "961",
+                            "name": "Tycho"
+                        },
+                        {
+                            "id": "512",
+                            "name": "Tyler, the Creator"
+                        }
+                    ]
+                },
+                {
+                    "name": "U",
+                    "artist": [
+                        {
+                            "id": "220",
+                            "name": "U2"
+                        },
+                        {
+                            "id": "610",
+                            "name": "Ultravox"
+                        },
+                        {
+                            "id": "716",
+                            "name": "The Undertones"
+                        },
+                        {
+                            "id": "310",
+                            "name": "The United States of America"
+                        },
+                        {
+                            "id": "66",
+                            "name": "Unknown Mortal Orchestra"
+                        },
+                        {
+                            "id": "441",
+                            "name": "The Upsetters"
+                        }
+                    ]
+                },
+                {
+                    "name": "V",
+                    "artist": [
+                        {
+                            "id": "125",
+                            "name": "Vampire Weekend"
+                        },
+                        {
+                            "id": "738",
+                            "name": "Van Dyke Parks"
+                        },
+                        {
+                            "id": "406",
+                            "name": "Van Morrison"
+                        },
+                        {
+                            "id": "615",
+                            "name": "Velvet Revolver"
+                        },
+                        {
+                            "id": "904",
+                            "name": "The Velvet Underground"
+                        },
+                        {
+                            "id": "121",
+                            "name": "The Verve"
+                        },
+                        {
+                            "id": "31804",
+                            "name": "Vulfpeck"
+                        }
+                    ]
+                },
+                {
+                    "name": "W",
+                    "artist": [
+                        {
+                            "id": "623",
+                            "name": "The Wailers"
+                        },
+                        {
+                            "id": "846",
+                            "name": "The Wailin’ Jennys"
+                        },
+                        {
+                            "id": "243",
+                            "name": "The Walkmen"
+                        },
+                        {
+                            "id": "757",
+                            "name": "Wand"
+                        },
+                        {
+                            "id": "514",
+                            "name": "The War on Drugs"
+                        },
+                        {
+                            "id": "311",
+                            "name": "Warpaint"
+                        },
+                        {
+                            "id": "67",
+                            "name": "Warren G"
+                        },
+                        {
+                            "id": "611",
+                            "name": "Wayne Wonder"
+                        },
+                        {
+                            "id": "126",
+                            "name": "Weather Report"
+                        },
+                        {
+                            "id": "292",
+                            "name": "The Weeknd"
+                        },
+                        {
+                            "id": "806",
+                            "name": "Ween"
+                        },
+                        {
+                            "id": "717",
+                            "name": "Weezer"
+                        },
+                        {
+                            "id": "479",
+                            "name": "Wendy & Lisa"
+                        },
+                        {
+                            "id": "569",
+                            "name": "Wes Montgomery"
+                        },
+                        {
+                            "id": "612",
+                            "name": "Wham!"
+                        },
+                        {
+                            "id": "613",
+                            "name": "Wheatus"
+                        },
+                        {
+                            "id": "68",
+                            "name": "White Denim"
+                        },
+                        {
+                            "id": "659",
+                            "name": "Whitesnake"
+                        },
+                        {
+                            "id": "63",
+                            "name": "The White Stripes"
+                        },
+                        {
+                            "id": "847",
+                            "name": "White Town"
+                        },
+                        {
+                            "id": "122",
+                            "name": "The Who"
+                        },
+                        {
+                            "id": "962",
+                            "name": "WHY_"
+                        },
+                        {
+                            "id": "146",
+                            "name": "Wilco"
+                        },
+                        {
+                            "id": "183",
+                            "name": "William Onyeabor"
+                        },
+                        {
+                            "id": "876",
+                            "name": "Will Smith"
+                        },
+                        {
+                            "id": "91",
+                            "name": "Wings"
+                        },
+                        {
+                            "id": "23",
+                            "name": "Wishbone Ash"
+                        },
+                        {
+                            "id": "556",
+                            "name": "Wolfman feat. Peter Doherty"
+                        },
+                        {
+                            "id": "498",
+                            "name": "Woodkid"
+                        },
+                        {
+                            "id": "641",
+                            "name": "Woody Guthrie"
+                        },
+                        {
+                            "id": "858",
+                            "name": "The Wrens"
+                        },
+                        {
+                            "id": "438",
+                            "name": "Wynton Kelly Trio _ Wes Montgomery"
+                        }
+                    ]
+                },
+                {
+                    "name": "X-Z",
+                    "artist": [
+                        {
+                            "id": "608",
+                            "name": "The xx"
+                        },
+                        {
+                            "id": "31876",
+                            "name": "XXXTENTACION"
+                        },
+                        {
+                            "id": "598",
+                            "name": "Yann Tiersen"
+                        },
+                        {
+                            "id": "739",
+                            "name": "Yeah Yeah Yeahs"
+                        },
+                        {
+                            "id": "740",
+                            "name": "YELLE"
+                        },
+                        {
+                            "id": "185",
+                            "name": "Yellowman"
+                        },
+                        {
+                            "id": "867",
+                            "name": "Yevgeny Kissin, Herbert von Karajan"
+                        },
+                        {
+                            "id": "772",
+                            "name": "Youth Lagoon"
+                        },
+                        {
+                            "id": "312",
+                            "name": "Yo-Yo Ma • Bobby McFerrin"
+                        },
+                        {
+                            "id": "797",
+                            "name": "The Zombies"
+                        }
+                    ]
+                },
+                {
+                    "name": "#",
+                    "artist": [
+                        {
+                            "id": "480",
+                            "name": "10cc"
+                        },
+                        {
+                            "id": "222",
+                            "name": "13th Floor Elevators"
+                        },
+                        {
+                            "id": "760",
+                            "name": "The 1975"
+                        },
+                        {
+                            "id": "703",
+                            "name": "1st Down"
+                        },
+                        {
+                            "id": "542",
+                            "name": "2Pac"
+                        },
+                        {
+                            "id": "267",
+                            "name": "4hero"
+                        },
+                        {
+                            "id": "753",
+                            "name": "Ólafur Arnalds"
+                        },
+                        {
+                            "id": "96",
+                            "name": "Игорь Фёдорович Стравинский; Orchestre symphonique de Montréal, Charles Dutoit"
+                        },
+                        {
+                            "id": "599",
+                            "name": "Кино"
+                        },
+                        {
+                            "id": "97",
+                            "name": "Пётр Ильич Чайковский"
+                        },
+                        {
+                            "id": "614",
+                            "name": "Ранетки"
+                        },
+                        {
+                            "id": "561",
+                            "name": "久石譲"
+                        },
+                        {
+                            "id": "62",
+                            "name": "永田権太, 若井淑, 峰岸透 & 近藤浩治"
+                        }
+                    ]
+                }
+            ]
+        }
+    }
+}

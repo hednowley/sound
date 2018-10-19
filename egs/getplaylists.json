@@ -1,0 +1,69 @@
+{
+    "subsonic-response": {
+        "status": "ok",
+        "version": "1.15.0",
+        "playlists": {
+            "playlist": [
+                {
+                    "id": "1",
+                    "name": "Jess",
+                    "comment": "",
+                    "owner": "ned",
+                    "public": true,
+                    "songCount": 14,
+                    "duration": 3445,
+                    "created": "2018-03-27T07:41:07.717Z",
+                    "changed": "2018-03-27T08:07:53.436Z",
+                    "coverArt": "pl-1"
+                },
+                {
+                    "id": "6",
+                    "name": "Jess Charlbury",
+                    "comment": "",
+                    "owner": "jess",
+                    "public": true,
+                    "songCount": 26,
+                    "duration": 7058,
+                    "created": "2018-04-03T20:37:31.999Z",
+                    "changed": "2018-05-05T08:32:28.941Z",
+                    "coverArt": "pl-6"
+                },
+                {
+                    "id": "5",
+                    "name": "Jess Stadhampton",
+                    "comment": "",
+                    "owner": "jess",
+                    "public": true,
+                    "songCount": 11,
+                    "duration": 2097,
+                    "created": "2018-04-03T20:36:35.071Z",
+                    "changed": "2018-05-05T08:32:34.303Z",
+                    "coverArt": "pl-5"
+                },
+                {
+                    "id": "7",
+                    "name": "Ned Summer 2018",
+                    "owner": "ned",
+                    "public": false,
+                    "songCount": 1,
+                    "duration": 181,
+                    "created": "2018-06-20T10:25:01.434Z",
+                    "changed": "2018-06-20T10:25:01.649Z",
+                    "coverArt": "pl-7"
+                },
+                {
+                    "id": "2",
+                    "name": "TT",
+                    "comment": "",
+                    "owner": "ned",
+                    "public": true,
+                    "songCount": 17,
+                    "duration": 4655,
+                    "created": "2018-03-27T21:09:38.501Z",
+                    "changed": "2018-05-05T08:33:03.706Z",
+                    "coverArt": "pl-2"
+                }
+            ]
+        }
+    }
+}

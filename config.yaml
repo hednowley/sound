@@ -1,0 +1,19 @@
+port: 3684
+path: "D:\\data"
+art path: "D:\\temp\\art"
+db: "host=localhost port=5432 user=postgres password=sound dbname=sound sslmode=disable"
+log config: "log-config.xml"
+extensions:
+  - mp3
+ignored articles:
+  - The
+  - El
+users:
+  - 
+    username: ned
+    password: hello
+    email: ned@blah.com
+  -
+    username: ned2
+    password: hello2
+    email: ned2@blah.com
