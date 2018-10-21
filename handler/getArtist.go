@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"fmt"
 	"net/url"
 
 	"github.com/hednowley/sound/api"
@@ -16,12 +15,14 @@ func NewGetArtistHandler(database *dao.Database) api.Handler {
 		idParam := params.Get("id")
 		id := api.ParseUint(idParam, 0)
 		if id == 0 {
-			message := fmt.Sprintf("Artist not found: %v", idParam)
-			return api.NewErrorReponse(dto.NotFound, message)
+			return api.NewErrorReponse(dto.MissingParameter, "Required param (id) is missing")
 		}
 
 		artist, err := database.GetArtist(id)
 		if err != nil {
+			if _, ok := err.(*dao.ErrNotFound); ok {
+				return api.NewErrorReponse(dto.NotFound, "Artist not found.")
+			}
 			return api.NewErrorReponse(dto.Generic, err.Error())
 		}
 
