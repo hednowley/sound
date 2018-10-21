@@ -5,7 +5,6 @@ import (
 	"log"
 
 	"github.com/hednowley/sound/config"
-
 	testfixtures "gopkg.in/testfixtures.v2"
 )
 
@@ -13,13 +12,19 @@ func NewMockDatabase() *Database {
 
 	conn := "dbname=sound_test sslmode=disable user=postgres password=sound"
 
+	// Initialise the database schema with gorm
+	database, err := NewDatabase(&config.Config{Db: conn})
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// Open the database
 	db, err := sql.Open("postgres", conn)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	// creating the context that hold the fixtures
-	// see about all compatible databases in this page below
+	// Insert test data
 	fixtures, err := testfixtures.NewFolder(db, &testfixtures.PostgreSQL{}, "../testdata")
 	if err != nil {
 		log.Fatal(err)
@@ -30,13 +35,5 @@ func NewMockDatabase() *Database {
 		log.Fatal(err)
 	}
 
-	c := config.Config{
-		Db: conn,
-	}
-
-	database, err := NewDatabase(&c)
-	if err != nil {
-		log.Fatal(err)
-	}
 	return database
 }
