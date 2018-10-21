@@ -17,11 +17,18 @@ func NewDeletePlaylistHandler(database *dao.Database) api.Handler {
 		idParam := params.Get("id")
 		id := api.ParseUint(idParam, 0)
 		if id == 0 {
-			message := fmt.Sprintf("Playlist not found: %v", idParam)
-			return api.NewErrorReponse(dto.NotFound, message)
+			return api.NewErrorReponse(dto.MissingParameter, "Required param (id) is missing")
 		}
 
-		database.DeletePlaylist(id)
+		err := database.DeletePlaylist(id)
+		if err != nil {
+			if _, ok := err.(*dao.ErrNotFound); ok {
+				message := fmt.Sprintf("Playlist not found: %v", idParam)
+				return api.NewErrorReponse(dto.NotFound, message)
+			}
+			return api.NewErrorReponse(dto.NotFound, err.Error())
+		}
+
 		return api.NewSuccessfulReponse(nil)
 	}
 }

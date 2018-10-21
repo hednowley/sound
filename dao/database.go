@@ -369,8 +369,16 @@ func (db *Database) GetPlaylists() []*Playlist {
 	return playlists
 }
 
-func (db *Database) DeletePlaylist(id uint) {
-	db.db.Delete(Playlist{ID: id})
+func (db *Database) DeletePlaylist(id uint) error {
+	var p Playlist
+	if db.db.Where(&Playlist{
+		ID: id,
+	}).First(&p).RecordNotFound() {
+		return &ErrNotFound{}
+	}
+
+	db.db.Delete(&p)
+	return nil
 }
 
 func (db *Database) GetPlaylist(id uint) (*Playlist, error) {
