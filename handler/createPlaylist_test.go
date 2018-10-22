@@ -1,19 +1,19 @@
-package handler
+package handler_test
 
 import (
 	"net/url"
 	"testing"
 
-	"github.com/hednowley/sound/dto"
-
 	"github.com/hednowley/sound/dao"
+	"github.com/hednowley/sound/dto"
+	"github.com/hednowley/sound/handler"
 )
 
 func TestCreatePlaylist(t *testing.T) {
 
 	db := dao.NewMockDatabase()
 
-	handler := NewCreatePlaylistHandler(db)
+	handler := handler.NewCreatePlaylistHandler(db)
 	params := url.Values{}
 	params.Add("name", "dfsdf")
 	params.Add("songId", "1")
@@ -46,7 +46,7 @@ func TestEmptyPlaylist(t *testing.T) {
 
 	db := dao.NewMockDatabase()
 
-	handler := NewCreatePlaylistHandler(db)
+	handler := handler.NewCreatePlaylistHandler(db)
 	params := url.Values{}
 	params.Add("playlistId", "1")
 	params.Add("songId", "sdf")
@@ -76,7 +76,7 @@ func TestReplacePlaylist(t *testing.T) {
 
 	db := dao.NewMockDatabase()
 
-	handler := NewCreatePlaylistHandler(db)
+	handler := handler.NewCreatePlaylistHandler(db)
 	params := url.Values{}
 	params.Add("playlistId", "1")
 	params.Add("name", "dsfsad")
@@ -108,7 +108,7 @@ func TestReplaceMissingPlaylist(t *testing.T) {
 
 	db := dao.NewMockDatabase()
 
-	handler := NewCreatePlaylistHandler(db)
+	handler := handler.NewCreatePlaylistHandler(db)
 	params := url.Values{}
 	params.Add("playlistId", "666")
 	params.Add("name", "dsfsad")
@@ -136,7 +136,7 @@ func TestCreatePlaylistNoParams(t *testing.T) {
 
 	db := dao.NewMockDatabase()
 
-	handler := NewCreatePlaylistHandler(db)
+	handler := handler.NewCreatePlaylistHandler(db)
 	params := url.Values{}
 
 	response := handler(params)

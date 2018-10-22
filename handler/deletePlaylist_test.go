@@ -1,4 +1,4 @@
-package handler
+package handler_test
 
 import (
 	"net/url"
@@ -6,13 +6,14 @@ import (
 
 	"github.com/hednowley/sound/dao"
 	"github.com/hednowley/sound/dto"
+	"github.com/hednowley/sound/handler"
 )
 
 func TestDeletePlaylist(t *testing.T) {
 
 	db := dao.NewMockDatabase()
 
-	handler := NewDeletePlaylistHandler(db)
+	handler := handler.NewDeletePlaylistHandler(db)
 	params := url.Values{}
 	params.Add("id", "1")
 
@@ -31,7 +32,7 @@ func TestDeleteMissingPlaylist(t *testing.T) {
 
 	db := dao.NewMockDatabase()
 
-	handler := NewDeletePlaylistHandler(db)
+	handler := handler.NewDeletePlaylistHandler(db)
 	params := url.Values{}
 	params.Add("id", "63")
 
@@ -55,7 +56,7 @@ func TestDeleteNonsensePlaylist(t *testing.T) {
 
 	db := dao.NewMockDatabase()
 
-	handler := NewDeletePlaylistHandler(db)
+	handler := handler.NewDeletePlaylistHandler(db)
 	params := url.Values{}
 	params.Add("id", "shsd")
 
@@ -79,7 +80,7 @@ func TestDeletePlaylistNoParams(t *testing.T) {
 
 	db := dao.NewMockDatabase()
 
-	handler := NewDeletePlaylistHandler(db)
+	handler := handler.NewDeletePlaylistHandler(db)
 	params := url.Values{}
 
 	response := handler(params)

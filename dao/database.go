@@ -260,7 +260,7 @@ func (db *Database) GetSong(id uint) (*Song, error) {
 		Where(&Song{
 			ID: id,
 		}).First(&f).RecordNotFound() {
-		return &f, errors.New("No such song")
+		return &f, &ErrNotFound{}
 	}
 	return &f, nil
 }

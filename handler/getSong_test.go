@@ -4,18 +4,35 @@ import (
 	"net/url"
 	"testing"
 
+	"github.com/hednowley/sound/api"
 	"github.com/hednowley/sound/dao"
 	"github.com/hednowley/sound/dto"
 	"github.com/hednowley/sound/handler"
 )
 
-func TestGetMissingAlbum(t *testing.T) {
+type HandlerTestResource struct {
+	db      *dao.Database
+	handler api.Handler
+	params  url.Values
+}
 
+func NewGetSongTestResource() HandlerTestResource {
 	db := dao.NewMockDatabase()
-	handler := handler.NewGetAlbumHandler(db)
+	handler := handler.NewGetSongHandler(db)
 	params := url.Values{}
-	url.Values.Add(params, "id", "666")
-	response := handler(params)
+
+	return HandlerTestResource{
+		db:      db,
+		handler: handler,
+		params:  params,
+	}
+}
+
+func TestGetMissingSong(t *testing.T) {
+
+	h := NewGetSongTestResource()
+	url.Values.Add(h.params, "id", "666")
+	response := h.handler(h.params)
 
 	if response.IsSuccess {
 		t.Error("Not a failure")
@@ -30,26 +47,24 @@ func TestGetMissingAlbum(t *testing.T) {
 		t.Error("Wrong error code")
 	}
 
-	if r.Message != "Album not found." {
+	if r.Message != "Song not found." {
 		t.Error("Wrong error message")
 	}
 }
 
-func TestGetGoodAlbum(t *testing.T) {
+func TestGetGoodSong(t *testing.T) {
 
-	db := dao.NewMockDatabase()
-	handler := handler.NewGetAlbumHandler(db)
-	params := url.Values{}
-	url.Values.Add(params, "id", "1")
-	response := handler(params)
+	h := NewGetSongTestResource()
+	url.Values.Add(h.params, "id", "1")
+	response := h.handler(h.params)
 
 	if !response.IsSuccess {
 		t.Error("Not a success")
 	}
 
-	r, ok := response.Body.(*dto.Album)
+	r, ok := response.Body.(*dto.Song)
 	if !ok {
-		t.Error("Not an album")
+		t.Error("Not a song")
 	}
 
 	if r.ID != 1 {
@@ -57,13 +72,11 @@ func TestGetGoodAlbum(t *testing.T) {
 	}
 }
 
-func TestGetAlbumWithBadId(t *testing.T) {
+func TestGetSongWithBadId(t *testing.T) {
 
-	db := dao.NewMockDatabase()
-	handler := handler.NewGetAlbumHandler(db)
-	params := url.Values{}
-	url.Values.Add(params, "id", "dfggsgs")
-	response := handler(params)
+	h := NewGetSongTestResource()
+	url.Values.Add(h.params, "id", "dfggsgs")
+	response := h.handler(h.params)
 
 	if response.IsSuccess {
 		t.Error("Not a failure")
@@ -83,12 +96,10 @@ func TestGetAlbumWithBadId(t *testing.T) {
 	}
 }
 
-func TestGetAlbumWithNoId(t *testing.T) {
+func TestGetSongWithNoId(t *testing.T) {
 
-	db := dao.NewMockDatabase()
-	handler := handler.NewGetAlbumHandler(db)
-	params := url.Values{}
-	response := handler(params)
+	h := NewGetSongTestResource()
+	response := h.handler(h.params)
 
 	if response.IsSuccess {
 		t.Error("Not a failure")
