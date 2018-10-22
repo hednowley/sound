@@ -1,0 +1,19 @@
+- id: 1
+  playlist_id: 1
+  song_id: 1
+  index: 0
+
+- id: 3
+  playlist_id: 1
+  song_id: 1
+  index: 5
+
+- id: 4
+  playlist_id: 1
+  song_id: 14
+  index: 2
+
+- id: 10
+  playlist_id: 1
+  song_id: 2
+  index: 6  

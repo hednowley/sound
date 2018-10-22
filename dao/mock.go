@@ -25,7 +25,7 @@ func NewMockDatabase() *Database {
 	}
 
 	// Insert test data
-	fixtures, err := testfixtures.NewFolder(db, &testfixtures.PostgreSQL{}, "../testdata")
+	fixtures, err := testfixtures.NewFolder(db, &testfixtures.PostgreSQL{}, "../testdata/dao")
 	if err != nil {
 		log.Fatal(err)
 	}
