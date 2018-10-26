@@ -4,13 +4,13 @@ import (
 	"net/url"
 	"testing"
 
-	"github.com/hednowley/sound/dao"
+	"github.com/hednowley/sound/dal"
 	"github.com/hednowley/sound/dto"
 	"github.com/hednowley/sound/handler"
 )
 
 func NewGetSongsByGenreTestResource() HandlerTestResource {
-	db := dao.NewMockDatabase()
+	db := dal.NewMock()
 	handler := handler.NewGetSongsByGenreHandler(db)
 	params := url.Values{}
 

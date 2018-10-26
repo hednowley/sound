@@ -9,13 +9,13 @@ import (
 	"github.com/hednowley/sound/entities"
 )
 
-func GetMusicData(filePath string) (data entities.FileData, err error) {
+func GetMusicData(filePath string) (*entities.FileInfo, error) {
 	file, _ := os.Open(filePath)
 	defer file.Close()
 
 	info, err := file.Stat()
 	if err != nil {
-		return
+		return nil, err
 	}
 
 	m, _ := tag.ReadFrom(file)
@@ -39,7 +39,7 @@ func GetMusicData(filePath string) (data entities.FileData, err error) {
 		albumArtist = m.AlbumArtist()
 	}
 
-	data = entities.FileData{
+	return &entities.FileInfo{
 		Path:        filePath,
 		Artist:      m.Artist(),
 		Album:       m.Album(),
@@ -52,6 +52,5 @@ func GetMusicData(filePath string) (data entities.FileData, err error) {
 		CoverArt:    art,
 		Size:        info.Size(),
 		Extension:   strings.TrimPrefix(path.Ext(filePath), "."),
-	}
-	return
+	}, nil
 }

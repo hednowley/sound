@@ -7,7 +7,7 @@ import (
 	"strings"
 
 	"github.com/hednowley/sound/api"
-	"github.com/hednowley/sound/dao"
+	"github.com/hednowley/sound/dal"
 	"github.com/hednowley/sound/dto"
 )
 
@@ -41,7 +41,7 @@ func parseStreamFormat(param string) *StreamFormat {
 	return nil
 }
 
-func NewStreamHandler(database *dao.Database) api.BinaryHandler {
+func NewStreamHandler(database *dal.DAL) api.BinaryHandler {
 
 	return func(params url.Values, w *http.ResponseWriter, r *http.Request) *api.Response {
 
@@ -71,7 +71,7 @@ func NewStreamHandler(database *dao.Database) api.BinaryHandler {
 			}
 		*/
 
-		file, err := database.GetSong(id)
+		file, err := database.GetSong(id, false, false, false, false)
 		if err != nil {
 			return api.NewErrorReponse(dto.Generic, err.Error())
 		}

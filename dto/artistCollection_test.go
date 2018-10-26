@@ -23,41 +23,71 @@ func TestArtistCollection(t *testing.T) {
 
 	xml := `
 	<artists ignoredArticles="the">
-		<index name="A"></index>
+		<index name="A">
+		</index>
 		<index name="B">
-			<artist id="1" name="bhusadiu sdu" coverArt="1" albumCount="0"></artist>
-			<artist id="5" name="Bdfgfdg" coverArt="1" albumCount="0"></artist>
+			<artist id="1" name="bhusadiu sdu" coverArt="1" albumCount="0" duration="1">
+			</artist>
+			<artist id="5" name="Bdfgfdg" coverArt="1" albumCount="0" duration="5">
+			</artist>
 		</index>
-		<index name="C"></index>
-		<index name="D"></index>
-		<index name="E"></index>
-		<index name="F"></index>
-		<index name="G"></index>
+		<index name="C">
+		</index>
+		<index name="D">
+		</index>
+		<index name="E">
+		</index>
+		<index name="F">
+		</index>
+		<index name="G">
+		</index>
 		<index name="H">
-			<artist id="2" name="Hsetr" coverArt="1" albumCount="0"></artist>
+			<artist id="2" name="Hsetr" coverArt="1" albumCount="0" duration="2">
+			</artist>
 		</index>
-		<index name="I"></index>
-		<index name="J"></index>
-		<index name="K"></index>
-		<index name="L"></index>
-		<index name="M"></index>
-		<index name="N"></index>
-		<index name="O"></index>
-		<index name="P"></index>
-		<index name="Q"></index>
-		<index name="R"></index>
-		<index name="S"></index>
-		<index name="T"></index>
-		<index name="U"></index>
-		<index name="V"></index>
-		<index name="W"></index>
-		<index name="X"></index>
-		<index name="Y"></index>
-		<index name="Z"></index>
+		<index name="I">
+		</index>
+		<index name="J">
+		</index>
+		<index name="K">
+		</index>
+		<index name="L">
+		</index>
+		<index name="M">
+		</index>
+		<index name="N">
+		</index>
+		<index name="O">
+		</index>
+		<index name="P">
+		</index>
+		<index name="Q">
+		</index>
+		<index name="R">
+		</index>
+		<index name="S">
+		</index>
+		<index name="T">
+		</index>
+		<index name="U">
+		</index>
+		<index name="V">
+		</index>
+		<index name="W">
+		</index>
+		<index name="X">
+		</index>
+		<index name="Y">
+		</index>
+		<index name="Z">
+		</index>
 		<index name="#">
-			<artist id="3" name="2 4" coverArt="1" albumCount="3"></artist>
-			<artist id="4" name="#sdgs" coverArt="1" albumCount="1"></artist>
-			<artist id="6" name="&#34;d&#34;" coverArt="1" albumCount="0"></artist>
+			<artist id="3" name="2 4" coverArt="1" albumCount="3" duration="3">
+			</artist>
+			<artist id="4" name="#sdgs" coverArt="1" albumCount="1" duration="4">
+			</artist>
+			<artist id="6" name="&#34;d&#34;" coverArt="1" albumCount="0" duration="6">
+			</artist>
 		</index>
 		</artists>
 	`
@@ -79,13 +109,15 @@ func TestArtistCollection(t *testing.T) {
 					"id":"1",
 					"name":"bhusadiu sdu",
 					"coverArt":"1",
-					"albumCount":0
+					"albumCount":0,
+					"duration":1
 				 },
 				 {
 					"id":"5",
 					"name":"Bdfgfdg",
 					"coverArt":"1",
-					"albumCount":0
+					"albumCount":0,
+					"duration":5
 				 }
 			  ]
 		   },
@@ -126,7 +158,8 @@ func TestArtistCollection(t *testing.T) {
 					"id":"2",
 					"name":"Hsetr",
 					"coverArt":"1",
-					"albumCount":0
+					"albumCount":0,
+					"duration":2
 				 }
 			  ]
 		   },
@@ -245,19 +278,22 @@ func TestArtistCollection(t *testing.T) {
 					"id":"3",
 					"name":"2 4",
 					"coverArt":"1",
-					"albumCount":3
+					"albumCount":3,
+					"duration":3
 				 },
 				 {
 					"id":"4",
 					"name":"#sdgs",
 					"coverArt":"1",
-					"albumCount":1
+					"albumCount":1,
+					"duration":4
 				 },
 				 {
 					"id":"6",
 					"name":"\"d\"",
 					"coverArt":"1",
-					"albumCount":0
+					"albumCount":0,
+					"duration":6
 				 }
 			  ]
 		   }

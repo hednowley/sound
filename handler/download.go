@@ -6,12 +6,12 @@ import (
 	"net/url"
 
 	"github.com/hednowley/sound/api"
-	"github.com/hednowley/sound/dao"
+	"github.com/hednowley/sound/dal"
 	"github.com/hednowley/sound/dto"
 )
 
 // NewDownloadHandler is a handler for downloading songs.
-func NewDownloadHandler(database *dao.Database) api.BinaryHandler {
+func NewDownloadHandler(database *dal.DAL) api.BinaryHandler {
 
 	return func(params url.Values, w *http.ResponseWriter, r *http.Request) *api.Response {
 
@@ -21,7 +21,7 @@ func NewDownloadHandler(database *dao.Database) api.BinaryHandler {
 			return api.NewErrorReponse(dto.Generic, fmt.Sprintf("Song not found: %v", idParam))
 		}
 
-		file, err := database.GetSong(id)
+		file, err := database.GetSong(id, false, false, false, false)
 		if err != nil {
 			return api.NewErrorReponse(dto.Generic, err.Error())
 		}

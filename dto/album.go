@@ -54,5 +54,6 @@ func NewAlbum(album *dao.Album, includeSongs bool) *Album {
 		Created:   album.Created,
 		Genre:     genreName,
 		Year:      album.Year,
+		Duration:  album.Duration,
 	}
 }

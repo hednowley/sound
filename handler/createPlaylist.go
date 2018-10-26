@@ -5,12 +5,13 @@ import (
 	"net/url"
 
 	"github.com/hednowley/sound/api"
+	"github.com/hednowley/sound/dal"
 	"github.com/hednowley/sound/dao"
 	"github.com/hednowley/sound/dto"
 )
 
 // NewCreatePlaylistHandler is a handler for creating or updating playlists.
-func NewCreatePlaylistHandler(database *dao.Database) api.Handler {
+func NewCreatePlaylistHandler(dal *dal.DAL) api.Handler {
 
 	return func(params url.Values) *api.Response {
 
@@ -32,7 +33,7 @@ func NewCreatePlaylistHandler(database *dao.Database) api.Handler {
 			}
 		}
 
-		id, err := database.PutPlaylist(id, name, songIdsNum)
+		id, err := dal.PutPlaylist(id, name, songIdsNum)
 		if err != nil {
 			_, ok := err.(*dao.ErrNotFound)
 			if ok {
@@ -42,11 +43,11 @@ func NewCreatePlaylistHandler(database *dao.Database) api.Handler {
 			return api.NewErrorReponse(dto.Generic, err.Error())
 		}
 
-		playlist, err := database.GetPlaylist(id)
+		p, err := dal.GetPlaylist(id)
 		if err != nil {
 			return api.NewErrorReponse(dto.Generic, err.Error())
 		}
 
-		return api.NewSuccessfulReponse(dto.NewPlaylist(playlist))
+		return api.NewSuccessfulReponse(dto.NewPlaylist(p))
 	}
 }

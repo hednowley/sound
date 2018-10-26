@@ -111,6 +111,7 @@ func GenerateAlbum(i int, genre *dao.Genre, artist *dao.Artist, art *dao.Art) *d
 		Art:      art,
 		ArtID:    artID,
 		Created:  &t,
+		Duration: i,
 	}
 
 	artist.Albums = append(artist.Albums, &a)
@@ -136,10 +137,11 @@ func GenerateArtist(i int, art *dao.Art) *dao.Artist {
 	}
 
 	a := dao.Artist{
-		ID:    uint(i),
-		Name:  fmt.Sprintf("artist%v", i),
-		Art:   art,
-		ArtID: artID,
+		ID:       uint(i),
+		Name:     fmt.Sprintf("artist%v", i),
+		Art:      art,
+		ArtID:    artID,
+		Duration: i,
 	}
 
 	return &a

@@ -5,12 +5,13 @@ import (
 	"net/url"
 
 	"github.com/hednowley/sound/api"
+	"github.com/hednowley/sound/dal"
 	"github.com/hednowley/sound/dao"
 	"github.com/hednowley/sound/dto"
 )
 
 // NewDeletePlaylistHandler is a handler for deleting playlists.
-func NewDeletePlaylistHandler(database *dao.Database) api.Handler {
+func NewDeletePlaylistHandler(database *dal.DAL) api.Handler {
 
 	return func(params url.Values) *api.Response {
 

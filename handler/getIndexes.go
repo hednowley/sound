@@ -4,11 +4,11 @@ import (
 	"net/url"
 
 	"github.com/hednowley/sound/api"
-	"github.com/hednowley/sound/dao"
+	"github.com/hednowley/sound/dal"
 	"github.com/hednowley/sound/dto"
 )
 
-func NewGetIndexesHandler(database *dao.Database) api.Handler {
+func NewGetIndexesHandler(database *dal.DAL) api.Handler {
 
 	return func(params url.Values) *api.Response {
 		artists := database.GetArtists()

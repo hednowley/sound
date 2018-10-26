@@ -70,6 +70,8 @@ func newSongBody(song *dao.Song) *songBody {
 		Created:    *song.Created,
 		Extension:  song.Extension,
 		Size:       song.Size,
+		Duration:   song.Duration,
+		Bitrate:    song.Bitrate,
 	}
 }
 

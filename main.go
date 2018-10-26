@@ -6,25 +6,27 @@ import (
 	"strings"
 
 	log "github.com/cihub/seelog"
-
 	"github.com/hednowley/sound/api"
 	"github.com/hednowley/sound/config"
-	"github.com/hednowley/sound/dao"
+	"github.com/hednowley/sound/dal"
+	"github.com/hednowley/sound/database"
 	"github.com/hednowley/sound/handler"
+	"github.com/hednowley/sound/provider"
 	"github.com/hednowley/sound/services"
 	"go.uber.org/fx"
 )
 
 // registerHandlers associates routes with handlers.
-func registerHandlers(factory *api.HandlerFactory, config *config.Config, db *dao.Database, scanner *services.Scanner) {
+func registerHandlers(factory *api.HandlerFactory, config *config.Config, db *dal.DAL, dal *dal.DAL) {
 
 	handlers := make(map[string]http.HandlerFunc)
 
 	handlers["/rest/ping"] = factory.PublishHandler(handler.NewPingHandler())
 
 	// Scanning
-	handlers["/rest/getscanstatus"] = factory.PublishHandler(handler.NewGetScanStatusHandler(scanner))
-	handlers["/rest/startscan"] = factory.PublishHandler(handler.NewStartScanHandler(scanner))
+	handlers["/rest/getscanstatus"] = factory.PublishHandler(handler.NewGetScanStatusHandler(dal))
+	handlers["/rest/startscan"] = factory.PublishHandler(handler.NewStartScanHandler(dal))
+	handlers["/rest/delete"] = factory.PublishHandler(handler.NewDeleteHandler(dal))
 
 	// Querying
 	handlers["/rest/getalbumlist2"] = factory.PublishHandler(handler.NewGetAlbumList2Handler(db))
@@ -69,9 +71,9 @@ func registerHandlers(factory *api.HandlerFactory, config *config.Config, db *da
 	})
 
 	defer log.Flush()
-	log.Info(`*******************`)
-	log.Info("Application started")
-	log.Info(`*******************`)
+	log.Info(`********************`)
+	log.Info("Application started!")
+	log.Info(`********************`)
 
 	log.Error(http.ListenAndServe(":"+config.Port, nil))
 }
@@ -91,8 +93,9 @@ func main() {
 	app := fx.New(
 		fx.Provide(
 			config.NewConfig,
-			dao.NewDatabase,
-			services.NewScanner,
+			database.NewDefault,
+			provider.NewProviders,
+			dal.NewDAL,
 			services.NewAuthenticator,
 			api.NewHandlerFactory),
 		fx.Invoke(setUpLogger, registerHandlers),

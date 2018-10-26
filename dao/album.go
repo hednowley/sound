@@ -7,8 +7,8 @@ import (
 type Album struct {
 	ID       uint `gorm:"PRIMARY_KEY"`
 	Artist   *Artist
-	ArtistID uint
-	Name     string
+	ArtistID uint    `gorm:"index:albums_name_idx"`
+	Name     string  `gorm:"index:albums_name_idx"`
 	Songs    []*Song `gorm:"foreignkey:AlbumID"`
 	Created  *time.Time
 	ArtID    uint
@@ -16,4 +16,5 @@ type Album struct {
 	GenreID  uint
 	Genre    *Genre
 	Year     int
+	Duration int // Duration in seconds
 }

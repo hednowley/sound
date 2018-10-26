@@ -4,14 +4,14 @@ import (
 	"net/url"
 	"testing"
 
-	"github.com/hednowley/sound/dao"
+	"github.com/hednowley/sound/dal"
 	"github.com/hednowley/sound/dto"
 	"github.com/hednowley/sound/handler"
 )
 
 func TestGetMissingAlbum(t *testing.T) {
 
-	db := dao.NewMockDatabase()
+	db := dal.NewMock()
 	handler := handler.NewGetAlbumHandler(db)
 	params := url.Values{}
 	url.Values.Add(params, "id", "666")
@@ -37,7 +37,7 @@ func TestGetMissingAlbum(t *testing.T) {
 
 func TestGetGoodAlbum(t *testing.T) {
 
-	db := dao.NewMockDatabase()
+	db := dal.NewMock()
 	handler := handler.NewGetAlbumHandler(db)
 	params := url.Values{}
 	url.Values.Add(params, "id", "1")
@@ -59,7 +59,7 @@ func TestGetGoodAlbum(t *testing.T) {
 
 func TestGetAlbumWithBadId(t *testing.T) {
 
-	db := dao.NewMockDatabase()
+	db := dal.NewMock()
 	handler := handler.NewGetAlbumHandler(db)
 	params := url.Values{}
 	url.Values.Add(params, "id", "dfggsgs")
@@ -85,7 +85,7 @@ func TestGetAlbumWithBadId(t *testing.T) {
 
 func TestGetAlbumWithNoId(t *testing.T) {
 
-	db := dao.NewMockDatabase()
+	db := dal.NewMock()
 	handler := handler.NewGetAlbumHandler(db)
 	params := url.Values{}
 	response := handler(params)

@@ -5,11 +5,11 @@ import (
 	"net/url"
 
 	"github.com/hednowley/sound/api"
-	"github.com/hednowley/sound/dao"
+	"github.com/hednowley/sound/dal"
 	"github.com/hednowley/sound/dto"
 )
 
-func NewUpdatePlaylistHandler(database *dao.Database) api.Handler {
+func NewUpdatePlaylistHandler(database *dal.DAL) api.Handler {
 
 	return func(params url.Values) *api.Response {
 

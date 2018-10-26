@@ -4,11 +4,12 @@ import (
 	"net/url"
 
 	"github.com/hednowley/sound/api"
+	"github.com/hednowley/sound/dal"
 	"github.com/hednowley/sound/dao"
 	"github.com/hednowley/sound/dto"
 )
 
-func NewGetSongHandler(database *dao.Database) api.Handler {
+func NewGetSongHandler(database *dal.DAL) api.Handler {
 
 	return func(params url.Values) *api.Response {
 
@@ -18,7 +19,7 @@ func NewGetSongHandler(database *dao.Database) api.Handler {
 			return api.NewErrorReponse(dto.MissingParameter, "Required param (id) is missing")
 		}
 
-		file, err := database.GetSong(id)
+		file, err := database.GetSong(id, true, true, true, true)
 		if err != nil {
 			if dao.IsErrNotFound(err) {
 				return api.NewErrorReponse(dto.NotFound, "Song not found.")

@@ -4,14 +4,14 @@ import (
 	"net/url"
 	"testing"
 
-	"github.com/hednowley/sound/dao"
+	"github.com/hednowley/sound/dal"
 	"github.com/hednowley/sound/dto"
 	"github.com/hednowley/sound/handler"
 )
 
 func TestDeletePlaylist(t *testing.T) {
 
-	db := dao.NewMockDatabase()
+	db := dal.NewMock()
 
 	handler := handler.NewDeletePlaylistHandler(db)
 	params := url.Values{}
@@ -30,7 +30,7 @@ func TestDeletePlaylist(t *testing.T) {
 
 func TestDeleteMissingPlaylist(t *testing.T) {
 
-	db := dao.NewMockDatabase()
+	db := dal.NewMock()
 
 	handler := handler.NewDeletePlaylistHandler(db)
 	params := url.Values{}
@@ -54,7 +54,7 @@ func TestDeleteMissingPlaylist(t *testing.T) {
 
 func TestDeleteNonsensePlaylist(t *testing.T) {
 
-	db := dao.NewMockDatabase()
+	db := dal.NewMock()
 
 	handler := handler.NewDeletePlaylistHandler(db)
 	params := url.Values{}
@@ -78,7 +78,7 @@ func TestDeleteNonsensePlaylist(t *testing.T) {
 
 func TestDeletePlaylistNoParams(t *testing.T) {
 
-	db := dao.NewMockDatabase()
+	db := dal.NewMock()
 
 	handler := handler.NewDeletePlaylistHandler(db)
 	params := url.Values{}

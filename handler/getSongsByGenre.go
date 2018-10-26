@@ -4,11 +4,12 @@ import (
 	"net/url"
 
 	"github.com/hednowley/sound/api"
+	"github.com/hednowley/sound/dal"
 	"github.com/hednowley/sound/dao"
 	"github.com/hednowley/sound/dto"
 )
 
-func NewGetSongsByGenreHandler(database *dao.Database) api.Handler {
+func NewGetSongsByGenreHandler(dal *dal.DAL) api.Handler {
 
 	return func(params url.Values) *api.Response {
 
@@ -23,7 +24,7 @@ func NewGetSongsByGenreHandler(database *dao.Database) api.Handler {
 		offsetParam := params.Get("offset")
 		offset := api.ParseUint(offsetParam, 0)
 
-		genre, err := database.GetGenre(genreParam)
+		genre, err := dal.GetGenre(genreParam)
 		if err != nil {
 			genre = &dao.Genre{}
 		}

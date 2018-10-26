@@ -4,13 +4,13 @@ import (
 	"net/url"
 	"testing"
 
-	"github.com/hednowley/sound/dao"
+	"github.com/hednowley/sound/dal"
 	"github.com/hednowley/sound/dto"
 )
 
 func TestGetMissingArtist(t *testing.T) {
 
-	db := dao.NewMockDatabase()
+	db := dal.NewMock()
 	handler := NewGetArtistHandler(db)
 	params := url.Values{}
 	url.Values.Add(params, "id", "3")
@@ -36,7 +36,7 @@ func TestGetMissingArtist(t *testing.T) {
 
 func TestGetGoodArtist(t *testing.T) {
 
-	db := dao.NewMockDatabase()
+	db := dal.NewMock()
 	handler := NewGetArtistHandler(db)
 	params := url.Values{}
 	url.Values.Add(params, "id", "1")
@@ -62,7 +62,7 @@ func TestGetGoodArtist(t *testing.T) {
 
 func TestGetArtistWithBadId(t *testing.T) {
 
-	db := dao.NewMockDatabase()
+	db := dal.NewMock()
 	handler := NewGetArtistHandler(db)
 	params := url.Values{}
 	url.Values.Add(params, "id", "dfggsgs")
@@ -88,7 +88,7 @@ func TestGetArtistWithBadId(t *testing.T) {
 
 func TestGetArtistWithNoId(t *testing.T) {
 
-	db := dao.NewMockDatabase()
+	db := dal.NewMock()
 	handler := NewGetArtistHandler(db)
 	params := url.Values{}
 	response := handler(params)

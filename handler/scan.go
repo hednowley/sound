@@ -3,28 +3,24 @@ package handler
 import (
 	"net/url"
 
-	log "github.com/cihub/seelog"
 	"github.com/hednowley/sound/api"
+	"github.com/hednowley/sound/dal"
 	"github.com/hednowley/sound/dto"
-
-	"github.com/hednowley/sound/services"
 )
 
-func NewStartScanHandler(scanner *services.Scanner) api.Handler {
+func NewStartScanHandler(dal *dal.DAL) api.Handler {
 
 	return func(params url.Values) *api.Response {
-		log.Info("Starting scan.")
-		scanner.Start()
-
-		r := dto.NewScanStatus(scanner.InProgress, scanner.FileCount())
+		go dal.StartAllScans(false, false)
+		r := dto.NewScanStatus(dal.GetScanStatus(), dal.GetScanFileCount())
 		return api.NewSuccessfulReponse(r)
 	}
 }
 
-func NewGetScanStatusHandler(scanner *services.Scanner) api.Handler {
+func NewGetScanStatusHandler(dal *dal.DAL) api.Handler {
 
 	return func(params url.Values) *api.Response {
-		r := dto.NewScanStatus(scanner.InProgress, scanner.FileCount())
+		r := dto.NewScanStatus(dal.GetScanStatus(), dal.GetScanFileCount())
 		return api.NewSuccessfulReponse(r)
 	}
 }

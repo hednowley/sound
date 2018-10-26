@@ -1,6 +1,6 @@
 package entities
 
-type FileData struct {
+type FileInfo struct {
 	Path        string
 	Artist      string
 	Album       string
@@ -13,6 +13,8 @@ type FileData struct {
 	CoverArt    *CoverArtData
 	Size        int64
 	Extension   string
+	Bitrate     int // Bitrate in kb/s
+	Duration    int // Duration in seconds
 }
 
 type CoverArtData struct {

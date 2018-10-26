@@ -1,5 +1,5 @@
 port: 3684
-path: "D:\\data"
+#path: "D:\\data"
 art path: "D:\\temp\\art"
 db: "host=localhost port=5432 user=postgres password=sound dbname=sound sslmode=disable"
 log config: "log-config.xml"
@@ -17,3 +17,4 @@ users:
     username: ned2
     password: hello2
     email: ned2@blah.com
+beets db: "C:\\Users\\ned.howley\\Downloads\\beetslib.blb"

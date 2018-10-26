@@ -4,31 +4,44 @@
   title: "title_1"
   created: 2018-06-12 11:11:11
   genre_id: 1
+  provider_id: "mock"
 
 - id: 2
   album_id: 2
   path: "path_2"
   title: "title_2"
   created: 2018-06-12 11:11:11
+  provider_id: "mock"
 
 # Gap for missing song #3
 
 - id: 10
   album_id: 2
-  path: "path_2"
+  path: "path_10"
   title: "title_2"
   created: 2018-06-12 11:11:11
   genre_id: 1
+  provider_id: "mock"
 
 - id: 14
   album_id: 2
-  path: "path_2"
+  path: "path_14"
   title: "title_2"
   created: 2018-06-12 11:11:11
   genre_id: 2
+  provider_id: "mock"
 
 - id: 15
+  album_id: 2
+  path: "path_15"
+  title: "title_2"
+  created: 2018-06-12 11:11:11
+  provider_id: "mock"
+
+# Same as song #2 but with different provider  
+- id: 22
   album_id: 2
   path: "path_2"
   title: "title_2"
   created: 2018-06-12 11:11:11
+  provider_id: "mock2"

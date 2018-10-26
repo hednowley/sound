@@ -5,19 +5,19 @@ import (
 	"testing"
 
 	"github.com/hednowley/sound/api"
-	"github.com/hednowley/sound/dao"
+	"github.com/hednowley/sound/dal"
 	"github.com/hednowley/sound/dto"
 	"github.com/hednowley/sound/handler"
 )
 
 type HandlerTestResource struct {
-	db      *dao.Database
+	db      *dal.DAL
 	handler api.Handler
 	params  url.Values
 }
 
 func NewGetSongTestResource() HandlerTestResource {
-	db := dao.NewMockDatabase()
+	db := dal.NewMock()
 	handler := handler.NewGetSongHandler(db)
 	params := url.Values{}
 

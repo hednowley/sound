@@ -17,7 +17,7 @@ func TestArtist(t *testing.T) {
 	DTO := NewArtist(artist, false)
 
 	xml := `
-	<artist id="1" name="artist1" coverArt="1" albumCount="6"></artist>
+	<artist id="1" name="artist1" coverArt="1" albumCount="6" duration="1"></artist>
 	`
 
 	json := `
@@ -25,7 +25,8 @@ func TestArtist(t *testing.T) {
 		"id":"1",
 		"name":"artist1",
 		"coverArt":"1",
-		"albumCount":6
+		"albumCount":6,
+		"duration":1
 	}
 	`
 
@@ -43,14 +44,15 @@ func TestArtistWithoutArt(t *testing.T) {
 	DTO := NewArtist(artist, false)
 
 	xml := `
-	<artist id="1" name="artist1" albumCount="6"></artist>
+	<artist id="1" name="artist1" albumCount="6" duration="1"></artist>
 	`
 
 	json := `
 	{
 		"id":"1",
 		"name":"artist1",
-		"albumCount":6
+		"albumCount":6,
+		"duration":1
 	}
 	`
 
@@ -68,7 +70,7 @@ func TestArtistWithoutAlbums(t *testing.T) {
 	DTO := NewArtist(artist, false)
 
 	xml := `
-	<artist id="1" name="artist1" coverArt="1" albumCount="0"></artist>
+	<artist id="1" name="artist1" coverArt="1" albumCount="0" duration="1"></artist>
 	`
 
 	json := `
@@ -76,7 +78,8 @@ func TestArtistWithoutAlbums(t *testing.T) {
 		"id":"1",
 		"name":"artist1",
 		"coverArt":"1",
-		"albumCount":0
+		"albumCount":0,
+		"duration":1
 	}
 	`
 
@@ -101,7 +104,7 @@ func TestArtistWithAlbums(t *testing.T) {
 	}
 
 	xml := fmt.Sprintf(`
-	<artist id="1" name="artist1" coverArt="1" albumCount="6">%v</artist>
+	<artist id="1" name="artist1" coverArt="1" albumCount="6" duration="1">%v</artist>
 	`, albumXML)
 
 	albumJSON := make([]string, len(albums))
@@ -116,7 +119,8 @@ func TestArtistWithAlbums(t *testing.T) {
 		"name":"artist1",
 		"coverArt":"1",
 		"albumCount":6,
-		"album":[%v]
+		"album":[%v],
+		"duration":1
 	}
 	`, strings.Join(albumJSON, ","))
 

@@ -15,6 +15,7 @@ type Config struct {
 	Extensions      []string
 	IgnoredArticles []string `yaml:"ignored articles"`
 	Users           []User
+	BeetsDB         string `yaml:"beets db"`
 }
 
 type User struct {

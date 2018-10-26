@@ -19,7 +19,7 @@ func TestAlbum(t *testing.T) {
 	DTO := NewAlbum(album, false)
 
 	xml := `
-	<album id="1" name="album1" artist="artist1" artistId="1" coverArt="1" songCount="11" duration="0" created="2001-08-15T00:00:00Z" year="1901" genre="genre1"></album>
+	<album id="1" name="album1" artist="artist1" artistId="1" coverArt="1" songCount="11" duration="1" created="2001-08-15T00:00:00Z" year="1901" genre="genre1"></album>
 	`
 
 	json := `
@@ -30,7 +30,7 @@ func TestAlbum(t *testing.T) {
 		"artistId":"1",
 		"coverArt":"1",
 		"songCount":11,
-		"duration":0,
+		"duration":1,
 		"created":"2001-08-15T00:00:00Z",
 		"year":1901,
 		"genre":"genre1"
@@ -54,7 +54,7 @@ func TestAlbumWithoutArt(t *testing.T) {
 	DTO := NewAlbum(album, false)
 
 	xml := `
-	<album id="1" name="album1" artist="artist1" artistId="1" songCount="11" duration="0" created="2001-08-15T00:00:00Z" year="1901" genre="genre1"></album>
+	<album id="1" name="album1" artist="artist1" artistId="1" songCount="11" duration="1" created="2001-08-15T00:00:00Z" year="1901" genre="genre1"></album>
 	`
 
 	json := `
@@ -64,7 +64,7 @@ func TestAlbumWithoutArt(t *testing.T) {
 		"artist":"artist1",
 		"artistId":"1",
 		"songCount":11,
-		"duration":0,
+		"duration":1,
 		"created":"2001-08-15T00:00:00Z",
 		"year":1901,
 		"genre":"genre1"
@@ -88,7 +88,7 @@ func TestAlbumWithoutGenre(t *testing.T) {
 	DTO := NewAlbum(album, false)
 
 	xml := `
-	<album id="1" name="album1" artist="artist1" artistId="1" coverArt="1" songCount="11" duration="0" created="2001-08-15T00:00:00Z" year="1901"></album>
+	<album id="1" name="album1" artist="artist1" artistId="1" coverArt="1" songCount="11" duration="1" created="2001-08-15T00:00:00Z" year="1901"></album>
 	`
 
 	json := `
@@ -99,7 +99,7 @@ func TestAlbumWithoutGenre(t *testing.T) {
 		"artistId":"1",
 		"coverArt":"1",
 		"songCount":11,
-		"duration":0,
+		"duration":1,
 		"created":"2001-08-15T00:00:00Z",
 		"year":1901
 	}
@@ -124,7 +124,7 @@ func TestAlbumWithoutYear(t *testing.T) {
 	DTO := NewAlbum(album, false)
 
 	xml := `
-	<album id="1" name="album1" artist="artist1" artistId="1" coverArt="1" songCount="11" duration="0" created="2001-08-15T00:00:00Z" genre="genre1"></album>
+	<album id="1" name="album1" artist="artist1" artistId="1" coverArt="1" songCount="11" duration="1" created="2001-08-15T00:00:00Z" genre="genre1"></album>
 	`
 
 	json := `
@@ -135,7 +135,7 @@ func TestAlbumWithoutYear(t *testing.T) {
 		"artistId":"1",
 		"coverArt":"1",
 		"songCount":11,
-		"duration":0,
+		"duration":1,
 		"created":"2001-08-15T00:00:00Z",
 		"genre":"genre1"
 	}
@@ -165,7 +165,7 @@ func TestAlbumWithSongs(t *testing.T) {
 	}
 
 	xml := fmt.Sprintf(`
-	<album id="1" name="album1" artist="artist1" artistId="1" coverArt="1" songCount="11" duration="0" created="2001-08-15T00:00:00Z" year="1901" genre="genre1">%v</album>
+	<album id="1" name="album1" artist="artist1" artistId="1" coverArt="1" songCount="11" duration="1" created="2001-08-15T00:00:00Z" year="1901" genre="genre1">%v</album>
 	`, songXML)
 
 	songJSON := make([]string, len(songs))
@@ -183,7 +183,7 @@ func TestAlbumWithSongs(t *testing.T) {
 		"artistId":"1",
 		"coverArt":"1",
 		"songCount":11,
-		"duration":0,
+		"duration":1,
 		"created":"2001-08-15T00:00:00Z",
 		"year":1901,
 		"genre":"genre1",

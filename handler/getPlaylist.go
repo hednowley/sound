@@ -5,11 +5,11 @@ import (
 	"net/url"
 
 	"github.com/hednowley/sound/api"
-	"github.com/hednowley/sound/dao"
+	"github.com/hednowley/sound/dal"
 	"github.com/hednowley/sound/dto"
 )
 
-func NewGetPlaylistHandler(database *dao.Database) api.Handler {
+func NewGetPlaylistHandler(dal *dal.DAL) api.Handler {
 
 	return func(params url.Values) *api.Response {
 
@@ -20,11 +20,11 @@ func NewGetPlaylistHandler(database *dao.Database) api.Handler {
 			return api.NewErrorReponse(dto.Generic, message)
 		}
 
-		artist, err := database.GetPlaylist(id)
+		p, err := dal.GetPlaylist(id)
 		if err != nil {
 			return api.NewErrorReponse(dto.Generic, err.Error())
 		}
 
-		return api.NewSuccessfulReponse(dto.NewPlaylist(artist))
+		return api.NewSuccessfulReponse(dto.NewPlaylist(p))
 	}
 }
