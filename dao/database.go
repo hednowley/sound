@@ -65,14 +65,51 @@ func (db *Database) putArt(art *entities.CoverArtData) uint {
 	return a.ID
 }
 
-func (db *Database) PutSong(data *entities.FileData) uint {
+func (db *Database) PutSongD(song *Song, scanID string) uint {
+
+	genreID := db.putGenre(song.Genre)
+	artID := db.putArt(song.CoverArt)
+	albumID := db.putAlbum(song)
+
+	song := Song{
+		Path:   data.Path,
+		ScanID: scanID,
+	}
+
+	result := db.db.Where(&song).First(&song)
+
+	song.AlbumID = albumID
+	song.Title = data.Title
+	song.Track = data.Track
+	song.Disc = data.Disc
+	song.GenreID = genreID
+	song.Year = data.Year
+	song.ArtID = artID
+	song.Extension = data.Extension
+	song.Size = data.Size
+
+	if result.RecordNotFound() {
+		now := time.Now()
+		song.Created = &now
+		db.db.Create(&song)
+	} else {
+		db.db.Save(&song)
+	}
+
+	db.generateAlbumData(albumID)
+
+	return song.ID
+}
+
+func (db *Database) PutSong(data *entities.FileData, scanID string) uint {
 
 	genreID := db.putGenre(data.Genre)
 	artID := db.putArt(data.CoverArt)
 	albumID := db.putAlbum(data)
 
 	song := Song{
-		Path: data.Path,
+		Path:   data.Path,
+		ScanID: scanID,
 	}
 
 	result := db.db.Where(&song).First(&song)
@@ -248,6 +285,21 @@ func (db *Database) GetArt(id uint) (*Art, error) {
 		return &f, errors.New("No such art")
 	}
 	return &f, nil
+}
+
+func (db *Database) DeleteMissingSongs(string scanID) {
+
+}
+
+func (db *Database) GetSongFromPath(path string) *uint {
+	var f Song
+	if db.db.
+		Where(&Song{
+			Path: path,
+		}).First(&f).RecordNotFound() {
+		return nil
+	}
+	return &f.ID
 }
 
 func (db *Database) GetSong(id uint) (*Song, error) {

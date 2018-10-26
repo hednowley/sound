@@ -18,4 +18,5 @@ type Song struct {
 	Created   *time.Time
 	Extension string
 	Size      int64
+	ScanID    string
 }

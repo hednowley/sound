@@ -52,3 +52,10 @@ func TestTagReader(t *testing.T) {
 		t.Error()
 	}
 }
+
+func TestReadMissingFile(t *testing.T) {
+	_, err := services.GetMusicData("../dsaiuhsduihsd/1.mp3")
+	if err == nil {
+		t.Error(err.Error())
+	}
+}

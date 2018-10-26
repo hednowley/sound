@@ -3,6 +3,7 @@
   path: "path_1"
   title: "title_1"
   created: 2018-06-12 11:11:11
+  genre_id: 1
 
 - id: 2
   album_id: 2
@@ -17,12 +18,14 @@
   path: "path_2"
   title: "title_2"
   created: 2018-06-12 11:11:11
+  genre_id: 1
 
 - id: 14
   album_id: 2
   path: "path_2"
   title: "title_2"
   created: 2018-06-12 11:11:11
+  genre_id: 2
 
 - id: 15
   album_id: 2
