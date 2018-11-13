@@ -103,13 +103,13 @@ func (db *Default) GetArtFromHash(hash string) *dao.Art {
 	return &a
 }
 
-// GetSongFromPath returns a pointer to the song with the given path and provider,
+// GetSongFromToken returns a pointer to the song with the given path and provider,
 // or nil if one doesn't exist. Joined entities are not loaded.
-func (db *Default) GetSongFromPath(path string, providerID string) *dao.Song {
+func (db *Default) GetSongFromToken(token string, providerID string) *dao.Song {
 	var f dao.Song
 	if db.db.
 		Where(&dao.Song{
-			Path:       path,
+			Token:      token,
 			ProviderID: providerID,
 		}).First(&f).RecordNotFound() {
 		return nil

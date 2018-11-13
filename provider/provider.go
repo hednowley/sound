@@ -8,11 +8,12 @@ import (
 
 // Provider gives access to a collection of music files.
 type Provider interface {
-	// Iterate through all files in the collection, calling the provided callback synchronously on each.
-	Iterate(func(path string)) error
+	// Iterate through all files in the collection, calling the provided
+	// callback synchronously on each file's unique token.
+	Iterate(func(token string)) error
 
-	// Returns information about the file at the given path.
-	GetInfo(path string) (*entities.FileInfo, error)
+	// Returns information about the file with the given token.
+	GetInfo(token string) (*entities.FileInfo, error)
 
 	// The ID of this provider.
 	ID() string

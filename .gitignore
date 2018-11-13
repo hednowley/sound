@@ -3,3 +3,5 @@
 /debug
 /dto/*.test
 /handler/debug.test
+/dal/*.test
+*.test

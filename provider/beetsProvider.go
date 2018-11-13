@@ -3,8 +3,10 @@ package provider
 import (
 	"database/sql"
 	"errors"
+	"fmt"
 	"io/ioutil"
 	"path/filepath"
+	"strconv"
 	"strings"
 	"time"
 
@@ -62,39 +64,45 @@ func (p *BeetsProvider) ScanID() string {
 }
 
 // Iterate through all files in the collection, calling the provided callback synchronously on each.
-func (p *BeetsProvider) Iterate(callback func(path string)) error {
+func (p *BeetsProvider) Iterate(callback func(token string)) error {
 	p.isScanning = true
 	p.fileCount = 0
 	p.scanID = hasher.GetHashFromInt(time.Now().Unix())
 
-	// This should probably look at id's not paths.
-	// Would need a new "external_id" field in our DB.
-	rows, err := p.beets.Query("SELECT path FROM items")
+	// Ordered so most recently added songs are scanned first.
+	rows, err := p.beets.Query("SELECT id FROM items ORDER BY id DESC")
 	if err != nil {
 		return err
 	}
 
-	var pathBlob []byte
+	var id int
 
 	for rows.Next() {
-		err = rows.Scan(&pathBlob)
+		err = rows.Scan(&id)
 		if err != nil {
 			return err
 		}
 
 		p.fileCount = p.fileCount + 1
-		callback(string(pathBlob))
+
+		// Use the id as a unique token
+		callback(strconv.Itoa(id))
 	}
 
 	p.isScanning = false
 	return nil
 }
 
-// GetInfo returns information about the file at the given path.
-func (p *BeetsProvider) GetInfo(path string) (*entities.FileInfo, error) {
+// GetInfo returns information about the file with the given token.
+func (p *BeetsProvider) GetInfo(token string) (*entities.FileInfo, error) {
 
-	row := p.beets.QueryRow("SELECT title, artist, album, album_id, albumartist, genre, track, disc, year, bitrate, length FROM items WHERE PATH = ?", []byte(path))
+	id, err := strconv.Atoi(token)
+	if err != nil {
+		return nil, fmt.Errorf("Unknown token '%v'", token)
+	}
+	row := p.beets.QueryRow("SELECT path, title, artist, album, album_id, albumartist, genre, track, disc, year, bitrate, length FROM items WHERE ID = ?", id)
 
+	var path string
 	var title string
 	var artist string
 	var album string
@@ -107,7 +115,7 @@ func (p *BeetsProvider) GetInfo(path string) (*entities.FileInfo, error) {
 	var bitrate int
 	var duration float64
 
-	err := row.Scan(&title, &artist, &album, &albumID, &albumArtist, &genre, &track, &disc, &year, &bitrate, &duration)
+	err = row.Scan(&path, &title, &artist, &album, &albumID, &albumArtist, &genre, &track, &disc, &year, &bitrate, &duration)
 
 	if err == nil {
 

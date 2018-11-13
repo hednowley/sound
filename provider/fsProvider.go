@@ -50,12 +50,13 @@ func (p *FsProvider) ID() string {
 }
 
 // Iterate through all files in the collection, calling the provided callback synchronously on each.
-func (p *FsProvider) Iterate(callback func(path string)) error {
+func (p *FsProvider) Iterate(callback func(token string)) error {
 	p.isScanning = true
 	p.fileCount = 0
 	p.scanID = hasher.GetHashFromInt(time.Now().Unix())
 
 	err := services.IterateFiles(p.path, p.extensions, func(path string, info *os.FileInfo) {
+		// Use the path as a unique token
 		callback(path)
 	})
 	if err != nil {
@@ -67,6 +68,6 @@ func (p *FsProvider) Iterate(callback func(path string)) error {
 }
 
 // GetInfo returns information about the file at the given path.
-func (p *FsProvider) GetInfo(path string) (*entities.FileInfo, error) {
-	return services.GetMusicData(path)
+func (p *FsProvider) GetInfo(token string) (*entities.FileInfo, error) {
+	return services.GetMusicData(token)
 }

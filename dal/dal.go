@@ -42,6 +42,7 @@ func (dal *DAL) putSong(song *dao.Song, data *entities.FileInfo) *dao.Song {
 	art := dal.putArt(data.CoverArt)
 	album := dal.db.PutAlbumByNameAndArtist(data.Album, data.AlbumArtist)
 
+	song.Path = data.Path
 	song.AlbumID = album.ID
 	song.Title = data.Title
 	song.Track = data.Track
@@ -144,6 +145,7 @@ func (dal *DAL) synchroniseArtist(id uint) error {
 	for _, album := range a.Albums {
 		if !artSet && album.ArtID != 0 {
 			a.ArtID = album.ArtID
+			artSet = true
 		}
 		duration = duration + album.Duration
 	}
@@ -416,26 +418,26 @@ func (dal *DAL) startScan(provider provider.Provider, update bool, delete bool) 
 	scanID := provider.ScanID()
 	synch := NewSynchroniser(dal, 10)
 
-	err := provider.Iterate(func(path string) {
-		s := dal.db.GetSongFromPath(path, providerID)
+	err := provider.Iterate(func(token string) {
+		s := dal.db.GetSongFromToken(token, providerID)
 		if s == nil || update {
-			seelog.Infof("Adding path '%v'", path)
-			data, err2 := provider.GetInfo(path)
+			data, err2 := provider.GetInfo(token)
 			if err2 != nil {
-				seelog.Errorf("Cannot read music info: %v", err2)
+				seelog.Errorf("Cannot read music info for '%v': %v", token, err2)
 				return
 			}
 
 			if s == nil {
+				seelog.Infof("Adding token '%v'", token)
 				now := time.Now()
 				s = &dao.Song{
 					Created:    &now,
 					ProviderID: providerID,
-					Path:       data.Path,
+					Token:      token,
 				}
 			} else {
-				// Notify of potential change to old album
-				synch.Notify(s.AlbumID)
+				seelog.Infof("Updating token '%v'", token)
+				synch.Notify(s.AlbumID) // Notify of potential change to old album
 			}
 
 			s.ScanID = scanID
@@ -445,6 +447,7 @@ func (dal *DAL) startScan(provider provider.Provider, update bool, delete bool) 
 			synch.Notify(s.AlbumID)
 
 		} else {
+			seelog.Infof("Skipping token '%v'", token)
 			dal.updateSongScanID(s, scanID)
 		}
 	})
@@ -458,6 +461,7 @@ func (dal *DAL) startScan(provider provider.Provider, update bool, delete bool) 
 	seelog.Infof("Finished '%v' scan.", providerID)
 }
 
+// Empty deletes all data.
 func (d *DAL) Empty() {
 	d.db.Empty()
 }

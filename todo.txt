@@ -1,19 +1,15 @@
 - ignored articles
-- check where to use pointers
-- add indexes to db
-- logging
-- tests
-- duration etc
-- auth
-- add album count to genres
-- improve scanner
-- image resizing
-- albums by genre fix
+- Get duration and bitrate from files
+- think about image resizing
 - transcoding
 - scheduling
 - https://golang.org/pkg/sync/#Pool
-- Fix ping XML
-- Interface with beets
 - Deploy to web server
 - Web UI
-- Db tests with docker??
+- Make scans stoppable
+- Allow songs to be deleted
+- Move subsonic API to subpath
+- Test beets provider
+- beets disambiguation
+- Play counts
+- Implement getartistinfo2

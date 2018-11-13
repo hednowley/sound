@@ -28,17 +28,12 @@ func NewArtist(artist *dao.Artist, includeAlbums bool) *Artist {
 		}
 	}
 
-	var artId uint
-	if artist.Art != nil {
-		artId = artist.Art.ID
-	}
-
 	return &Artist{
 		ID:         artist.ID,
 		Name:       artist.Name,
 		AlbumCount: albumCount,
 		Albums:     albums,
-		ArtID:      artId,
+		ArtID:      artist.ArtID,
 		Duration:   artist.Duration,
 	}
 }
