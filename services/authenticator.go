@@ -1,6 +1,9 @@
 package services
 
 import (
+	"fmt"
+
+	jwt "github.com/dgrijalva/jwt-go"
 	"github.com/hednowley/sound/config"
 	"github.com/hednowley/sound/hasher"
 )
@@ -35,6 +38,28 @@ func (authenticator *Authenticator) AuthenticateFromPassword(username string, pa
 	}
 
 	return user.Password == password
+}
+
+func (authenticator *Authenticator) AuthenticateFromJWT(token string) {
+
+	t, err := jwt.Parse(token, func(t *jwt.Token) (interface{}, error) {
+
+		// Check the hashing algorithm is HMAC
+		_, ok := t.Method.(*jwt.SigningMethodHMAC)
+		if !ok {
+			return nil, fmt.Errorf("Unexpected signing method: %v", t.Header["alg"])
+		}
+
+		// Provide the hashing secret so the token claims can be verified
+		return []byte("my_secret_key"), nil
+	})
+
+	claims, ok := t.Claims.(jwt.MapClaims)
+	if ok && t.Valid {
+		fmt.Println(claims["foo"], claims["nbf"])
+	} else {
+		fmt.Println(err)
+	}
 }
 
 func NewAuthenticator(config *config.Config) *Authenticator {

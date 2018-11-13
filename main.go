@@ -6,18 +6,19 @@ import (
 	"strings"
 
 	log "github.com/cihub/seelog"
+	handler2 "github.com/hednowley/sound/api/handlers"
 	"github.com/hednowley/sound/config"
 	"github.com/hednowley/sound/dal"
 	"github.com/hednowley/sound/database"
-	"github.com/hednowley/sound/subsonic/handler"
-	"github.com/hednowley/sound/provider" 
+	"github.com/hednowley/sound/provider"
 	"github.com/hednowley/sound/services"
 	"github.com/hednowley/sound/subsonic/api"
+	"github.com/hednowley/sound/subsonic/handler"
 	"go.uber.org/fx"
 )
 
-// registerHandlers associates routes with handlers.
-func registerHandlers(factory *api.HandlerFactory, config *config.Config, db *dal.DAL, dal *dal.DAL) {
+// registerSubsonicHandlers associates routes with handlers.
+func registerSubsonicHandlers(factory *api.HandlerFactory, config *config.Config, db *dal.DAL, dal *dal.DAL) {
 
 	handlers := make(map[string]http.HandlerFunc)
 
@@ -55,7 +56,7 @@ func registerHandlers(factory *api.HandlerFactory, config *config.Config, db *da
 	handlers["/subsonic/rest/deleteplaylist"] = factory.PublishHandler(handler.NewDeletePlaylistHandler(db))
 	handlers["/subsonic/rest/updateplaylist"] = factory.PublishHandler(handler.NewUpdatePlaylistHandler(db))
 
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+	http.HandleFunc("/subsonic/", func(w http.ResponseWriter, r *http.Request) {
 		defer log.Flush()
 		log.Info(fmt.Sprintf("Request received: %v", r.URL.Path))
 		path := strings.ToLower(strings.Split(r.URL.Path, ".")[0])
@@ -71,11 +72,17 @@ func registerHandlers(factory *api.HandlerFactory, config *config.Config, db *da
 	})
 
 	defer log.Flush()
+}
+
+func registerAPIHandlers(factory *api.HandlerFactory, config *config.Config, db *dal.DAL, dal *dal.DAL) {
+	http.HandleFunc("/api/authenticate", handler2.NewAuthenticateHandler(config))
+}
+
+func start(config *config.Config) {
+	log.Error(http.ListenAndServe(":"+config.Port, nil))
 	log.Info(`********************`)
 	log.Info("Application started!")
 	log.Info(`********************`)
-
-	log.Error(http.ListenAndServe(":"+config.Port, nil))
 }
 
 func setUpLogger(config *config.Config) {
@@ -98,7 +105,9 @@ func main() {
 			dal.NewDAL,
 			services.NewAuthenticator,
 			api.NewHandlerFactory),
-		fx.Invoke(setUpLogger, registerHandlers),
+		fx.Invoke(setUpLogger,
+			//registerSubsonicHandlers,
+			registerAPIHandlers, start),
 	)
 
 	app.Run()

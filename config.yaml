@@ -1,3 +1,4 @@
+secret: "secret"
 port: 3684
 #path: "D:\\data"
 art path: "D:\\temp\\art"
