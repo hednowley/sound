@@ -6,13 +6,13 @@ import (
 	"strings"
 
 	log "github.com/cihub/seelog"
-	"github.com/hednowley/sound/api"
 	"github.com/hednowley/sound/config"
 	"github.com/hednowley/sound/dal"
 	"github.com/hednowley/sound/database"
-	"github.com/hednowley/sound/handler"
-	"github.com/hednowley/sound/provider"
+	"github.com/hednowley/sound/subsonic/handler"
+	"github.com/hednowley/sound/provider" 
 	"github.com/hednowley/sound/services"
+	"github.com/hednowley/sound/subsonic/api"
 	"go.uber.org/fx"
 )
 

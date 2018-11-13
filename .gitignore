@@ -5,3 +5,4 @@
 /handler/debug.test
 /dal/*.test
 *.test
+*.log
