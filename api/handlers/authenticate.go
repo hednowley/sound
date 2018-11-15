@@ -10,7 +10,7 @@ import (
 
 // NewAuthenticateHandler makes a handler which accepts credentials and returns
 // a JWT token if they are valid.
-func NewAuthenticateHandler(config *config.Config) *api.Handler {
+func NewAuthenticateHandler(config *config.Config) *api.Controller {
 
 	input := dto.Credentials{}
 
@@ -31,8 +31,9 @@ func NewAuthenticateHandler(config *config.Config) *api.Handler {
 		return api.NewSuccessfulReponse(dto.Token{Token: tokenString})
 	}
 
-	return &api.Handler{
+	return &api.Controller{
 		Input:  &input,
-		Worker: w,
+		Run:    w,
+		Secure: false,
 	}
 }

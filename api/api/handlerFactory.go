@@ -21,13 +21,13 @@ func NewHandlerFactory(authenticator *services.Authenticator) *HandlerFactory {
 	}
 }
 
-func (factory *HandlerFactory) PublishHandler(handler *Handler) http.HandlerFunc {
+func (factory *HandlerFactory) PublishHandler(handler *Controller) http.HandlerFunc {
 	b := func(w *http.ResponseWriter, r *http.Request) *Response {
-		return handler.Worker()
+		return handler.Run()
 	}
 	return factory.PublishBinaryHandler(BinaryHandler{
-		Input:  handler.Input,
-		Worker: b,
+		Input: handler.Input,
+		Run:   b,
 	})
 }
 
@@ -44,8 +44,11 @@ func (factory *HandlerFactory) PublishBinaryHandler(handler BinaryHandler) http.
 		}
 
 		// Authenticate!!!
+		if handler.Secure {
 
-		response = handler.Worker(&w, r)
+		}
+
+		response = handler.Run(&w, r)
 		if response != nil {
 			goto respond
 		}
