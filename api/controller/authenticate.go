@@ -1,4 +1,4 @@
-package handlers
+package controller
 
 import (
 	jwt "github.com/dgrijalva/jwt-go"
@@ -8,9 +8,9 @@ import (
 	"github.com/hednowley/sound/services"
 )
 
-// NewAuthenticateHandler makes a handler which accepts credentials and returns
+// NewAuthenticateController makes a controller which accepts credentials and returns
 // a JWT token if they are valid.
-func NewAuthenticateHandler(config *config.Config) *api.Controller {
+func NewAuthenticateController(config *config.Config) *api.Controller {
 
 	input := dto.Credentials{}
 

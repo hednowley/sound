@@ -9,7 +9,7 @@ import (
 	"encoding/json"
 )
 
-// HandlerFactory converts friendly handlers into HandlerFuncs.
+// HandlerFactory converts web controllers into HandlerFuncs.
 type HandlerFactory struct {
 	authenticator *services.Authenticator
 }
@@ -21,34 +21,35 @@ func NewHandlerFactory(authenticator *services.Authenticator) *HandlerFactory {
 	}
 }
 
-func (factory *HandlerFactory) PublishHandler(handler *Controller) http.HandlerFunc {
+func (factory *HandlerFactory) NewHandler(controller *Controller) http.HandlerFunc {
+	// Convert the controller into a binary controller
 	b := func(w *http.ResponseWriter, r *http.Request) *Response {
-		return handler.Run()
+		return controller.Run()
 	}
-	return factory.PublishBinaryHandler(BinaryHandler{
-		Input: handler.Input,
+	return factory.NewBinaryHandler(&BinaryController{
+		Input: controller.Input,
 		Run:   b,
 	})
 }
 
-func (factory *HandlerFactory) PublishBinaryHandler(handler BinaryHandler) http.HandlerFunc {
+func (factory *HandlerFactory) NewBinaryHandler(controller *BinaryController) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 
 		var response *Response
 
 		d := json.NewDecoder(r.Body)
-		err := d.Decode(&handler.Input)
+		err := d.Decode(&controller.Input)
 		if err != nil {
 			response = NewErrorReponse("Bad request.")
 			goto respond
 		}
 
 		// Authenticate!!!
-		if handler.Secure {
+		if controller.Secure {
 
 		}
 
-		response = handler.Run(&w, r)
+		response = controller.Run(&w, r)
 		if response != nil {
 			goto respond
 		}
