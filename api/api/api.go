@@ -8,9 +8,16 @@ import (
 // Controller is a web controller.
 // It accepts a data-transfer object and returns an unserialised Response.
 type Controller struct {
-	Input  interface{}      // Pointer to a DTO struct. This struct should be kept in a closure along with the Run func (makes Run like a generic function)
-	Secure bool             // Request token will be authenticated iff this is true
-	Run    func() *Response // Run the controller action.
+	// Pointer to a DTO struct. This struct should be kept in a closure along
+	// with the Run func (makes Run like a generic function).
+	// The struct must be mutated rather than reassigning the pointer.
+	Input interface{}
+
+	// Request token will be authenticated iff this is true
+	Secure bool
+
+	// Run the controller action.
+	Run func() *Response
 }
 
 // BinaryController is a low-level web controller.

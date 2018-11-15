@@ -6,7 +6,7 @@ import (
 	"strings"
 
 	log "github.com/cihub/seelog"
-	handler2 "github.com/hednowley/sound/api/controller"
+	"github.com/hednowley/sound/api/controller"
 	"github.com/hednowley/sound/config"
 	"github.com/hednowley/sound/dal"
 	"github.com/hednowley/sound/database"
@@ -76,8 +76,8 @@ func registerSubsonicHandlers(factory *api.HandlerFactory, config *config.Config
 	defer log.Flush()
 }
 
-func registerAPIHandlers(factory *api2.HandlerFactory, config *config.Config, db *dal.DAL, dal *dal.DAL) {
-	http.HandleFunc("/api/authenticate", factory.NewHandler(handler2.NewAuthenticateHandler(config)))
+func registerAPIHandlers(factory *api2.HandlerFactory, config *config.Config, authenticator *services.Authenticator, db *dal.DAL, dal *dal.DAL) {
+	http.HandleFunc("/api/authenticate", factory.NewHandler(controller.NewAuthenticateController(authenticator, config)))
 }
 
 func start(config *config.Config) {

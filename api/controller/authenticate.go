@@ -10,14 +10,13 @@ import (
 
 // NewAuthenticateController makes a controller which accepts credentials and returns
 // a JWT token if they are valid.
-func NewAuthenticateController(config *config.Config) *api.Controller {
+func NewAuthenticateController(authenticator *services.Authenticator, config *config.Config) *api.Controller {
 
 	input := dto.Credentials{}
 
 	w := func() *api.Response {
 		credentials := &input
-		a := services.NewAuthenticator(config)
-		if !a.AuthenticateFromPassword(credentials.Username, credentials.Password) {
+		if !authenticator.AuthenticateFromPassword(credentials.Username, credentials.Password) {
 			return api.NewErrorReponse("Bad credentials.")
 		}
 
@@ -28,7 +27,7 @@ func NewAuthenticateController(config *config.Config) *api.Controller {
 
 		// Sign and get the complete encoded token as a string using the secret
 		tokenString, _ := token.SignedString([]byte(config.Secret))
-		return api.NewSuccessfulReponse(dto.Token{Token: tokenString})
+		return api.NewSuccessfulReponse(&dto.Token{Token: tokenString})
 	}
 
 	return &api.Controller{
