@@ -10,9 +10,12 @@ import (
 
 // NewAuthenticateHandler makes a handler which accepts credentials and returns
 // a JWT token if they are valid.
-func NewAuthenticateHandler(config *config.Config) api.Handler {
+func NewAuthenticateHandler(config *config.Config) *api.Handler {
 
-	w := func(credentials *dto.Credentials) *api.Response {
+	input := dto.Credentials{}
+
+	w := func() *api.Response {
+		credentials := &input
 		a := services.NewAuthenticator(config)
 		if !a.AuthenticateFromPassword(credentials.Username, credentials.Password) {
 			return api.NewErrorReponse("Bad credentials.")
@@ -24,12 +27,12 @@ func NewAuthenticateHandler(config *config.Config) api.Handler {
 		})
 
 		// Sign and get the complete encoded token as a string using the secret
-		tokenString, err := token.SignedString([]byte(config.Secret))
+		tokenString, _ := token.SignedString([]byte(config.Secret))
 		return api.NewSuccessfulReponse(dto.Token{Token: tokenString})
 	}
 
-	return api.Handler{
-		Input:  dto.Credentials{},
+	return &api.Handler{
+		Input:  &input,
 		Worker: w,
 	}
 }

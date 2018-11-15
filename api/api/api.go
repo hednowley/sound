@@ -8,7 +8,7 @@ import (
 // It accepts a set of parameters and returns an unserialised Response.
 type Handler struct {
 	Input  interface{}
-	Worker func(interface{}) *Response
+	Worker func() *Response
 }
 
 func (h *Handler) Run() {
@@ -21,5 +21,5 @@ func (h *Handler) Run() {
 // otherwise it returns an unserialised Response.
 type BinaryHandler struct {
 	Input  interface{}
-	Worker func(interface{}, *http.ResponseWriter, *http.Request) *Response
+	Worker func(*http.ResponseWriter, *http.Request) *Response
 }

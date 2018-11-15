@@ -21,9 +21,9 @@ func NewHandlerFactory(authenticator *services.Authenticator) *HandlerFactory {
 	}
 }
 
-func (factory *HandlerFactory) PublishHandler(handler Handler) http.HandlerFunc {
-	b := func(input interface{}, w *http.ResponseWriter, r *http.Request) *Response {
-		return handler.Worker(input)
+func (factory *HandlerFactory) PublishHandler(handler *Handler) http.HandlerFunc {
+	b := func(w *http.ResponseWriter, r *http.Request) *Response {
+		return handler.Worker()
 	}
 	return factory.PublishBinaryHandler(BinaryHandler{
 		Input:  handler.Input,
@@ -45,7 +45,7 @@ func (factory *HandlerFactory) PublishBinaryHandler(handler BinaryHandler) http.
 
 		// Authenticate!!!
 
-		response = handler.Worker(&handler.Input, &w, r)
+		response = handler.Worker(&w, r)
 		if response != nil {
 			goto respond
 		}

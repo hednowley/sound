@@ -15,6 +15,8 @@ import (
 	"github.com/hednowley/sound/subsonic/api"
 	"github.com/hednowley/sound/subsonic/handler"
 	"go.uber.org/fx"
+
+	api2 "github.com/hednowley/sound/api/api"
 )
 
 // registerSubsonicHandlers associates routes with handlers.
@@ -74,8 +76,8 @@ func registerSubsonicHandlers(factory *api.HandlerFactory, config *config.Config
 	defer log.Flush()
 }
 
-func registerAPIHandlers(factory *api.HandlerFactory, config *config.Config, db *dal.DAL, dal *dal.DAL) {
-	http.HandleFunc("/api/authenticate", handler2.NewAuthenticateHandler(config))
+func registerAPIHandlers(factory *api2.HandlerFactory, config *config.Config, db *dal.DAL, dal *dal.DAL) {
+	http.HandleFunc("/api/authenticate", factory.PublishHandler(handler2.NewAuthenticateHandler(config)))
 }
 
 func start(config *config.Config) {
@@ -104,7 +106,8 @@ func main() {
 			provider.NewProviders,
 			dal.NewDAL,
 			services.NewAuthenticator,
-			api.NewHandlerFactory),
+			api.NewHandlerFactory,
+			api2.NewHandlerFactory),
 		fx.Invoke(setUpLogger,
 			//registerSubsonicHandlers,
 			registerAPIHandlers, start),
