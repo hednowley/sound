@@ -78,6 +78,8 @@ func registerSubsonicHandlers(factory *api.HandlerFactory, config *config.Config
 
 func registerAPIHandlers(factory *api2.HandlerFactory, config *config.Config, authenticator *services.Authenticator, db *dal.DAL, dal *dal.DAL) {
 	http.HandleFunc("/api/authenticate", factory.NewHandler(controller.NewAuthenticateController(authenticator, config)))
+
+	http.HandleFunc("/api/artist", factory.NewHandler(controller.NewArtistController()))
 }
 
 func start(config *config.Config) {
