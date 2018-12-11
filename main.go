@@ -115,7 +115,7 @@ func main() {
 			api.NewHandlerFactory,
 			api2.NewHandlerFactory),
 		fx.Invoke(setUpLogger,
-			//registerSubsonicHandlers,
+			registerSubsonicHandlers,
 			registerAPIHandlers, start),
 	)
 
