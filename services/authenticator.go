@@ -74,7 +74,7 @@ func (a *Authenticator) AuthenticateFromJWT(token string) bool {
 			return false
 		}
 		return a.getUser(u) != nil
-	} else {
-		return false
 	}
+	return false
+
 }

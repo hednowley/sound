@@ -3,14 +3,16 @@ package controller
 import (
 	"github.com/hednowley/sound/api/api"
 	"github.com/hednowley/sound/api/dto"
+	"github.com/hednowley/sound/dal"
 )
 
-func NewArtistController() *api.Controller {
+func NewArtistCollectionController(dal *dal.DAL) *api.Controller {
 
 	input := struct{}{}
 
 	w := func() *api.Response {
-		return api.NewSuccessfulReponse(&dto.Token{Token: "hello"})
+		artists := dal.GetArtists()
+		return api.NewSuccessfulReponse(dto.NewArtistCollection(artists))
 	}
 
 	return &api.Controller{

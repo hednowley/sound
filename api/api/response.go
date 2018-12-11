@@ -8,6 +8,7 @@ const (
 	Error   Status = 2
 )
 
+// Reponse follows JSend syntax.
 type Response struct {
 	Body   interface{}
 	Status Status
