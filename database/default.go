@@ -57,13 +57,14 @@ func (db *Default) PutAlbum(album *dao.Album) {
 	db.db.Save(&album)
 }
 
-// PutAlbumByNameAndArtist returns the ID of the album record with the same name and artist,
+// PutAlbumByAttributes returns the ID of the album record with the same name and artist,
 // or creates a new one and returns its ID if there is no such album.
-func (db *Default) PutAlbumByNameAndArtist(name string, artist string) *dao.Album {
+func (db *Default) PutAlbumByAttributes(name string, artist string, disambiguator string) *dao.Album {
 
 	album := dao.Album{
-		Name:     name,
-		ArtistID: db.putArtistByName(artist).ID,
+		Name:          name,
+		ArtistID:      db.putArtistByName(artist).ID,
+		Disambiguator: disambiguator,
 	}
 
 	if db.db.Where(&album).First(&album).RecordNotFound() {

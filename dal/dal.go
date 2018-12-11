@@ -40,7 +40,7 @@ func (dal *DAL) putSong(song *dao.Song, data *entities.FileInfo) *dao.Song {
 
 	genre := dal.db.PutGenreByName(data.Genre)
 	art := dal.putArt(data.CoverArt)
-	album := dal.db.PutAlbumByNameAndArtist(data.Album, data.AlbumArtist)
+	album := dal.db.PutAlbumByAttributes(data.Album, data.AlbumArtist, data.Disambiguator)
 
 	song.Path = data.Path
 	song.AlbumID = album.ID

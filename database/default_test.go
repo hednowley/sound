@@ -72,17 +72,17 @@ func TestPutArtistByName(t *testing.T) {
 }
 */
 
-func TestPutAlbumByNameAndArtist(t *testing.T) {
+func TestPutAlbumByAttributest(t *testing.T) {
 	m := database.NewMock()
 
 	// Put existing album
-	a := m.PutAlbumByNameAndArtist("album_2", "artist_1")
+	a := m.PutAlbumByAttributes("album_2", "artist_1", "")
 	if a.ID != 2 {
 		t.Error()
 	}
 
 	// Put album with existing name but new artist
-	a = m.PutAlbumByNameAndArtist("album_2", "sdffsd")
+	a = m.PutAlbumByAttributes("album_2", "sdffsd", "")
 	if a.ID != 10001 || a.ArtistID != 10001 {
 		t.Error()
 	}
@@ -93,19 +93,37 @@ func TestPutAlbumByNameAndArtist(t *testing.T) {
 	}
 
 	// Put album with new name but existing artist
-	a = m.PutAlbumByNameAndArtist("ghghddh", "artist_2")
+	a = m.PutAlbumByAttributes("ghghddh", "artist_2", "")
 	if a.ID != 10002 || a.ArtistID != 2 {
 		t.Error()
 	}
 
 	// Put new album and artist
-	a = m.PutAlbumByNameAndArtist("sdfgyifs", "sduiru")
+	a = m.PutAlbumByAttributes("sdfgyifs", "sduiru", "")
 	if a.ID != 10003 || a.ArtistID != 10002 {
 		t.Error()
 	}
 
 	a2 = m.GetArtist(10002, true, false)
 	if a2.Name != "sduiru" || a2.Albums[0].ID != 10003 {
+		t.Error()
+	}
+
+	// Put existing album with new disambiguator
+	a = m.PutAlbumByAttributes("album_2", "artist_1", "d1")
+	if a.ID != 10004 {
+		t.Error()
+	}
+
+	// Put same album again
+	a = m.PutAlbumByAttributes("album_2", "artist_1", "d1")
+	if a.ID != 10004 {
+		t.Error()
+	}
+
+	// Put same album again with another new disambiguator
+	a = m.PutAlbumByAttributes("album_2", "artist_1", "d2")
+	if a.ID != 10005 {
 		t.Error()
 	}
 }

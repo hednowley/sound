@@ -80,6 +80,10 @@ func registerAPIHandlers(factory *api2.HandlerFactory, config *config.Config, au
 	http.HandleFunc("/api/authenticate", factory.NewHandler(controller.NewAuthenticateController(authenticator, config)))
 
 	http.HandleFunc("/api/artist", factory.NewHandler(controller.NewArtistCollectionController(dal)))
+
+	// Scanning
+	http.HandleFunc("/api/getscanstatus", factory.NewHandler(controller.NewGetScanStatusHandler(dal)))
+	http.HandleFunc("/api/startscan", factory.NewHandler(controller.NewStartScanHandler(dal)))
 }
 
 func start(config *config.Config) {
