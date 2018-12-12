@@ -5,7 +5,9 @@ import (
 
 	"github.com/hednowley/sound/config"
 	"github.com/hednowley/sound/dao"
-	"github.com/jinzhu/gorm" // Postgres driver for GORM
+	"github.com/jinzhu/gorm"
+
+	// Postgres driver for GORM
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 )
 
@@ -14,6 +16,7 @@ type Default struct {
 	db *gorm.DB
 }
 
+// NewDefault constructs a new default database.
 func NewDefault(config *config.Config) (*Default, error) {
 	db, err := gorm.Open("postgres", config.Db)
 	db = db.Set("gorm:association_autoupdate", false).
@@ -33,6 +36,7 @@ func NewDefault(config *config.Config) (*Default, error) {
 	return &database, err
 }
 
+// Close the database.
 func (db *Default) Close() {
 	db.Close()
 }
@@ -51,7 +55,7 @@ func (db *Default) putArtistByName(name string) *dao.Artist {
 	return &artist
 }
 
-// UpdateAlbum updates the album record with the same ID,
+// PutAlbum updates the album record with the same ID,
 // or creates a new one and returns its ID if there is no such album.
 func (db *Default) PutAlbum(album *dao.Album) {
 	db.db.Save(&album)

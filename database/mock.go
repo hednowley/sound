@@ -3,11 +3,14 @@ package database
 import (
 	"database/sql"
 	"log"
+	"runtime"
 
 	"github.com/hednowley/sound/config"
 	testfixtures "gopkg.in/testfixtures.v2"
 )
 
+// NewMock makes a new database seeded from test data.
+// Note that a real database must exist at the connection string below.
 func NewMock() *Default {
 
 	conn := "dbname=sound_test sslmode=disable user=postgres password=sound"
@@ -24,8 +27,12 @@ func NewMock() *Default {
 		log.Fatal(err)
 	}
 
+	// Get test data path (found relative to this file)
+	_, filename, _, _ := runtime.Caller(0)
+	dataPath := filename + "/../../testdata/dao"
+
 	// Insert test data
-	fixtures, err := testfixtures.NewFolder(db, &testfixtures.PostgreSQL{}, "../testdata/dao")
+	fixtures, err := testfixtures.NewFolder(db, &testfixtures.PostgreSQL{}, dataPath)
 	if err != nil {
 		log.Fatal(err)
 	}
