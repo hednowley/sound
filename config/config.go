@@ -7,17 +7,18 @@ import (
 )
 
 type Config struct {
-	Port            string
-	Path            string
-	ArtPath         string `yaml:"art path"`
-	ResizeArt       bool   `yaml:"resize art`
-	Db              string
-	LogConfig       string `yaml:"log config"`
-	Extensions      []string
-	IgnoredArticles []string `yaml:"ignored articles"`
-	Users           []User
-	BeetsDB         string `yaml:"beets db"`
-	Secret          string
+	Port                     string
+	Path                     string
+	ArtPath                  string `yaml:"art path"`
+	ResizeArt                bool   `yaml:"resize art`
+	Db                       string
+	LogConfig                string `yaml:"log config"`
+	Extensions               []string
+	IgnoredArticles          []string `yaml:"ignored articles"`
+	Users                    []User
+	BeetsDB                  string `yaml:"beets db"`
+	Secret                   string
+	AccessControlAllowOrigin string `yaml:"access control allow origin"`
 }
 
 type User struct {

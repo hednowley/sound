@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/hednowley/sound/config"
 	"github.com/hednowley/sound/services"
 
 	"encoding/json"
@@ -13,12 +14,14 @@ import (
 // HandlerFactory converts web controllers into HandlerFuncs.
 type HandlerFactory struct {
 	authenticator *services.Authenticator
+	config        *config.Config
 }
 
 // NewHandlerFactory constructs a new HandlerFactory.
-func NewHandlerFactory(authenticator *services.Authenticator) *HandlerFactory {
+func NewHandlerFactory(authenticator *services.Authenticator, config *config.Config) *HandlerFactory {
 	return &HandlerFactory{
 		authenticator: authenticator,
+		config:        config,
 	}
 }
 
@@ -36,6 +39,16 @@ func (factory *HandlerFactory) NewHandler(controller *Controller) http.HandlerFu
 
 func (factory *HandlerFactory) NewBinaryHandler(controller *BinaryController) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
+
+		// Set CORS headers
+		w.Header().Set("Access-Control-Allow-Origin", factory.config.AccessControlAllowOrigin)
+		w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
+		w.Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
+
+		// Send no more to preflight requests
+		if r.Method == "OPTIONS" {
+			return
+		}
 
 		var response *Response
 
