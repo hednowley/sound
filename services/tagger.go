@@ -9,6 +9,7 @@ import (
 	"github.com/hednowley/sound/entities"
 )
 
+// GetMusicData extracts data from a music file's ID3 tags.
 func GetMusicData(filePath string) (*entities.FileInfo, error) {
 	file, _ := os.Open(filePath)
 	defer file.Close()

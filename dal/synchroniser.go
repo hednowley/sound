@@ -15,7 +15,7 @@ type Synchroniser struct {
 
 // NewSynchroniser returns a new synchroniser. flushthreshhold is how many
 // albums need to be changed before they and their artists are synced. A high
-// value will be more efficient if albums are grouped by artist.
+// value will be more efficient if albums arrive roughly grouped by artist.
 func NewSynchroniser(dal *DAL, flushThreshhold int) *Synchroniser {
 	return &Synchroniser{
 		dal:             dal,

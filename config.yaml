@@ -2,6 +2,7 @@ secret: "secret"
 port: 3684
 #path: "D:\\data"
 art path: "D:\\temp\\art"
+resize art: true
 db: "host=localhost port=5432 user=postgres password=sound dbname=sound sslmode=disable"
 log config: "log-config.xml"
 extensions:

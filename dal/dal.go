@@ -22,6 +22,7 @@ type DAL struct {
 	db        *database.Default
 	providers []provider.Provider
 	artDir    string
+	resize    bool
 }
 
 // NewDAL constructs a new DAL.
@@ -29,6 +30,7 @@ func NewDAL(providers []provider.Provider, config *config.Config, database *data
 	return &DAL{
 		db:        database,
 		artDir:    config.ArtPath,
+		resize:    config.ResizeArt,
 		providers: providers,
 	}
 }

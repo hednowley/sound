@@ -7,7 +7,7 @@
             "label": "Run all tests",
             "type": "shell",
             "command": "go test -p 1 ./...",
-            "problemMatcher": "$go"
+            "problemMatcher": "$go",
         }
     ]
 }

@@ -10,6 +10,7 @@ type Config struct {
 	Port            string
 	Path            string
 	ArtPath         string `yaml:"art path"`
+	ResizeArt       bool   `yaml:"resize art`
 	Db              string
 	LogConfig       string `yaml:"log config"`
 	Extensions      []string
