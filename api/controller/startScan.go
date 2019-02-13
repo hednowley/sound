@@ -3,6 +3,7 @@ package controller
 import (
 	"github.com/hednowley/sound/api/api"
 	"github.com/hednowley/sound/api/dto"
+	"github.com/hednowley/sound/config"
 	"github.com/hednowley/sound/dal"
 )
 
@@ -13,7 +14,7 @@ func NewStartScanHandler(dal *dal.DAL) *api.Controller {
 		Delete bool
 	}{}
 
-	w := func() *api.Response {
+	w := func(_ *config.User) *api.Response {
 		go dal.StartAllScans(input.Update, input.Delete)
 		r := dto.NewScanStatus(dal.GetScanStatus(), dal.GetScanFileCount())
 		return api.NewSuccessfulReponse(&r)
@@ -30,7 +31,7 @@ func NewGetScanStatusHandler(dal *dal.DAL) *api.Controller {
 
 	input := struct{}{}
 
-	w := func() *api.Response {
+	w := func(_ *config.User) *api.Response {
 		r := dto.NewScanStatus(dal.GetScanStatus(), dal.GetScanFileCount())
 		return api.NewSuccessfulReponse(&r)
 	}

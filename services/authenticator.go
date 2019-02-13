@@ -50,7 +50,7 @@ func (a *Authenticator) AuthenticateFromPassword(username string, password strin
 	return user.Password == password
 }
 
-func (a *Authenticator) AuthenticateFromJWT(token string) bool {
+func (a *Authenticator) AuthenticateFromJWT(token string) *config.User {
 
 	t, err := jwt.Parse(token, func(t *jwt.Token) (interface{}, error) {
 
@@ -64,17 +64,16 @@ func (a *Authenticator) AuthenticateFromJWT(token string) bool {
 		return []byte(a.secret), nil
 	})
 	if err != nil {
-		return false
+		return nil
 	}
 
 	claims, ok := t.Claims.(jwt.MapClaims)
 	if ok && t.Valid {
 		u, ok := claims["u"].(string)
 		if !ok {
-			return false
+			return nil
 		}
-		return a.getUser(u) != nil
+		return a.getUser(u)
 	}
-	return false
-
+	return nil
 }

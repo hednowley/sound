@@ -19,6 +19,7 @@ type Config struct {
 	BeetsDB                  string `yaml:"beets db"`
 	Secret                   string
 	AccessControlAllowOrigin string `yaml:"access control allow origin"`
+	WebsocketTicketExpiry    int    `yaml:"websocket ticket expiry"`
 }
 
 type User struct {

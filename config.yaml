@@ -21,3 +21,4 @@ users:
     email: ned2@blah.com
 beets db: "C:\\Users\\ned.howley\\Downloads\\beetslib.blb"
 access control allow origin: "*"
+websocket ticket expiry: 30

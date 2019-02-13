@@ -27,8 +27,8 @@ func NewHandlerFactory(authenticator *services.Authenticator, config *config.Con
 
 func (factory *HandlerFactory) NewHandler(controller *Controller) http.HandlerFunc {
 	// Convert the controller into a binary controller
-	b := func(w *http.ResponseWriter, r *http.Request) *Response {
-		return controller.Run()
+	b := func(w *http.ResponseWriter, r *http.Request, u *config.User) *Response {
+		return controller.Run(u)
 	}
 	return factory.NewBinaryHandler(&BinaryController{
 		Input:  controller.Input,
@@ -51,6 +51,7 @@ func (factory *HandlerFactory) NewBinaryHandler(controller *BinaryController) ht
 		}
 
 		var response *Response
+		var user *config.User
 
 		if r.Body != http.NoBody {
 			d := json.NewDecoder(r.Body)
@@ -70,13 +71,14 @@ func (factory *HandlerFactory) NewBinaryHandler(controller *BinaryController) ht
 			}
 
 			h = strings.TrimPrefix(h, "Bearer ")
-			if !factory.authenticator.AuthenticateFromJWT(h) {
+			user = factory.authenticator.AuthenticateFromJWT(h)
+			if user == nil {
 				w.WriteHeader(http.StatusUnauthorized)
 				return
 			}
 		}
 
-		response = controller.Run(&w, r)
+		response = controller.Run(&w, r, user)
 		if response != nil {
 			goto respond
 		}

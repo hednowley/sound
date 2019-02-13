@@ -14,6 +14,7 @@ import (
 	"github.com/hednowley/sound/services"
 	"github.com/hednowley/sound/subsonic/api"
 	"github.com/hednowley/sound/subsonic/handler"
+	"github.com/hednowley/sound/ws"
 	"go.uber.org/fx"
 
 	api2 "github.com/hednowley/sound/api/api"
@@ -76,14 +77,22 @@ func registerSubsonicHandlers(factory *api.HandlerFactory, config *config.Config
 	defer log.Flush()
 }
 
-func registerAPIHandlers(factory *api2.HandlerFactory, config *config.Config, authenticator *services.Authenticator, dal *dal.DAL) {
+func registerAPIHandlers(factory *api2.HandlerFactory, config *config.Config, authenticator *services.Authenticator, ticketer *ws.Ticketer, dal *dal.DAL) {
 	http.HandleFunc("/api/authenticate", factory.NewHandler(controller.NewAuthenticateController(authenticator, config)))
+	http.HandleFunc("/api/ticket", factory.NewHandler(controller.NewTicketController(ticketer)))
 
 	http.HandleFunc("/api/artist", factory.NewHandler(controller.NewArtistCollectionController(dal)))
 
 	// Scanning
 	http.HandleFunc("/api/getscanstatus", factory.NewHandler(controller.NewGetScanStatusHandler(dal)))
 	http.HandleFunc("/api/startscan", factory.NewHandler(controller.NewStartScanHandler(dal)))
+
+	hub := ws.NewHub()
+	go hub.Run()
+
+	http.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {
+		ws.ServeWs(hub, ticketer, w, r)
+	})
 }
 
 func start(config *config.Config) {
@@ -112,6 +121,7 @@ func main() {
 			provider.NewProviders,
 			dal.NewDAL,
 			services.NewAuthenticator,
+			ws.NewTicketer,
 			api.NewHandlerFactory,
 			api2.NewHandlerFactory),
 		fx.Invoke(setUpLogger,
