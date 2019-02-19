@@ -91,7 +91,7 @@ func registerAPIHandlers(factory *api2.HandlerFactory, config *config.Config, au
 	go hub.Run()
 
 	http.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {
-		ws.ServeWs(hub, ticketer, w, r)
+		ws.ServeWs(hub, ticketer, dal, w, r)
 	})
 }
 

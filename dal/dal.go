@@ -15,6 +15,7 @@ import (
 	"github.com/hednowley/sound/entities"
 	"github.com/hednowley/sound/hasher"
 	"github.com/hednowley/sound/provider"
+	"github.com/hednowley/sound/ws"
 )
 
 // DAL (data access layer) allow high-level manipulation of application data.
@@ -23,15 +24,17 @@ type DAL struct {
 	providers []provider.Provider
 	artDir    string
 	resize    bool
+	hub       *ws.Hub
 }
 
 // NewDAL constructs a new DAL.
-func NewDAL(providers []provider.Provider, config *config.Config, database *database.Default) *DAL {
+func NewDAL(providers []provider.Provider, config *config.Config, database *database.Default, hub *ws.Hub) *DAL {
 	return &DAL{
 		db:        database,
 		artDir:    config.ArtPath,
 		resize:    config.ResizeArt,
 		providers: providers,
+		hub:       hub,
 	}
 }
 
