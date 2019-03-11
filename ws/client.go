@@ -64,18 +64,9 @@ func (c *Client) readPump() {
 			break
 		}
 
-		switch request.Method {
-		case "startScan":
-			{
-				var update bool
-				err = json.Unmarshal(*request.Params["update"], &update)
-				if err != nil {
-					break
-				}
-
-				go c.dal.StartAllScans(update, false)
-
-			}
+		c.hub.incoming <- &Incoming{
+			client:  c,
+			request: request,
 		}
 
 		//message = bytes.TrimSpace(bytes.Replace(message, newline, space, -1))

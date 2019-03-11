@@ -81,13 +81,7 @@ func registerAPIHandlers(factory *api2.HandlerFactory, config *config.Config, au
 	http.HandleFunc("/api/authenticate", factory.NewHandler(controller.NewAuthenticateController(authenticator, config)))
 	http.HandleFunc("/api/ticket", factory.NewHandler(controller.NewTicketController(ticketer)))
 
-	http.HandleFunc("/api/artist", factory.NewHandler(controller.NewArtistCollectionController(dal)))
-
-	// Scanning
-	http.HandleFunc("/api/getscanstatus", factory.NewHandler(controller.NewGetScanStatusHandler(dal)))
-	http.HandleFunc("/api/startscan", factory.NewHandler(controller.NewStartScanHandler(dal)))
-
-	hub := ws.NewHub()
+	hub := ws.NewHub(dal)
 	go hub.Run()
 
 	http.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {
