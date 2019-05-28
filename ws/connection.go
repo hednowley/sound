@@ -9,16 +9,19 @@ import (
 	"github.com/hednowley/sound/ws/dto"
 )
 
+// Connection is a wrapper around a websocket connection.
 type Connection struct {
 	inner *websocket.Conn
 }
 
+// NewConnection creates a new connection.
 func NewConnection(inner *websocket.Conn) *Connection {
 	return &Connection{
 		inner: inner,
 	}
 }
 
+// SendMessage sends the response to the remote client.
 func (c *Connection) SendMessage(r *dto.Response) {
 
 	body, err := json.Marshal(r)
@@ -29,6 +32,7 @@ func (c *Connection) SendMessage(r *dto.Response) {
 	c.inner.WriteMessage(websocket.TextMessage, body)
 }
 
+// ReadMessage returns the last message sent from the remote client.
 func (c *Connection) ReadMessage() (*dto.Request, error) {
 	messageType, payload, err := c.inner.ReadMessage()
 	if err != nil {
@@ -49,6 +53,7 @@ func (c *Connection) ReadMessage() (*dto.Request, error) {
 	return &r, nil
 }
 
+// Close closes the connection.
 func (c *Connection) Close() error {
 	return c.inner.Close()
 }

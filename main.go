@@ -78,6 +78,9 @@ func registerSubsonicHandlers(factory *api.HandlerFactory, config *config.Config
 }
 
 func registerAPIHandlers(factory *api2.HandlerFactory, config *config.Config, authenticator *services.Authenticator, ticketer *ws.Ticketer, dal *dal.DAL) {
+
+	http.Handle("/", http.FileServer(http.Dir("static")))
+
 	http.HandleFunc("/api/authenticate", factory.NewHandler(controller.NewAuthenticateController(authenticator, config)))
 	http.HandleFunc("/api/ticket", factory.NewHandler(controller.NewTicketController(ticketer)))
 
@@ -85,7 +88,7 @@ func registerAPIHandlers(factory *api2.HandlerFactory, config *config.Config, au
 	go hub.Run()
 
 	http.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {
-		ws.ServeWs(hub, ticketer, dal, w, r)
+		ws.NewClient(hub, ticketer, dal, w, r)
 	})
 }
 

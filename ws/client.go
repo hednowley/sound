@@ -119,11 +119,14 @@ func (c *Client) writePump() {
 	*/
 }
 
-// ServeWs handles websocket requests from the peer.
-func ServeWs(hub *Hub, ticketer *Ticketer, dal *dal.DAL, w http.ResponseWriter, r *http.Request) {
+// NewClient tries to set up a new client and register it with the hub.
+func NewClient(hub *Hub, ticketer *Ticketer, dal *dal.DAL, w http.ResponseWriter, r *http.Request) {
+
+	// Allow all origins
 	upgrader.CheckOrigin = func(r *http.Request) bool {
 		return true
 	}
+
 	conn, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
 		conn.Close()

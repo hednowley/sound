@@ -32,6 +32,7 @@ type Incoming struct {
 	request *dto.Request
 }
 
+// NewHub creates a new hub.
 func NewHub(dal *dal.DAL) *Hub {
 
 	allHandlers := make(map[string]handlers.WsHandler)
@@ -48,6 +49,7 @@ func NewHub(dal *dal.DAL) *Hub {
 	}
 }
 
+// Run starts the hub.
 func (h *Hub) Run() {
 	for {
 		select {
@@ -69,10 +71,14 @@ func (h *Hub) Run() {
 			}
 
 		case incoming := <-h.incoming:
-			handler, ok := h.handlers[incoming.request.Method]
-			if ok {
-				go handler(incoming.request)
-			}
+			go h.runHandler(incoming)
 		}
+	}
+}
+
+func (h *Hub) runHandler(incoming *Incoming) {
+	handler, ok := h.handlers[incoming.request.Method]
+	if ok {
+		handler(incoming.request)
 	}
 }
