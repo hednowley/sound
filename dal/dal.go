@@ -17,7 +17,7 @@ import (
 	"github.com/hednowley/sound/provider"
 )
 
-// DAL (data access layer) allow high-level manipulation of application data.
+// DAL (data access layer) allows high-level manipulation of application data.
 type DAL struct {
 	db        *database.Default
 	providers []provider.Provider

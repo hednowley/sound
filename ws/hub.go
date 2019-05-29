@@ -12,7 +12,7 @@ type Hub struct {
 	// Registered clients.
 	clients map[*Client]bool
 
-	// Inbound messages from the clients.
+	// Receieves messages which should be sent out by all clients.
 	broadcast chan []byte
 
 	// Register requests from the clients.
@@ -21,7 +21,7 @@ type Hub struct {
 	// Unregister requests from clients.
 	unregister chan *Client
 
-	// Receives requests forward by clients
+	// Receives requests forwarded by clients
 	incoming chan *Incoming
 
 	handlers map[string]handlers.WsHandler
