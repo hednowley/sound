@@ -1,6 +1,8 @@
 package ws
 
 import (
+	"encoding/json"
+
 	"github.com/hednowley/sound/idal"
 	"github.com/hednowley/sound/ws/dto"
 	"github.com/hednowley/sound/ws/handlers"
@@ -81,4 +83,13 @@ func (h *Hub) runHandler(incoming *Incoming) {
 	if ok {
 		handler(incoming.request)
 	}
+}
+
+// Notify sends a notification to all clients.
+func (h *Hub) Notify(method string, params map[string]interface{}) {
+	n := dto.NewNotification(method, params)
+	b, err := json.Marshal(&n)
+	if err != nil {
+	}
+	h.broadcast <- b
 }

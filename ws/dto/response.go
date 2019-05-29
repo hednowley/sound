@@ -32,10 +32,3 @@ func NewResponse(result interface{}, id int) *Response {
 		Version: version,
 	}
 }
-
-func NewNotification(result interface{}) *Response {
-	return &Response{
-		Result:  result,
-		Version: version,
-	}
-}

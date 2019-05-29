@@ -16,6 +16,7 @@ import (
 	"github.com/hednowley/sound/hasher"
 	"github.com/hednowley/sound/idal"
 	"github.com/hednowley/sound/provider"
+	"github.com/hednowley/sound/ws"
 )
 
 // DAL (data access layer) allows high-level manipulation of application data.
@@ -24,15 +25,17 @@ type DAL struct {
 	providers []provider.Provider
 	artDir    string
 	resize    bool
+	hub       *ws.Hub
 }
 
 // NewDAL constructs a new DAL.
-func NewDAL(providers []provider.Provider, config *config.Config, database *database.Default) idal.DAL {
+func NewDAL(providers []provider.Provider, config *config.Config, database *database.Default, hub *ws.Hub) idal.DAL {
 	return &DAL{
 		db:        database,
 		artDir:    config.ArtPath,
 		resize:    config.ResizeArt,
 		providers: providers,
+		hub:       hub,
 	}
 }
 
@@ -416,6 +419,8 @@ func (dal *DAL) startScan(provider provider.Provider, update bool, delete bool) 
 		seelog.Infof("Skipped '%v' scan as one is already in progress.", providerID)
 		return
 	}
+
+	dal.hub.Notify("scanStatus", map[string]interface{}{})
 
 	seelog.Infof("Started '%v' scan.", providerID)
 	scanID := provider.ScanID()
