@@ -3,12 +3,12 @@ package handler
 import (
 	"net/url"
 
+	"github.com/hednowley/sound/idal"
 	"github.com/hednowley/sound/subsonic/api"
-	"github.com/hednowley/sound/dal"
 	"github.com/hednowley/sound/subsonic/dto"
 )
 
-func NewGetMusicDirectoryHandler(database *dal.DAL) api.Handler {
+func NewGetMusicDirectoryHandler(database idal.DAL) api.Handler {
 
 	return func(params url.Values) *api.Response {
 

@@ -5,11 +5,13 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/hednowley/sound/dal"
+
 	log "github.com/cihub/seelog"
 	"github.com/hednowley/sound/api/controller"
 	"github.com/hednowley/sound/config"
-	"github.com/hednowley/sound/dal"
 	"github.com/hednowley/sound/database"
+	"github.com/hednowley/sound/idal"
 	"github.com/hednowley/sound/provider"
 	"github.com/hednowley/sound/services"
 	"github.com/hednowley/sound/subsonic/api"
@@ -21,7 +23,7 @@ import (
 )
 
 // registerSubsonicHandlers associates routes with handlers.
-func registerSubsonicHandlers(factory *api.HandlerFactory, config *config.Config, db *dal.DAL, dal *dal.DAL) {
+func registerSubsonicHandlers(factory *api.HandlerFactory, config *config.Config, dal idal.DAL) {
 
 	handlers := make(map[string]http.HandlerFunc)
 
@@ -33,31 +35,31 @@ func registerSubsonicHandlers(factory *api.HandlerFactory, config *config.Config
 	handlers["/subsonic/rest/delete"] = factory.PublishHandler(handler.NewDeleteHandler(dal))
 
 	// Querying
-	handlers["/subsonic/rest/getalbumlist2"] = factory.PublishHandler(handler.NewGetAlbumList2Handler(db))
-	handlers["/subsonic/rest/getartists"] = factory.PublishHandler(handler.NewGetArtistsHandler(db))
-	handlers["/subsonic/rest/getindexes"] = factory.PublishHandler(handler.NewGetIndexesHandler(db))
-	handlers["/subsonic/rest/getartist"] = factory.PublishHandler(handler.NewGetArtistHandler(db))
-	handlers["/subsonic/rest/getalbum"] = factory.PublishHandler(handler.NewGetAlbumHandler(db))
-	handlers["/subsonic/rest/getsong"] = factory.PublishHandler(handler.NewGetSongHandler(db))
-	handlers["/subsonic/rest/getmusicdirectory"] = factory.PublishHandler(handler.NewGetMusicDirectoryHandler(db))
-	handlers["/subsonic/rest/getgenres"] = factory.PublishHandler(handler.NewGetGenresHandler(db))
-	handlers["/subsonic/rest/getsongsbygenre"] = factory.PublishHandler(handler.NewGetSongsByGenreHandler(db))
+	handlers["/subsonic/rest/getalbumlist2"] = factory.PublishHandler(handler.NewGetAlbumList2Handler(dal))
+	handlers["/subsonic/rest/getartists"] = factory.PublishHandler(handler.NewGetArtistsHandler(dal))
+	handlers["/subsonic/rest/getindexes"] = factory.PublishHandler(handler.NewGetIndexesHandler(dal))
+	handlers["/subsonic/rest/getartist"] = factory.PublishHandler(handler.NewGetArtistHandler(dal))
+	handlers["/subsonic/rest/getalbum"] = factory.PublishHandler(handler.NewGetAlbumHandler(dal))
+	handlers["/subsonic/rest/getsong"] = factory.PublishHandler(handler.NewGetSongHandler(dal))
+	handlers["/subsonic/rest/getmusicdirectory"] = factory.PublishHandler(handler.NewGetMusicDirectoryHandler(dal))
+	handlers["/subsonic/rest/getgenres"] = factory.PublishHandler(handler.NewGetGenresHandler(dal))
+	handlers["/subsonic/rest/getsongsbygenre"] = factory.PublishHandler(handler.NewGetSongsByGenreHandler(dal))
 
 	// Users
 	handlers["/subsonic/rest/getusers"] = factory.PublishHandler(handler.NewGetUsersHandler(config))
 	handlers["/subsonic/rest/getuser"] = factory.PublishHandler(handler.NewGetUserHandler(config))
 
 	// Data
-	handlers["/subsonic/rest/getcoverart"] = factory.PublishBinaryHandler(handler.NewGetCoverArtHandler(db))
-	handlers["/subsonic/rest/stream"] = factory.PublishBinaryHandler(handler.NewStreamHandler(db))
-	handlers["/subsonic/rest/download"] = factory.PublishBinaryHandler(handler.NewDownloadHandler(db))
+	handlers["/subsonic/rest/getcoverart"] = factory.PublishBinaryHandler(handler.NewGetCoverArtHandler(dal))
+	handlers["/subsonic/rest/stream"] = factory.PublishBinaryHandler(handler.NewStreamHandler(dal))
+	handlers["/subsonic/rest/download"] = factory.PublishBinaryHandler(handler.NewDownloadHandler(dal))
 
 	// Playlists
-	handlers["/subsonic/rest/createplaylist"] = factory.PublishHandler(handler.NewCreatePlaylistHandler(db))
-	handlers["/subsonic/rest/getplaylists"] = factory.PublishHandler(handler.NewGetPlaylistsHandler(db))
-	handlers["/subsonic/rest/getplaylist"] = factory.PublishHandler(handler.NewGetPlaylistHandler(db))
-	handlers["/subsonic/rest/deleteplaylist"] = factory.PublishHandler(handler.NewDeletePlaylistHandler(db))
-	handlers["/subsonic/rest/updateplaylist"] = factory.PublishHandler(handler.NewUpdatePlaylistHandler(db))
+	handlers["/subsonic/rest/createplaylist"] = factory.PublishHandler(handler.NewCreatePlaylistHandler(dal))
+	handlers["/subsonic/rest/getplaylists"] = factory.PublishHandler(handler.NewGetPlaylistsHandler(dal))
+	handlers["/subsonic/rest/getplaylist"] = factory.PublishHandler(handler.NewGetPlaylistHandler(dal))
+	handlers["/subsonic/rest/deleteplaylist"] = factory.PublishHandler(handler.NewDeletePlaylistHandler(dal))
+	handlers["/subsonic/rest/updateplaylist"] = factory.PublishHandler(handler.NewUpdatePlaylistHandler(dal))
 
 	http.HandleFunc("/subsonic/", func(w http.ResponseWriter, r *http.Request) {
 		defer log.Flush()
@@ -77,14 +79,13 @@ func registerSubsonicHandlers(factory *api.HandlerFactory, config *config.Config
 	defer log.Flush()
 }
 
-func registerAPIHandlers(factory *api2.HandlerFactory, config *config.Config, authenticator *services.Authenticator, ticketer *ws.Ticketer, dal *dal.DAL) {
+func registerAPIHandlers(factory *api2.HandlerFactory, config *config.Config, authenticator *services.Authenticator, ticketer *ws.Ticketer, dal idal.DAL, hub *ws.Hub) {
 
 	http.Handle("/", http.FileServer(http.Dir("static")))
 
 	http.HandleFunc("/api/authenticate", factory.NewHandler(controller.NewAuthenticateController(authenticator, config)))
 	http.HandleFunc("/api/ticket", factory.NewHandler(controller.NewTicketController(ticketer)))
 
-	hub := ws.NewHub(dal)
 	go hub.Run()
 
 	http.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {
@@ -117,6 +118,7 @@ func main() {
 			database.NewDefault,
 			provider.NewProviders,
 			dal.NewDAL,
+			ws.NewHub,
 			services.NewAuthenticator,
 			ws.NewTicketer,
 			api.NewHandlerFactory,

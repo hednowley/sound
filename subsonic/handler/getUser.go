@@ -3,8 +3,8 @@ package handler
 import (
 	"net/url"
 
-	"github.com/hednowley/sound/subsonic/api"
 	"github.com/hednowley/sound/config"
+	"github.com/hednowley/sound/subsonic/api"
 	"github.com/hednowley/sound/subsonic/dto"
 )
 

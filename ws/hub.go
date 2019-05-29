@@ -1,7 +1,7 @@
 package ws
 
 import (
-	"github.com/hednowley/sound/dal"
+	"github.com/hednowley/sound/idal"
 	"github.com/hednowley/sound/ws/dto"
 	"github.com/hednowley/sound/ws/handlers"
 )
@@ -33,7 +33,7 @@ type Incoming struct {
 }
 
 // NewHub creates a new hub.
-func NewHub(dal *dal.DAL) *Hub {
+func NewHub(dal idal.DAL) *Hub {
 
 	allHandlers := make(map[string]handlers.WsHandler)
 	allHandlers["getArtists"] = handlers.MakeGetArtistsHandler(dal)

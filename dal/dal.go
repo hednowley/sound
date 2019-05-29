@@ -14,6 +14,7 @@ import (
 	"github.com/hednowley/sound/database"
 	"github.com/hednowley/sound/entities"
 	"github.com/hednowley/sound/hasher"
+	"github.com/hednowley/sound/idal"
 	"github.com/hednowley/sound/provider"
 )
 
@@ -26,7 +27,7 @@ type DAL struct {
 }
 
 // NewDAL constructs a new DAL.
-func NewDAL(providers []provider.Provider, config *config.Config, database *database.Default) *DAL {
+func NewDAL(providers []provider.Provider, config *config.Config, database *database.Default) idal.DAL {
 	return &DAL{
 		db:        database,
 		artDir:    config.ArtPath,

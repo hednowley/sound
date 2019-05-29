@@ -4,12 +4,12 @@ import (
 	"fmt"
 	"net/url"
 
+	"github.com/hednowley/sound/idal"
 	"github.com/hednowley/sound/subsonic/api"
-	"github.com/hednowley/sound/dal"
 	"github.com/hednowley/sound/subsonic/dto"
 )
 
-func NewUpdatePlaylistHandler(database *dal.DAL) api.Handler {
+func NewUpdatePlaylistHandler(database idal.DAL) api.Handler {
 
 	return func(params url.Values) *api.Response {
 

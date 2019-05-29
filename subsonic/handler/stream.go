@@ -6,8 +6,8 @@ import (
 	"net/url"
 	"strings"
 
+	"github.com/hednowley/sound/idal"
 	"github.com/hednowley/sound/subsonic/api"
-	"github.com/hednowley/sound/dal"
 	"github.com/hednowley/sound/subsonic/dto"
 )
 
@@ -41,7 +41,7 @@ func parseStreamFormat(param string) *StreamFormat {
 	return nil
 }
 
-func NewStreamHandler(database *dal.DAL) api.BinaryHandler {
+func NewStreamHandler(database idal.DAL) api.BinaryHandler {
 
 	return func(params url.Values, w *http.ResponseWriter, r *http.Request) *api.Response {
 
