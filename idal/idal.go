@@ -1,6 +1,9 @@
 package idal
 
-import "github.com/hednowley/sound/dao"
+import (
+	"github.com/hednowley/sound/dao"
+	"github.com/hednowley/sound/entities"
+)
 
 type DAL interface {
 	PutPlaylist(id uint, name string, songIDs []uint) (uint, error)
@@ -11,14 +14,16 @@ type DAL interface {
 	GetArtist(id uint) (*dao.Artist, error)
 	GetGenre(name string) (*dao.Genre, error)
 	GetPlaylist(id uint) (*dao.Playlist, error)
+	GetSongFromToken(token string, providerID string) *dao.Song
 	UpdatePlaylist(id uint, name string, comment string, public *bool, addedSongs []uint, removedSongs []uint) error
 	DeletePlaylist(id uint) error
 	GetAlbums(listType dao.AlbumList2Type, size uint, offset uint) []*dao.Album
 	GetArtists() []*dao.Artist
 	GetGenres() []*dao.Genre
 	GetPlaylists() []*dao.Playlist
-	GetScanFileCount() int64
-	GetScanStatus() bool
-	StartAllScans(update bool, delete bool)
+	SynchroniseAlbum(id uint) (*dao.Album, error)
+	SynchroniseArtist(id uint) error
+	UpdateSongScanID(song *dao.Song, scanID string)
+	PutSong(song *dao.Song, data *entities.FileInfo) *dao.Song
 	Empty()
 }

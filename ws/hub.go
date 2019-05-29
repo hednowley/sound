@@ -3,10 +3,11 @@ package ws
 import (
 	"encoding/json"
 
-	"github.com/hednowley/sound/idal"
 	"github.com/hednowley/sound/ws/dto"
-	"github.com/hednowley/sound/ws/handlers"
 )
+
+// WsHandler listens for particular websocket messages.
+type WsHandler = func(*dto.Request) interface{}
 
 // Hub maintains the set of active clients and broadcasts messages to the
 // clients.
@@ -26,7 +27,7 @@ type Hub struct {
 	// Receives requests forwarded by clients
 	incoming chan *Incoming
 
-	handlers map[string]handlers.WsHandler
+	handlers map[string]WsHandler
 }
 
 type Incoming struct {
@@ -35,20 +36,19 @@ type Incoming struct {
 }
 
 // NewHub creates a new hub.
-func NewHub(dal idal.DAL) *Hub {
-
-	allHandlers := make(map[string]handlers.WsHandler)
-	allHandlers["getArtists"] = handlers.MakeGetArtistsHandler(dal)
-	allHandlers["startScan"] = handlers.MakeStartScanHandler(dal)
-
+func NewHub() *Hub {
 	return &Hub{
 		broadcast:  make(chan []byte),
 		register:   make(chan *Client),
 		unregister: make(chan *Client),
 		incoming:   make(chan *Incoming),
 		clients:    make(map[*Client]bool),
-		handlers:   allHandlers,
+		handlers:   make(map[string]WsHandler),
 	}
+}
+
+func (h *Hub) SetHandler(method string, handler WsHandler) {
+	h.handlers[method] = handler
 }
 
 // Run starts the hub.
@@ -86,10 +86,10 @@ func (h *Hub) runHandler(incoming *Incoming) {
 }
 
 // Notify sends a notification to all clients.
-func (h *Hub) Notify(method string, params map[string]interface{}) {
-	n := dto.NewNotification(method, params)
-	b, err := json.Marshal(&n)
+func (h *Hub) Notify(notification *dto.Notification) {
+	b, err := json.Marshal(notification)
 	if err != nil {
+		h.broadcast <- []byte("oops")
 	}
 	h.broadcast <- b
 }

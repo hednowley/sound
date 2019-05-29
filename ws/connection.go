@@ -11,13 +11,13 @@ import (
 
 // Connection is a wrapper around a websocket connection.
 type Connection struct {
-	inner *websocket.Conn
+	Inner *websocket.Conn
 }
 
 // NewConnection creates a new connection.
 func NewConnection(inner *websocket.Conn) *Connection {
 	return &Connection{
-		inner: inner,
+		Inner: inner,
 	}
 }
 
@@ -29,12 +29,12 @@ func (c *Connection) SendMessage(r *dto.Response) {
 
 	}
 
-	c.inner.WriteMessage(websocket.TextMessage, body)
+	c.Inner.WriteMessage(websocket.TextMessage, body)
 }
 
 // ReadMessage returns the last message sent from the remote client.
 func (c *Connection) ReadMessage() (*dto.Request, error) {
-	messageType, payload, err := c.inner.ReadMessage()
+	messageType, payload, err := c.Inner.ReadMessage()
 	if err != nil {
 		return nil, err
 	}
@@ -55,5 +55,5 @@ func (c *Connection) ReadMessage() (*dto.Request, error) {
 
 // Close closes the connection.
 func (c *Connection) Close() error {
-	return c.inner.Close()
+	return c.Inner.Close()
 }

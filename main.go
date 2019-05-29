@@ -5,11 +5,10 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/hednowley/sound/dal"
-
 	log "github.com/cihub/seelog"
 	"github.com/hednowley/sound/api/controller"
 	"github.com/hednowley/sound/config"
+	"github.com/hednowley/sound/dal"
 	"github.com/hednowley/sound/database"
 	"github.com/hednowley/sound/idal"
 	"github.com/hednowley/sound/provider"
@@ -17,21 +16,22 @@ import (
 	"github.com/hednowley/sound/subsonic/api"
 	"github.com/hednowley/sound/subsonic/handler"
 	"github.com/hednowley/sound/ws"
+	"github.com/hednowley/sound/ws/handlers"
 	"go.uber.org/fx"
 
 	api2 "github.com/hednowley/sound/api/api"
 )
 
 // registerSubsonicHandlers associates routes with handlers.
-func registerSubsonicHandlers(factory *api.HandlerFactory, config *config.Config, dal idal.DAL) {
+func registerSubsonicHandlers(factory *api.HandlerFactory, config *config.Config, dal idal.DAL, scanner *provider.Scanner) {
 
 	handlers := make(map[string]http.HandlerFunc)
 
 	handlers["/subsonic/rest/ping"] = factory.PublishHandler(handler.NewPingHandler())
 
 	// Scanning
-	handlers["/subsonic/rest/getscanstatus"] = factory.PublishHandler(handler.NewGetScanStatusHandler(dal))
-	handlers["/subsonic/rest/startscan"] = factory.PublishHandler(handler.NewStartScanHandler(dal))
+	handlers["/subsonic/rest/getscanstatus"] = factory.PublishHandler(handler.NewGetScanStatusHandler(scanner))
+	handlers["/subsonic/rest/startscan"] = factory.PublishHandler(handler.NewStartScanHandler(scanner))
 	handlers["/subsonic/rest/delete"] = factory.PublishHandler(handler.NewDeleteHandler(dal))
 
 	// Querying
@@ -79,12 +79,15 @@ func registerSubsonicHandlers(factory *api.HandlerFactory, config *config.Config
 	defer log.Flush()
 }
 
-func registerAPIHandlers(factory *api2.HandlerFactory, config *config.Config, authenticator *services.Authenticator, ticketer *ws.Ticketer, dal idal.DAL, hub *ws.Hub) {
+func registerAPIHandlers(factory *api2.HandlerFactory, config *config.Config, authenticator *services.Authenticator, ticketer *ws.Ticketer, dal idal.DAL, hub *ws.Hub, scanner *provider.Scanner) {
 
 	http.Handle("/", http.FileServer(http.Dir("static")))
 
 	http.HandleFunc("/api/authenticate", factory.NewHandler(controller.NewAuthenticateController(authenticator, config)))
 	http.HandleFunc("/api/ticket", factory.NewHandler(controller.NewTicketController(ticketer)))
+
+	hub.SetHandler("getArtists", handlers.MakeGetArtistsHandler(dal))
+	hub.SetHandler("startScan", handlers.MakeStartScanHandler(scanner))
 
 	go hub.Run()
 
@@ -119,6 +122,7 @@ func main() {
 			provider.NewProviders,
 			dal.NewDAL,
 			ws.NewHub,
+			provider.NewScanner,
 			services.NewAuthenticator,
 			ws.NewTicketer,
 			api.NewHandlerFactory,

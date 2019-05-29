@@ -72,6 +72,7 @@ func (p *BeetsProvider) Iterate(callback func(token string)) error {
 	// Ordered so most recently added songs are scanned first.
 	rows, err := p.beets.Query("SELECT id FROM items ORDER BY id DESC")
 	if err != nil {
+		p.isScanning = false
 		return err
 	}
 
@@ -80,6 +81,7 @@ func (p *BeetsProvider) Iterate(callback func(token string)) error {
 	for rows.Next() {
 		err = rows.Scan(&id)
 		if err != nil {
+			p.isScanning = false
 			return err
 		}
 

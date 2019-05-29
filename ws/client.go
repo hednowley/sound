@@ -80,43 +80,40 @@ func (c *Client) readPump() {
 // application ensures that there is at most one writer to a connection by
 // executing all writes from this goroutine.
 func (c *Client) writePump() {
-	/*
-		defer func() {
-			c.conn.Close()
-		}()
 
+	defer func() {
+		c.conn.Close()
+	}()
 
-
-			for {
-				select {
-				case message, ok := <-c.send:
-					c.conn.SetWriteDeadline(time.Now().Add(writeWait))
-					if !ok {
-						// The hub closed the channel.
-						c.conn.WriteMessage(websocket.CloseMessage, []byte{})
-						return
-					}
-
-					w, err := c.conn.NextWriter(websocket.TextMessage)
-					if err != nil {
-						return
-					}
-					w.Write(message)
-
-					// Add queued chat messages to the current websocket message.
-					n := len(c.send)
-					for i := 0; i < n; i++ {
-						w.Write(newline)
-						w.Write(<-c.send)
-					}
-
-					if err := w.Close(); err != nil {
-						return
-					}
-				}
+	for {
+		select {
+		case message, ok := <-c.send:
+			c.conn.Inner.SetWriteDeadline(time.Now().Add(writeWait))
+			if !ok {
+				// The hub closed the channel.
+				c.conn.Inner.WriteMessage(websocket.CloseMessage, []byte{})
+				return
 			}
 
-	*/
+			w, err := c.conn.Inner.NextWriter(websocket.TextMessage)
+			if err != nil {
+				return
+			}
+			w.Write(message)
+
+			// Add queued chat messages to the current websocket message.
+			n := len(c.send)
+			for i := 0; i < n; i++ {
+				w.Write(newline)
+				w.Write(<-c.send)
+			}
+
+			if err := w.Close(); err != nil {
+				return
+			}
+		}
+	}
+
 }
 
 // NewClient tries to set up a new client and register it with the hub.

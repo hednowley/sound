@@ -5,7 +5,6 @@ import (
 	"io/ioutil"
 	"path"
 	"sort"
-	"sync"
 	"time"
 
 	"github.com/cihub/seelog"
@@ -15,34 +14,28 @@ import (
 	"github.com/hednowley/sound/entities"
 	"github.com/hednowley/sound/hasher"
 	"github.com/hednowley/sound/idal"
-	"github.com/hednowley/sound/provider"
-	"github.com/hednowley/sound/ws"
 )
 
 // DAL (data access layer) allows high-level manipulation of application data.
 type DAL struct {
-	db        *database.Default
-	providers []provider.Provider
-	artDir    string
-	resize    bool
-	hub       *ws.Hub
+	db     *database.Default
+	artDir string
+	resize bool
 }
 
 // NewDAL constructs a new DAL.
-func NewDAL(providers []provider.Provider, config *config.Config, database *database.Default, hub *ws.Hub) idal.DAL {
+func NewDAL(config *config.Config, database *database.Default) idal.DAL {
 	return &DAL{
-		db:        database,
-		artDir:    config.ArtPath,
-		resize:    config.ResizeArt,
-		providers: providers,
-		hub:       hub,
+		db:     database,
+		artDir: config.ArtPath,
+		resize: config.ResizeArt,
 	}
 }
 
 // putSong updates the stored song with the given path and provider ID and returns its ID.putSong
 // If there is no such song then a new one is created and its ID is returned.
 // The associated album, artist, artwork and genre are created too if necessary.
-func (dal *DAL) putSong(song *dao.Song, data *entities.FileInfo) *dao.Song {
+func (dal *DAL) PutSong(song *dao.Song, data *entities.FileInfo) *dao.Song {
 
 	genre := dal.db.PutGenreByName(data.Genre)
 	art := dal.putArt(data.CoverArt)
@@ -99,7 +92,7 @@ func (dal *DAL) putArt(art *entities.CoverArtData) *dao.Art {
 }
 
 // Should "stagger" this to run every 50 songs
-func (dal *DAL) synchroniseAlbum(id uint) (*dao.Album, error) {
+func (dal *DAL) SynchroniseAlbum(id uint) (*dao.Album, error) {
 
 	seelog.Infof("Synchronising album %v", id)
 
@@ -136,7 +129,7 @@ func (dal *DAL) synchroniseAlbum(id uint) (*dao.Album, error) {
 	return a, nil
 }
 
-func (dal *DAL) synchroniseArtist(id uint) error {
+func (dal *DAL) SynchroniseArtist(id uint) error {
 
 	seelog.Infof("Synchronising artist %v", id)
 
@@ -161,7 +154,7 @@ func (dal *DAL) synchroniseArtist(id uint) error {
 	return nil
 }
 
-func (dal *DAL) updateSongScanID(song *dao.Song, scanID string) {
+func (dal *DAL) UpdateSongScanID(song *dao.Song, scanID string) {
 	song.ScanID = scanID
 	dal.db.PutSong(song)
 }
@@ -266,6 +259,10 @@ func (dal *DAL) GetSong(id uint, genre bool, album bool, artist bool, art bool) 
 		return nil, &dao.ErrNotFound{}
 	}
 	return s, nil
+}
+
+func (dal *DAL) GetSongFromToken(token string, providerID string) *dao.Song {
+	return dal.db.GetSongFromToken(token, providerID)
 }
 
 func (dal *DAL) GetAlbum(id uint, genre bool, artist bool, songs bool) (*dao.Album, error) {
@@ -380,93 +377,6 @@ func (dal *DAL) GetPlaylists() []*dao.Playlist {
 		sort.Sort(s)
 	}
 	return playlists
-}
-
-func (dal *DAL) GetScanFileCount() int64 {
-	count := int64(0)
-	for _, p := range dal.providers {
-		count += p.FileCount()
-	}
-	return count
-}
-
-func (dal *DAL) GetScanStatus() bool {
-	scanning := false
-	for _, p := range dal.providers {
-		scanning = scanning || p.IsScanning()
-	}
-	return scanning
-}
-
-// StartAllScans asks all providers to start scanning in parallel.
-func (dal *DAL) StartAllScans(update bool, delete bool) {
-	seelog.Info("Starting all scans.")
-	var wg sync.WaitGroup
-	for _, p := range dal.providers {
-		wg.Add(1)
-		go func() {
-			defer wg.Done()
-			dal.startScan(p, update, delete)
-		}()
-	}
-	wg.Wait()
-}
-
-func (dal *DAL) startScan(provider provider.Provider, update bool, delete bool) {
-	providerID := provider.ID()
-
-	if provider.IsScanning() {
-		seelog.Infof("Skipped '%v' scan as one is already in progress.", providerID)
-		return
-	}
-
-	dal.hub.Notify("scanStatus", map[string]interface{}{})
-
-	seelog.Infof("Started '%v' scan.", providerID)
-	scanID := provider.ScanID()
-	synch := NewSynchroniser(dal, 10)
-
-	err := provider.Iterate(func(token string) {
-		s := dal.db.GetSongFromToken(token, providerID)
-		if s == nil || update {
-			data, err2 := provider.GetInfo(token)
-			if err2 != nil {
-				seelog.Errorf("Cannot read music info for '%v': %v", token, err2)
-				return
-			}
-
-			if s == nil {
-				seelog.Infof("Adding token '%v'", token)
-				now := time.Now()
-				s = &dao.Song{
-					Created:    &now,
-					ProviderID: providerID,
-					Token:      token,
-				}
-			} else {
-				seelog.Infof("Updating token '%v'", token)
-				synch.Notify(s.AlbumID) // Notify of potential change to old album
-			}
-
-			s.ScanID = scanID
-			s = dal.putSong(s, data)
-
-			// Notify of change to new album
-			synch.Notify(s.AlbumID)
-
-		} else {
-			seelog.Infof("Skipping token '%v'", token)
-			dal.updateSongScanID(s, scanID)
-		}
-	})
-	if err != nil {
-		seelog.Errorf("Error during '%v' scan: %v", providerID, err)
-	}
-
-	// Make any remaining updates
-	synch.Flush()
-
-	seelog.Infof("Finished '%v' scan.", providerID)
 }
 
 // Empty deletes all data.

@@ -59,7 +59,9 @@ func (p *FsProvider) Iterate(callback func(token string)) error {
 		// Use the path as a unique token
 		callback(path)
 	})
+
 	if err != nil {
+		p.isScanning = false
 		return err
 	}
 

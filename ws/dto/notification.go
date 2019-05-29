@@ -13,3 +13,10 @@ func NewNotification(method string, params map[string]interface{}) *Notification
 		Version: "2.0",
 	}
 }
+
+func NewScanStatusNotification(scanning bool, count int64) *Notification {
+	return NewNotification("scanStatus", map[string]interface{}{
+		"scanning": scanning,
+		"count":    count,
+	})
+}

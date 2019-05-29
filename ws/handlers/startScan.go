@@ -3,11 +3,12 @@ package handlers
 import (
 	"encoding/json"
 
-	"github.com/hednowley/sound/idal"
+	"github.com/hednowley/sound/provider"
+	"github.com/hednowley/sound/ws"
 	"github.com/hednowley/sound/ws/dto"
 )
 
-func MakeStartScanHandler(dal idal.DAL) WsHandler {
+func MakeStartScanHandler(scanner *provider.Scanner) ws.WsHandler {
 	return func(request *dto.Request) interface{} {
 		var update bool
 		err := json.Unmarshal(*request.Params["update"], &update)
@@ -15,7 +16,7 @@ func MakeStartScanHandler(dal idal.DAL) WsHandler {
 
 		}
 
-		go dal.StartAllScans(update, false)
+		go scanner.StartAllScans(update, false)
 		return struct{}{}
 	}
 }
