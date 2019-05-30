@@ -69,6 +69,8 @@ func (dal *Scanner) startScan(provider Provider, update bool, delete bool) {
 	scanID := provider.ScanID()
 	synch := NewSynchroniser(dal.dal, 10)
 
+	dal.hub.Notify(dto.NewScanStatusNotification(provider.IsScanning(), provider.FileCount()))
+
 	err := provider.Iterate(func(token string) {
 		dal.hub.Notify(dto.NewScanStatusNotification(provider.IsScanning(), provider.FileCount()))
 
@@ -112,4 +114,6 @@ func (dal *Scanner) startScan(provider Provider, update bool, delete bool) {
 	synch.Flush()
 
 	seelog.Infof("Finished '%v' scan.", providerID)
+
+	dal.hub.Notify(dto.NewScanStatusNotification(provider.IsScanning(), provider.FileCount()))
 }

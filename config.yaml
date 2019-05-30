@@ -6,19 +6,17 @@ resize art: true
 db: "host=localhost port=5432 user=postgres password=sound dbname=sound sslmode=disable"
 log config: "log-config.xml"
 extensions:
-  - mp3
+    - mp3
 ignored articles:
-  - The
-  - El
+    - The
+    - El
 users:
-  - 
-    username: ned
-    password: hello
-    email: ned@blah.com
-  -
-    username: ned2
-    password: hello2
-    email: ned2@blah.com
-beets db: "C:\\Users\\ned.howley\\Downloads\\beetslib.blb"
+    - username: ned
+      password: hello
+      email: ned@blah.com
+    - username: ned2
+      password: hello2
+      email: ned2@blah.com
+beets db: "C:\\beetslib.blb"
 access control allow origin: "*"
 websocket ticket expiry: 30
