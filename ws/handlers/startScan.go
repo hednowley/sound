@@ -3,12 +3,12 @@ package handlers
 import (
 	"encoding/json"
 
+	"github.com/hednowley/sound/interfaces"
 	"github.com/hednowley/sound/provider"
-	"github.com/hednowley/sound/ws"
 	"github.com/hednowley/sound/ws/dto"
 )
 
-func MakeStartScanHandler(scanner *provider.Scanner) ws.WsHandler {
+func MakeStartScanHandler(scanner *provider.Scanner) interfaces.WsHandler {
 	return func(request *dto.Request) interface{} {
 		var update bool
 		var delete bool

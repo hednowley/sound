@@ -79,7 +79,7 @@ func registerSubsonicHandlers(factory *api.HandlerFactory, config *config.Config
 	defer log.Flush()
 }
 
-func registerAPIHandlers(factory *api2.HandlerFactory, config *config.Config, authenticator *services.Authenticator, ticketer *ws.Ticketer, dal interfaces.DAL, hub *ws.Hub, scanner *provider.Scanner) {
+func registerAPIHandlers(factory *api2.HandlerFactory, config *config.Config, authenticator *services.Authenticator, ticketer *ws.Ticketer, dal interfaces.DAL, hub interfaces.Hub, scanner *provider.Scanner) {
 
 	http.Handle("/", http.FileServer(http.Dir("static")))
 
@@ -92,7 +92,7 @@ func registerAPIHandlers(factory *api2.HandlerFactory, config *config.Config, au
 	go hub.Run()
 
 	http.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {
-		ws.NewClient(hub, ticketer, dal, w, r)
+		hub.AddClient(ticketer, dal, w, r)
 	})
 }
 

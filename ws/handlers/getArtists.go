@@ -2,11 +2,10 @@ package handlers
 
 import (
 	"github.com/hednowley/sound/interfaces"
-	"github.com/hednowley/sound/ws"
 	"github.com/hednowley/sound/ws/dto"
 )
 
-func MakeGetArtistsHandler(dal interfaces.DAL) ws.WsHandler {
+func MakeGetArtistsHandler(dal interfaces.DAL) interfaces.WsHandler {
 	return func(request *dto.Request) interface{} {
 		artists := dal.GetArtists()
 		return dto.NewArtistCollection(artists)

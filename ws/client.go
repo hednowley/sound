@@ -1,14 +1,10 @@
 package ws
 
 import (
-	"encoding/json"
 	"log"
-	"net/http"
 	"time"
 
-	"github.com/cihub/seelog"
 	"github.com/hednowley/sound/interfaces"
-	"github.com/hednowley/sound/ws/dto"
 
 	"github.com/gorilla/websocket"
 )
@@ -107,69 +103,4 @@ func (c *Client) writePump() {
 		}
 	}
 
-}
-
-// NewClient tries to set up a new client and register it with the hub.
-func NewClient(hub *Hub, ticketer *Ticketer, dal interfaces.DAL, w http.ResponseWriter, r *http.Request) {
-
-	// Allow all origins
-	upgrader.CheckOrigin = func(r *http.Request) bool {
-		return true
-	}
-
-	conn, err := upgrader.Upgrade(w, r, nil)
-	if err != nil {
-		conn.Close()
-		seelog.Error(err)
-		return
-	}
-
-	conn.SetReadLimit(maxMessageSize)
-
-	c := NewConnection(conn)
-	request, err := c.ReadMessage()
-	if err != nil {
-		conn.Close()
-		seelog.Error(err)
-		return
-	}
-
-	if request.Method != "handshake" {
-		conn.Close()
-		seelog.Errorf("Unexpected method: %v", request.Method)
-		return
-	}
-
-	var ticket string
-	err = json.Unmarshal(*request.Params["ticket"], &ticket)
-	if err != nil {
-		conn.Close()
-		seelog.Error("Unexpected handshake params")
-		return
-	}
-
-	user := ticketer.SubmitTicket(ticket)
-	if user == nil {
-		c.SendMessage(dto.NewErrorResponse("Bad ticket", request.ID))
-		conn.Close()
-		return
-	}
-
-	c.SendMessage(dto.NewResponse(dto.TicketResponse{
-		Accepted: true,
-	}, request.ID))
-
-	client := &Client{
-		hub:  hub,
-		conn: c,
-		send: make(chan []byte, 256),
-		dal:  dal,
-	}
-
-	client.hub.register <- client
-
-	// Allow collection of memory referenced by the caller by doing all work in
-	// new goroutines.
-	go client.writePump()
-	go client.readPump()
 }

@@ -1,6 +1,7 @@
 package ws
 
 import (
+	"github.com/hednowley/sound/interfaces"
 	"github.com/hednowley/sound/ws/dto"
 )
 
@@ -11,7 +12,7 @@ func NewMockHub() *MockHub {
 	return &MockHub{}
 }
 
-func (h *MockHub) SetHandler(method string, handler WsHandler) {
+func (h *MockHub) SetHandler(method string, handler interfaces.WsHandler) {
 }
 
 // Run starts the hub.
