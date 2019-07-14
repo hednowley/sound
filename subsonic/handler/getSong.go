@@ -4,12 +4,12 @@ import (
 	"net/url"
 
 	"github.com/hednowley/sound/dao"
-	"github.com/hednowley/sound/idal"
+	"github.com/hednowley/sound/interfaces"
 	"github.com/hednowley/sound/subsonic/api"
 	"github.com/hednowley/sound/subsonic/dto"
 )
 
-func NewGetSongHandler(database idal.DAL) api.Handler {
+func NewGetSongHandler(database interfaces.DAL) api.Handler {
 
 	return func(params url.Values) *api.Response {
 

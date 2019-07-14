@@ -102,7 +102,7 @@ func (p *BeetsProvider) GetInfo(token string) (*entities.FileInfo, error) {
 	if err != nil {
 		return nil, fmt.Errorf("Unknown token '%v'", token)
 	}
-	row := p.beets.QueryRow("SELECT path, title, artist, album, album_id, albumartist, genre, track, disc, year, bitrate, length, albumdisambig FROM items WHERE ID = ?", id)
+	row := p.beets.QueryRow("SELECT path, title, artist, album, album_id, albumartist, genre, track, disc, year, bitrate, length FROM items WHERE ID = ?", id)
 
 	var path string
 	var title string
@@ -116,9 +116,8 @@ func (p *BeetsProvider) GetInfo(token string) (*entities.FileInfo, error) {
 	var year int
 	var bitrate int
 	var duration float64
-	var disambiguator string
 
-	err = row.Scan(&path, &title, &artist, &album, &albumID, &albumArtist, &genre, &track, &disc, &year, &bitrate, &duration, &disambiguator)
+	err = row.Scan(&path, &title, &artist, &album, &albumID, &albumArtist, &genre, &track, &disc, &year, &bitrate, &duration)
 
 	if err == nil {
 
@@ -134,14 +133,14 @@ func (p *BeetsProvider) GetInfo(token string) (*entities.FileInfo, error) {
 			Album:         album,
 			Artist:        artist,
 			AlbumArtist:   albumArtist,
-			Genre:         genre,
+			Genre:         genre, 
 			Track:         track,
 			Disc:          disc,
 			Year:          year,
 			Bitrate:       bitrate / 1000,
 			Duration:      int(duration),
 			CoverArt:      art,
-			Disambiguator: disambiguator,
+			Disambiguator: strconv.Itoa(albumID),
 		}, nil
 	}
 	if err == sql.ErrNoRows {

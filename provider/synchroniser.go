@@ -2,14 +2,14 @@ package provider
 
 import (
 	"github.com/cihub/seelog"
-	"github.com/hednowley/sound/idal"
+	"github.com/hednowley/sound/interfaces"
 	"github.com/hednowley/sound/util"
 )
 
 // Synchroniser efficiently keeps artist and album information in sync
 // with song information.
 type Synchroniser struct {
-	dal             idal.DAL
+	dal             interfaces.DAL
 	albumQueue      []uint
 	flushThreshhold int
 }
@@ -17,7 +17,7 @@ type Synchroniser struct {
 // NewSynchroniser returns a new synchroniser. flushthreshhold is how many
 // albums need to be changed before they and their artists are synced. A high
 // value will be more efficient if albums arrive roughly grouped by artist.
-func NewSynchroniser(dal idal.DAL, flushThreshhold int) *Synchroniser {
+func NewSynchroniser(dal interfaces.DAL, flushThreshhold int) *Synchroniser {
 	return &Synchroniser{
 		dal:             dal,
 		flushThreshhold: flushThreshhold,

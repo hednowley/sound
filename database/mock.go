@@ -3,6 +3,7 @@ package database
 import (
 	"database/sql"
 	"log"
+	"path/filepath"
 	"runtime"
 
 	"github.com/hednowley/sound/config"
@@ -13,7 +14,7 @@ import (
 // Note that a real database must exist at the connection string below.
 func NewMock() *Default {
 
-	conn := "dbname=sound_test sslmode=disable user=postgres password=sound"
+	conn := "dbname=sound_test sslmode=disable user=sound password=sound"
 
 	// Initialise the database schema with gorm
 	database, err := NewDefault(&config.Config{Db: conn})
@@ -29,7 +30,8 @@ func NewMock() *Default {
 
 	// Get test data path (found relative to this file)
 	_, filename, _, _ := runtime.Caller(0)
-	dataPath := filename + "/../../testdata/dao"
+	dir := filepath.Dir(filename)
+	dataPath := filepath.Join(dir, "..", "testdata", "dao")
 
 	// Insert test data
 	fixtures, err := testfixtures.NewFolder(db, &testfixtures.PostgreSQL{}, dataPath)

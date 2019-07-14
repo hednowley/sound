@@ -13,7 +13,7 @@ import (
 	"github.com/hednowley/sound/database"
 	"github.com/hednowley/sound/entities"
 	"github.com/hednowley/sound/hasher"
-	"github.com/hednowley/sound/idal"
+	"github.com/hednowley/sound/interfaces"
 )
 
 // DAL (data access layer) allows high-level manipulation of application data.
@@ -24,7 +24,7 @@ type DAL struct {
 }
 
 // NewDAL constructs a new DAL.
-func NewDAL(config *config.Config, database *database.Default) idal.DAL {
+func NewDAL(config *config.Config, database *database.Default) interfaces.DAL {
 	return &DAL{
 		db:     database,
 		artDir: config.ArtPath,
@@ -32,7 +32,7 @@ func NewDAL(config *config.Config, database *database.Default) idal.DAL {
 	}
 }
 
-// putSong updates the stored song with the given path and provider ID and returns its ID.putSong
+// PutSong updates the stored song with the given path and provider ID and returns its ID.
 // If there is no such song then a new one is created and its ID is returned.
 // The associated album, artist, artwork and genre are created too if necessary.
 func (dal *DAL) PutSong(song *dao.Song, data *entities.FileInfo) *dao.Song {

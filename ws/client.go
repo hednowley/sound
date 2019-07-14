@@ -7,7 +7,7 @@ import (
 	"time"
 
 	"github.com/cihub/seelog"
-	"github.com/hednowley/sound/idal"
+	"github.com/hednowley/sound/interfaces"
 	"github.com/hednowley/sound/ws/dto"
 
 	"github.com/gorilla/websocket"
@@ -41,7 +41,7 @@ type Client struct {
 	// Buffered channel of outbound messages.
 	send chan []byte
 
-	dal idal.DAL
+	dal interfaces.DAL
 }
 
 // readPump pumps messages from the websocket connection to the hub.
@@ -110,7 +110,7 @@ func (c *Client) writePump() {
 }
 
 // NewClient tries to set up a new client and register it with the hub.
-func NewClient(hub *Hub, ticketer *Ticketer, dal idal.DAL, w http.ResponseWriter, r *http.Request) {
+func NewClient(hub *Hub, ticketer *Ticketer, dal interfaces.DAL, w http.ResponseWriter, r *http.Request) {
 
 	// Allow all origins
 	upgrader.CheckOrigin = func(r *http.Request) bool {

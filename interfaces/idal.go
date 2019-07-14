@@ -1,4 +1,4 @@
-package idal
+package interfaces
 
 import (
 	"github.com/hednowley/sound/dao"

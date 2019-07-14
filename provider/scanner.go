@@ -6,20 +6,19 @@ import (
 
 	"github.com/cihub/seelog"
 	"github.com/hednowley/sound/dao"
-	"github.com/hednowley/sound/idal"
-	"github.com/hednowley/sound/ws"
+	"github.com/hednowley/sound/interfaces"
 	"github.com/hednowley/sound/ws/dto"
 )
 
 // DAL (data access layer) allows high-level manipulation of application data.
 type Scanner struct {
 	providers []Provider
-	dal       idal.DAL
-	hub       *ws.Hub
+	dal       interfaces.DAL
+	hub       interfaces.Hub
 }
 
 // NewDAL constructs a new DAL.
-func NewScanner(providers []Provider, dal idal.DAL, hub *ws.Hub) *Scanner {
+func NewScanner(providers []Provider, dal interfaces.DAL, hub interfaces.Hub) *Scanner {
 	return &Scanner{
 		providers: providers,
 		dal:       dal,

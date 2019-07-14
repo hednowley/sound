@@ -15,7 +15,7 @@ type FileInfo struct {
 	Extension     string
 	Bitrate       int    // Bitrate in kb/s
 	Duration      int    // Duration in seconds
-	Disambiguator string // Optional string to distinguish multiple albums all sharing the same name and artist
+	Disambiguator string
 }
 
 type CoverArtData struct {

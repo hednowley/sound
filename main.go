@@ -10,7 +10,7 @@ import (
 	"github.com/hednowley/sound/config"
 	"github.com/hednowley/sound/dal"
 	"github.com/hednowley/sound/database"
-	"github.com/hednowley/sound/idal"
+	"github.com/hednowley/sound/interfaces"
 	"github.com/hednowley/sound/provider"
 	"github.com/hednowley/sound/services"
 	"github.com/hednowley/sound/subsonic/api"
@@ -23,7 +23,7 @@ import (
 )
 
 // registerSubsonicHandlers associates routes with handlers.
-func registerSubsonicHandlers(factory *api.HandlerFactory, config *config.Config, dal idal.DAL, scanner *provider.Scanner) {
+func registerSubsonicHandlers(factory *api.HandlerFactory, config *config.Config, dal interfaces.DAL, scanner *provider.Scanner) {
 
 	handlers := make(map[string]http.HandlerFunc)
 
@@ -79,7 +79,7 @@ func registerSubsonicHandlers(factory *api.HandlerFactory, config *config.Config
 	defer log.Flush()
 }
 
-func registerAPIHandlers(factory *api2.HandlerFactory, config *config.Config, authenticator *services.Authenticator, ticketer *ws.Ticketer, dal idal.DAL, hub *ws.Hub, scanner *provider.Scanner) {
+func registerAPIHandlers(factory *api2.HandlerFactory, config *config.Config, authenticator *services.Authenticator, ticketer *ws.Ticketer, dal interfaces.DAL, hub *ws.Hub, scanner *provider.Scanner) {
 
 	http.Handle("/", http.FileServer(http.Dir("static")))
 
