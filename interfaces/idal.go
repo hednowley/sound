@@ -26,4 +26,5 @@ type DAL interface {
 	UpdateSongScanID(song *dao.Song, scanID string)
 	PutSong(song *dao.Song, data *entities.FileInfo) *dao.Song
 	Empty()
+	DeleteMissing(tokens []string, providerID string)
 }

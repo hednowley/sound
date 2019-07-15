@@ -1,6 +1,8 @@
 package ws
 
 import (
+	"net/http"
+
 	"github.com/hednowley/sound/interfaces"
 	"github.com/hednowley/sound/ws/dto"
 )
@@ -21,4 +23,8 @@ func (h *MockHub) Run() {
 
 // Notify sends a notification to all clients.
 func (h *MockHub) Notify(notification *dto.Notification) {
+}
+
+// Notify sends a notification to all clients.
+func (h *MockHub) AddClient(ticketer interfaces.Ticketer, dal interfaces.DAL, w http.ResponseWriter, r *http.Request) {
 }

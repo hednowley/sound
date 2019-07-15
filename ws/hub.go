@@ -25,12 +25,12 @@ type Hub struct {
 	unregister chan *Client
 
 	// Receives requests forwarded by clients
-	incoming chan *Incoming
+	incoming chan *incoming
 
 	handlers map[string]interfaces.WsHandler
 }
 
-type Incoming struct {
+type incoming struct {
 	client  *Client
 	request *dto.Request
 }
@@ -41,7 +41,7 @@ func NewHub() interfaces.Hub {
 		broadcast:  make(chan []byte),
 		register:   make(chan *Client),
 		unregister: make(chan *Client),
-		incoming:   make(chan *Incoming),
+		incoming:   make(chan *incoming),
 		clients:    make(map[*Client]bool),
 		handlers:   make(map[string]interfaces.WsHandler),
 	}
@@ -78,7 +78,7 @@ func (h *Hub) Run() {
 	}
 }
 
-func (h *Hub) runHandler(incoming *Incoming) {
+func (h *Hub) runHandler(incoming *incoming) {
 	handler, ok := h.handlers[incoming.request.Method]
 	if ok {
 		handler(incoming.request)

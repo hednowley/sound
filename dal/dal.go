@@ -383,3 +383,7 @@ func (dal *DAL) GetPlaylists() []*dao.Playlist {
 func (d *DAL) Empty() {
 	d.db.Empty()
 }
+
+func (d *DAL) DeleteMissing(tokens []string, providerID string) {
+	d.db.DeleteMissing(tokens, providerID)
+}

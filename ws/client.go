@@ -60,7 +60,7 @@ func (c *Client) readPump() {
 			break
 		}
 
-		c.hub.incoming <- &Incoming{
+		c.hub.incoming <- &incoming{
 			client:  c,
 			request: request,
 		}

@@ -70,8 +70,14 @@ func (dal *Scanner) startScan(provider Provider, update bool, delete bool) {
 
 	dal.hub.Notify(dto.NewScanStatusNotification(provider.IsScanning(), provider.FileCount()))
 
+	tokens := []string{}
+
 	err := provider.Iterate(func(token string) {
 		dal.hub.Notify(dto.NewScanStatusNotification(provider.IsScanning(), provider.FileCount()))
+
+		if delete {
+			tokens = append(tokens, token)
+		}
 
 		s := dal.dal.GetSongFromToken(token, providerID)
 		if s == nil || update {
@@ -111,6 +117,16 @@ func (dal *Scanner) startScan(provider Provider, update bool, delete bool) {
 
 	// Make any remaining updates
 	synch.Flush()
+
+	if delete {
+		seelog.Info("Deleting unscanned items")
+		dal.dal.DeleteMissing(tokens, providerID)
+
+		// Find unscanned songs from same provider
+
+		// Find albums etc with no songs
+
+	}
 
 	seelog.Infof("Finished '%v' scan.", providerID)
 

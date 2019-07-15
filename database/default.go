@@ -330,3 +330,10 @@ func (db *Default) Empty() {
 	db.db.Delete(dao.Genre{})
 	db.db.Delete(dao.Art{})
 }
+
+func (db *Default) DeleteMissing(tokens []string, providerID string) {
+	db.db.Where("provider_id = ?", providerID).Not("token IN (?)", tokens).Delete(dao.Song{})
+	db.db.Exec("DELETE FROM albums WHERE id in (SELECT albums.id FROM albums LEFT JOIN songs ON songs.album_id = albums.id GROUP BY albums.id HAVING count(songs.id) = 0)")
+	db.db.Exec("DELETE FROM artists WHERE id in (SELECT artists.id FROM artists LEFT JOIN albums ON albums.artist_id = artists.id GROUP BY artists.id HAVING count(albums.id) = 0)")
+	//db.db.Joins("JOIN albums ON albums.artist_id = artists.id").Group("artists.id").Having("count(albums.id) = 1").Delete(dao.Artist{})
+}
