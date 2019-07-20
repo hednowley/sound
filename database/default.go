@@ -123,8 +123,7 @@ func (db *Default) GetSongFromToken(token string, providerID string) *dao.Song {
 }
 
 func (db *Default) ReplacePlaylistEntries(playlist *dao.Playlist, entries []*dao.PlaylistEntry) {
-
-	db.db.Delete(dao.PlaylistEntry{PlaylistID: playlist.ID})
+	db.db.Delete(&dao.PlaylistEntry{}, "playlist_id = ?", playlist.ID)
 	for _, e := range entries {
 		e.PlaylistID = playlist.ID
 		db.db.Save(e)

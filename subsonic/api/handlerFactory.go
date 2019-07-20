@@ -84,6 +84,8 @@ func (factory *HandlerFactory) PublishBinaryHandler(handler BinaryHandler) http.
 			response = NewErrorReponse(dto.Generic, message)
 		}
 
+		//log.Debugf("\nREQUEST: %v\n%v\n", r.URL, string(body))
+
 		params := parseParams(r.URL.Query(), body)
 
 		format := parseResponseFormat(params.Get("f"))
@@ -109,6 +111,7 @@ func (factory *HandlerFactory) PublishBinaryHandler(handler BinaryHandler) http.
 		if *format == xmlFormat {
 			s := serialiseToXML(response)
 			fmt.Fprint(w, s)
+			//log.Debugf("\nRESPONSE: %v\n%v\n", r.URL, s)
 			return
 		}
 
@@ -116,6 +119,7 @@ func (factory *HandlerFactory) PublishBinaryHandler(handler BinaryHandler) http.
 			w.Header().Set("Content-Type", "application/json;charset=UTF-8")
 			s := serialiseToJSON(response)
 			fmt.Fprint(w, s)
+			//log.Debugf("\nRESPONSE: %v\n%v\n", r.URL, s)
 			return
 		}
 	}

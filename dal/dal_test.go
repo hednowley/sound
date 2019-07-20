@@ -6,10 +6,28 @@ import (
 	"github.com/hednowley/sound/config"
 	"github.com/hednowley/sound/dal"
 	"github.com/hednowley/sound/database"
-	"github.com/hednowley/sound/entities"
-	"github.com/hednowley/sound/provider"
 )
 
+func TestPutPlaylist(t *testing.T) {
+	m := database.NewMock()
+	dal := dal.NewDAL(&config.Config{}, m)
+
+	id, err := dal.PutPlaylist(0, "playlist2", []uint{1, 2, 10})
+	if err != nil || id != 10001 {
+		t.Error()
+	}
+
+	p, err := dal.GetPlaylist(1)
+	if err != nil {
+		t.Error()
+	}
+
+	if len(p.Entries) != 4 {
+		t.Error()
+	}
+}
+
+/*
 func TestAddOnlyScan(t *testing.T) {
 
 	f := []*entities.FileInfo{
@@ -32,7 +50,7 @@ func TestAddOnlyScan(t *testing.T) {
 	p := provider.NewMockProvider("mock", f)
 	p.SetScanID("scan1")
 	m := database.NewMock()
-	dal := dal.NewDAL([]provider.Provider{p}, &config.Config{}, m)
+	dal := dal.NewDAL(&config.Config{}, m)
 
 	// Scan without updating or deleting
 	dal.StartAllScans(false, false)
@@ -145,3 +163,4 @@ func TestUpdateScan(t *testing.T) {
 	}
 
 }
+*/

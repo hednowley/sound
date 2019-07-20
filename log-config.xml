@@ -1,4 +1,4 @@
-<seelog>
+<seelog minlevel="info">
 	<outputs formatid="common">
 		<file path="log.log" />
 	</outputs>
