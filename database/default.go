@@ -340,18 +340,24 @@ func (db *Default) DeleteMissing(tokens []string, providerID string) {
 
 func (db *Default) SearchAlbums(query string, count uint, offset uint) []*dao.Album {
 	var albums []*dao.Album
-	db.db.Where("name LIKE ?", fmt.Sprintf("%%%s%%", query)).Limit(count).Offset(offset).Find(&albums)
+	db.db.Where("name ILIKE ?", fmt.Sprintf("%%%s%%", query)).Limit(count).Offset(offset).Find(&albums)
 	return albums
 }
 
 func (db *Default) SearchArtists(query string, count uint, offset uint) []*dao.Artist {
 	var artists []*dao.Artist
-	db.db.Where("name LIKE ?", fmt.Sprintf("%%%s%%", query)).Limit(count).Offset(offset).Find(&artists)
+	db.db.Where("name ILIKE ?", fmt.Sprintf("%%%s%%", query)).Limit(count).Offset(offset).Find(&artists)
 	return artists
 }
 
 func (db *Default) SearchSongs(query string, count uint, offset uint) []*dao.Song {
 	var songs []*dao.Song
-	db.db.Where("title LIKE ?", fmt.Sprintf("%%%s%%", query)).Limit(count).Offset(offset).Find(&songs)
+	db.db.Preload("Genre").
+		Preload("Album").
+		Preload("Album.Artist").
+		Where("title ILIKE ?", fmt.Sprintf("%%%s%%", query)).
+		Limit(count).
+		Offset(offset).
+		Find(&songs)
 	return songs
 }

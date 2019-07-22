@@ -38,7 +38,7 @@ func TestSearchArtist(t *testing.T) {
 
 	dal := dal.NewDAL(&config.Config{}, m)
 
-	artists := dal.SearchArtists("eethove", 10, 0)
+	artists := dal.SearchArtists("EethOVE", 10, 0)
 	if len(artists) != 1 {
 		t.Error("Could not find beethoven")
 	}
