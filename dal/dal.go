@@ -369,3 +369,15 @@ func (d *DAL) Empty() {
 func (d *DAL) DeleteMissing(tokens []string, providerID string) {
 	d.db.DeleteMissing(tokens, providerID)
 }
+
+func (d *DAL) SearchArtists(query string, count uint, offset uint) []*dao.Artist {
+	return d.db.SearchArtists(query, count, offset)
+}
+
+func (d *DAL) SearchSongs(query string, count uint, offset uint) []*dao.Song {
+	return d.db.SearchSongs(query, count, offset)
+}
+
+func (d *DAL) SearchAlbums(query string, count uint, offset uint) []*dao.Album {
+	return d.db.SearchAlbums(query, count, offset)
+}

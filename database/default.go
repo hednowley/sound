@@ -1,6 +1,7 @@
 package database
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/hednowley/sound/config"
@@ -335,4 +336,22 @@ func (db *Default) DeleteMissing(tokens []string, providerID string) {
 	db.db.Exec("DELETE FROM albums WHERE id in (SELECT albums.id FROM albums LEFT JOIN songs ON songs.album_id = albums.id GROUP BY albums.id HAVING count(songs.id) = 0)")
 	db.db.Exec("DELETE FROM artists WHERE id in (SELECT artists.id FROM artists LEFT JOIN albums ON albums.artist_id = artists.id GROUP BY artists.id HAVING count(albums.id) = 0)")
 	//db.db.Joins("JOIN albums ON albums.artist_id = artists.id").Group("artists.id").Having("count(albums.id) = 1").Delete(dao.Artist{})
+}
+
+func (db *Default) SearchAlbums(query string, count uint, offset uint) []*dao.Album {
+	var albums []*dao.Album
+	db.db.Where("name LIKE ?", fmt.Sprintf("%%%s%%", query)).Limit(count).Offset(offset).Find(&albums)
+	return albums
+}
+
+func (db *Default) SearchArtists(query string, count uint, offset uint) []*dao.Artist {
+	var artists []*dao.Artist
+	db.db.Where("name LIKE ?", fmt.Sprintf("%%%s%%", query)).Limit(count).Offset(offset).Find(&artists)
+	return artists
+}
+
+func (db *Default) SearchSongs(query string, count uint, offset uint) []*dao.Song {
+	var songs []*dao.Song
+	db.db.Where("title LIKE ?", fmt.Sprintf("%%%s%%", query)).Limit(count).Offset(offset).Find(&songs)
+	return songs
 }

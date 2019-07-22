@@ -25,4 +25,8 @@ type DAL interface {
 	PutSong(song *dao.Song, data *entities.FileInfo) *dao.Song
 	Empty()
 	DeleteMissing(tokens []string, providerID string)
+
+	SearchArtists(query string, count uint, offset uint) []*dao.Artist
+	SearchAlbums(query string, count uint, offset uint) []*dao.Album
+	SearchSongs(query string, count uint, offset uint) []*dao.Song
 }

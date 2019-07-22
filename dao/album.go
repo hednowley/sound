@@ -16,6 +16,6 @@ type Album struct {
 	GenreID       uint
 	Genre         *Genre
 	Year          int
-	Duration      int // Duration in seconds
-	Disambiguator string
+	Duration      int    // Duration in seconds
+	Disambiguator string // Two albums are only considered the same if their Name, Artist and Disambiguator are the same.
 }
