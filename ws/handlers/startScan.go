@@ -13,14 +13,12 @@ func MakeStartScanHandler(scanner *provider.Scanner) interfaces.WsHandler {
 		var update bool
 		var delete bool
 
-		err := json.Unmarshal(*request.Params["update"], &update)
-		if err != nil {
-
+		if request.Params["update"] == nil || json.Unmarshal(*request.Params["update"], &update) != nil {
+			update = false
 		}
 
-		err = json.Unmarshal(*request.Params["delete"], &delete)
-		if err != nil {
-
+		if request.Params["delete"] == nil || json.Unmarshal(*request.Params["delete"], &delete) != nil {
+			delete = false
 		}
 
 		go scanner.StartAllScans(update, delete)
