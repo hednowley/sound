@@ -17,7 +17,7 @@ type songBody struct {
 	Track       int       `xml:"track,attr" json:"track,omitempty"`
 	Year        int       `xml:"year,attr,omitempty" json:"year,omitempty"`
 	Genre       string    `xml:"genre,attr,omitempty" json:"genre,omitempty"`
-	ArtID       uint      `xml:"coverArt,attr,omitempty" json:"coverArt,omitempty,string"`
+	ArtID       string    `xml:"coverArt,attr,omitempty" json:"coverArt,omitempty,string"`
 	Size        int64     `xml:"size,attr" json:"size"`
 	ContentType string    `xml:"contentType,attr" json:"contentType"`
 	Extension   string    `xml:"suffix,attr" json:"suffix"`
@@ -61,7 +61,7 @@ func newSongBody(song *dao.Song) *songBody {
 		Path:       song.Path,
 		Genre:      genreName,
 		Year:       song.Year,
-		ArtID:      song.ArtID,
+		ArtID:      song.Art,
 		Track:      song.Track,
 		Disc:       song.Disc,
 		IsDir:      false,

@@ -3,6 +3,7 @@ package dal
 import (
 	"fmt"
 	"io/ioutil"
+	"os"
 	"path"
 	"sort"
 	"time"
@@ -54,7 +55,7 @@ func (dal *DAL) PutSong(song *dao.Song, data *entities.FileInfo) *dao.Song {
 	song.Duration = data.Duration
 
 	if art != nil {
-		song.ArtID = art.ID
+		song.Art = art.Path
 	}
 
 	dal.db.PutSong(song)
@@ -70,23 +71,27 @@ func (dal *DAL) putArt(art *entities.CoverArtData) *dao.Art {
 	hash := hasher.GetHash(art.Raw)
 	a := dal.db.GetArtFromHash(hash)
 	if a != nil {
+		// Artwork already exists
 		return a
 	}
 
-	a = &dao.Art{}
+	// Save the hash to get a fresh ID
+	a = &dao.Art{
+		Hash: hash,
+	}
 	dal.db.PutArt(a)
 
-	p := path.Join(dal.artDir, "art", fmt.Sprintf("%v.%v", a.ID, art.Extension))
 	a = &dao.Art{
-		Path: p,
+		Path: fmt.Sprintf("%v.%v", a.ID, art.Extension),
 		Hash: hash,
 	}
 
-	err := ioutil.WriteFile(a.Path, art.Raw, 0644)
+	err := ioutil.WriteFile(path.Join(dal.artDir, "art", a.Path), art.Raw, 0644)
 	if err != nil {
-		fmt.Println(err.Error())
+		seelog.Errorf("Error saving artwork %v", a.Path)
 	}
 
+	// Save the record with the new path
 	dal.db.PutArt(a)
 	return a
 }
@@ -110,8 +115,8 @@ func (dal *DAL) SynchroniseAlbum(id uint) (*dao.Album, error) {
 
 		duration = duration + song.Duration
 
-		if !artSet && song.ArtID != 0 {
-			a.ArtID = song.ArtID
+		if !artSet && song.Art != "" {
+			a.Art = song.Art
 			artSet = true
 		}
 		if !genreSet && song.GenreID != 0 {
@@ -143,8 +148,8 @@ func (dal *DAL) SynchroniseArtist(id uint) error {
 	duration := 0
 
 	for _, album := range a.Albums {
-		if !artSet && album.ArtID != 0 {
-			a.ArtID = album.ArtID
+		if !artSet && album.Art != "" {
+			a.Art = album.Art
 			artSet = true
 		}
 		duration = duration + album.Duration
@@ -380,4 +385,15 @@ func (d *DAL) SearchSongs(query string, count uint, offset uint) []*dao.Song {
 
 func (d *DAL) SearchAlbums(query string, count uint, offset uint) []*dao.Album {
 	return d.db.SearchAlbums(query, count, offset)
+}
+
+// GetArtPath checks that an artwork file exists for the given ID and returns
+// the full path if so.
+func (dal *DAL) GetArtPath(id string) (string, error) {
+	p := path.Join(dal.artDir, "art", id)
+	_, err := os.Stat(p)
+	if err != nil {
+		return "", err
+	}
+	return p, nil
 }

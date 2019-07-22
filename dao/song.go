@@ -13,8 +13,7 @@ type Song struct {
 	GenreID    uint
 	Genre      *Genre
 	Year       int
-	ArtID      uint
-	Art        *Art
+	Art        string
 	Created    *time.Time
 	Extension  string // File extension (without leading full stop)
 	Size       int64  // File size in bytes

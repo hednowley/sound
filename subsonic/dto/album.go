@@ -13,7 +13,7 @@ type Album struct {
 	Name      string     `xml:"name,attr" json:"name"`
 	Artist    string     `xml:"artist,attr" json:"artist"`
 	ArtistID  uint       `xml:"artistId,attr" json:"artistId,string"`
-	ArtID     uint       `xml:"coverArt,attr,omitempty" json:"coverArt,string,omitempty"`
+	ArtID     string     `xml:"coverArt,attr,omitempty" json:"coverArt,string,omitempty"`
 	SongCount int        `xml:"songCount,attr" json:"songCount"`
 	Duration  int        `xml:"duration,attr" json:"duration"`
 	Created   *time.Time `xml:"created,attr" json:"created"`
@@ -50,7 +50,7 @@ func NewAlbum(album *dao.Album, includeSongs bool) *Album {
 		SongCount: len(album.Songs),
 		Artist:    artistName,
 		Songs:     songs,
-		ArtID:     album.ArtID,
+		ArtID:     album.Art,
 		Created:   album.Created,
 		Genre:     genreName,
 		Year:      album.Year,

@@ -12,7 +12,7 @@ func Resize(originalPath string, newPath string, size uint) (err error) {
 
 	file, err := os.Open(originalPath)
 	if err != nil {
-		return
+		return err
 	}
 	defer file.Close()
 
@@ -22,7 +22,7 @@ func Resize(originalPath string, newPath string, size uint) (err error) {
 	if err != nil {
 		img, err = png.Decode(file)
 		if err != nil {
-			return
+			return err
 		}
 		useJpeg = false
 	}
@@ -31,7 +31,7 @@ func Resize(originalPath string, newPath string, size uint) (err error) {
 
 	out, err := os.Create(newPath)
 	if err != nil {
-		return
+		return err
 	}
 	defer out.Close()
 

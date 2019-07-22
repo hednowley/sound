@@ -11,8 +11,7 @@ type Album struct {
 	Name          string  `gorm:"index:albums_name_idx"`
 	Songs         []*Song `gorm:"foreignkey:AlbumID"`
 	Created       *time.Time
-	ArtID         uint
-	Art           *Art
+	Art           string
 	GenreID       uint
 	Genre         *Genre
 	Year          int

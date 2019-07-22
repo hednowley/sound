@@ -10,6 +10,7 @@ type DAL interface {
 	GetSong(id uint, genre bool, album bool, artist bool, art bool) (*dao.Song, error)
 	GetAlbum(id uint, genre bool, artist bool, songs bool) (*dao.Album, error)
 	GetArt(id uint) (*dao.Art, error)
+	GetArtPath(id uint) (string, error)
 	GetArtist(id uint) (*dao.Artist, error)
 	GetGenre(name string) (*dao.Genre, error)
 	GetPlaylist(id uint) (*dao.Playlist, error)

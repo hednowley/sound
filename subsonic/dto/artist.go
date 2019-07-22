@@ -10,7 +10,7 @@ type Artist struct {
 	XMLName    xml.Name `xml:"artist" json:"-"`
 	ID         uint     `xml:"id,attr" json:"id,string"`
 	Name       string   `xml:"name,attr" json:"name"`
-	ArtID      uint     `xml:"coverArt,attr,omitempty" json:"coverArt,string,omitempty"`
+	ArtID      string   `xml:"coverArt,attr,omitempty" json:"coverArt,string,omitempty"`
 	AlbumCount int      `xml:"albumCount,attr" json:"albumCount"`
 	Albums     []*Album `xml:"album" json:"album,omitempty"`
 	Duration   int      `xml:"duration,attr" json:"duration"`
@@ -33,7 +33,7 @@ func NewArtist(artist *dao.Artist, includeAlbums bool) *Artist {
 		Name:       artist.Name,
 		AlbumCount: albumCount,
 		Albums:     albums,
-		ArtID:      artist.ArtID,
+		ArtID:      artist.Art,
 		Duration:   artist.Duration,
 	}
 }
