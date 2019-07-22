@@ -14,7 +14,7 @@ import (
 )
 
 func TestController(t *testing.T) {
-	config := config.Config{
+	cfg := config.Config{
 		Secret: "secret",
 		Users: []config.User{
 			config.User{
@@ -24,8 +24,8 @@ func TestController(t *testing.T) {
 			},
 		},
 	}
-	a := services.NewAuthenticator(&config)
-	c := controller.NewAuthenticateController(a, &config)
+	a := services.NewAuthenticator(&cfg)
+	c := controller.NewAuthenticateController(a, &cfg)
 
 	cred, ok := c.Input.(*dto.Credentials)
 	if !ok {
@@ -35,8 +35,10 @@ func TestController(t *testing.T) {
 	cred.Username = "billy"
 	cred.Password = "apple tart!!!"
 
-	r := c.Run()
+	// Try and login with valid credentials
+	r := c.Run(&config.User{})
 
+	// Assert that the correct JWT was returned
 	if r.Status != api.Success {
 		t.Error()
 	}

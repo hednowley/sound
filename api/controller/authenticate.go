@@ -8,8 +8,7 @@ import (
 	"github.com/hednowley/sound/services"
 )
 
-// NewAuthenticateController makes a controller which accepts credentials and returns
-// a JWT token if they are valid.
+// NewAuthenticateController makes a controller which gives out JWT tokens.
 func NewAuthenticateController(authenticator *services.Authenticator, cfg *config.Config) *api.Controller {
 
 	input := dto.Credentials{}
