@@ -65,7 +65,6 @@ func (dal *Scanner) startScan(provider Provider, update bool, delete bool) {
 	}
 
 	seelog.Infof("Started '%v' scan.", providerID)
-	scanID := provider.ScanID()
 	synch := NewSynchroniser(dal.dal, 10)
 
 	dal.hub.Notify(dto.NewScanStatusNotification(provider.IsScanning(), provider.FileCount()))
@@ -100,7 +99,6 @@ func (dal *Scanner) startScan(provider Provider, update bool, delete bool) {
 				synch.Notify(s.AlbumID) // Notify of potential change to old album
 			}
 
-			s.ScanID = scanID
 			s = dal.dal.PutSong(s, data)
 
 			// Notify of change to new album
@@ -108,7 +106,6 @@ func (dal *Scanner) startScan(provider Provider, update bool, delete bool) {
 
 		} else {
 			seelog.Infof("Skipping token '%v'", token)
-			dal.dal.UpdateSongScanID(s, scanID)
 		}
 	})
 	if err != nil {

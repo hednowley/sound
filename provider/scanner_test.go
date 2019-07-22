@@ -32,7 +32,6 @@ func TestAddOnlyScan(t *testing.T) {
 	}
 
 	p := provider.NewMockProvider("mock", f)
-	p.SetScanID("scan1")
 	m := database.NewMock()
 	dal := dal.NewDAL(&config.Config{}, m)
 	hub := ws.NewMockHub()
@@ -41,27 +40,27 @@ func TestAddOnlyScan(t *testing.T) {
 	// Scan without updating or deleting
 	scanner.StartAllScans(false, false)
 
-	// Only scan ID should change
+	// Title shouldn't change
 	s, err := dal.GetSong(2, false, false, false, false)
-	if err != nil || s.Title != "title_2" || s.ScanID != "scan1" {
+	if err != nil || s.Title != "title_2" {
 		t.Error()
 	}
 
-	// Scan ID shouldn't change as this song wasn't provided
+	// Song shouldn't change as this song wasn't provided
 	s, err = dal.GetSong(1, false, false, false, false)
-	if err != nil || s.ScanID != "" {
+	if err != nil {
 		t.Error()
 	}
 
-	// Scan ID shouldn't change as this song has another provider
+	// Song shouldn't change as this song has another provider
 	s, err = dal.GetSong(22, false, false, false, false)
-	if err != nil || s.ScanID != "" {
+	if err != nil {
 		t.Error()
 	}
 
 	// New song should have been added
 	s, err = dal.GetSong(10001, false, false, false, false)
-	if err != nil || s == nil || s.ScanID != "scan1" || s.Title != "new_title" {
+	if err != nil || s == nil || s.Title != "new_title" {
 		t.Error()
 	}
 
@@ -99,7 +98,6 @@ func TestUpdateScan(t *testing.T) {
 	}
 
 	p := provider.NewMockProvider("mock", f)
-	p.SetScanID("scan1")
 	m := database.NewMock()
 	dal := dal.NewDAL(&config.Config{}, m)
 	hub := ws.NewMockHub()
@@ -110,7 +108,7 @@ func TestUpdateScan(t *testing.T) {
 
 	// Should change
 	s, err := dal.GetSong(2, false, true, false, false)
-	if err != nil || s.Title != "Y.M.C.A." || s.ScanID != "scan1" {
+	if err != nil || s.Title != "Y.M.C.A." {
 		t.Error()
 	}
 
@@ -120,21 +118,21 @@ func TestUpdateScan(t *testing.T) {
 		t.Error()
 	}
 
-	// Scan ID shouldn't change as this song wasn't provided
+	// Song shouldn't change as this song wasn't provided
 	s, err = dal.GetSong(1, false, false, false, false)
-	if err != nil || s.ScanID != "" {
+	if err != nil {
 		t.Error()
 	}
 
-	// Scan ID shouldn't change as this song has another provider
+	// Song shouldn't change as this song has another provider
 	s, err = dal.GetSong(22, false, false, false, false)
-	if err != nil || s.ScanID != "" {
+	if err != nil {
 		t.Error()
 	}
 
 	// New song should have been added
 	s, err = dal.GetSong(10001, true, true, true, true)
-	if err != nil || s == nil || s.ScanID != "scan1" || s.Title != "new_title" {
+	if err != nil || s == nil || s.Title != "new_title" {
 		t.Error()
 	}
 
@@ -173,7 +171,6 @@ func TestDeleteScan(t *testing.T) {
 	}
 
 	p := provider.NewMockProvider("mock", f)
-	p.SetScanID("scan1")
 	m := database.NewMock()
 	dal := dal.NewDAL(&config.Config{}, m)
 	hub := ws.NewMockHub()

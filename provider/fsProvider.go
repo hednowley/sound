@@ -2,10 +2,8 @@ package provider
 
 import (
 	"os"
-	"time"
 
 	"github.com/hednowley/sound/entities"
-	"github.com/hednowley/sound/hasher"
 	"github.com/hednowley/sound/services"
 )
 
@@ -16,7 +14,6 @@ type FsProvider struct {
 	isScanning bool
 	path       string
 	extensions []string
-	scanID     string
 }
 
 // NewFsProvider constructs a new provider.
@@ -40,10 +37,6 @@ func (p *FsProvider) IsScanning() bool {
 	return p.isScanning
 }
 
-func (p *FsProvider) ScanID() string {
-	return p.scanID
-}
-
 // ID of this provider.
 func (p *FsProvider) ID() string {
 	return p.id
@@ -53,7 +46,6 @@ func (p *FsProvider) ID() string {
 func (p *FsProvider) Iterate(callback func(token string)) error {
 	p.isScanning = true
 	p.fileCount = 0
-	p.scanID = hasher.GetHashFromInt(time.Now().Unix())
 
 	err := services.IterateFiles(p.path, p.extensions, func(path string, info *os.FileInfo) {
 		// Use the path as a unique token

@@ -91,7 +91,7 @@ func (dal *DAL) putArt(art *entities.CoverArtData) *dao.Art {
 	return a
 }
 
-// Should "stagger" this to run every 50 songs
+// SynchroniseAlbum updates the given album's aggregate properties, e.g. duration.
 func (dal *DAL) SynchroniseAlbum(id uint) (*dao.Album, error) {
 
 	seelog.Infof("Synchronising album %v", id)
@@ -129,6 +129,7 @@ func (dal *DAL) SynchroniseAlbum(id uint) (*dao.Album, error) {
 	return a, nil
 }
 
+// SynchroniseAlbum updates the given artist's aggregate properties, e.g. album count.
 func (dal *DAL) SynchroniseArtist(id uint) error {
 
 	seelog.Infof("Synchronising artist %v", id)
@@ -152,25 +153,6 @@ func (dal *DAL) SynchroniseArtist(id uint) error {
 	a.Duration = duration
 	dal.db.PutArtist(a)
 	return nil
-}
-
-func (dal *DAL) UpdateSongScanID(song *dao.Song, scanID string) {
-	song.ScanID = scanID
-	dal.db.PutSong(song)
-}
-
-func (dal *DAL) DeleteMissingSongs(scanID string, scannerID string) {
-	// Delete songs
-
-	// Delete albums
-
-	// Delete artists
-
-	// Delete genres
-
-	// Delete from playlists
-
-	// Delete art
 }
 
 func (dal *DAL) deleteSong(song *dao.Song) {

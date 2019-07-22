@@ -11,7 +11,6 @@ type MockProvider struct {
 	id         string
 	isScanning bool
 	count      int
-	scanID     string
 }
 
 func NewMockProvider(id string, files []*entities.FileInfo) *MockProvider {
@@ -21,14 +20,6 @@ func NewMockProvider(id string, files []*entities.FileInfo) *MockProvider {
 		isScanning: false,
 		count:      0,
 	}
-}
-
-func (p *MockProvider) SetScanID(id string) {
-	p.scanID = id
-}
-
-func (p *MockProvider) ScanID() string {
-	return p.scanID
 }
 
 func (p *MockProvider) Iterate(callback func(path string)) error {

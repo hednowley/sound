@@ -8,11 +8,9 @@ import (
 	"path/filepath"
 	"strconv"
 	"strings"
-	"time"
 
 	"github.com/cihub/seelog"
 	"github.com/hednowley/sound/entities"
-	"github.com/hednowley/sound/hasher"
 
 	// SQLite driver
 	_ "github.com/mattn/go-sqlite3"
@@ -24,7 +22,6 @@ type BeetsProvider struct {
 	id         string
 	fileCount  int64
 	isScanning bool
-	scanID     string
 	lastAlbum  int
 	lastArt    *entities.CoverArtData
 }
@@ -59,15 +56,10 @@ func (p *BeetsProvider) ID() string {
 	return p.id
 }
 
-func (p *BeetsProvider) ScanID() string {
-	return p.scanID
-}
-
 // Iterate through all files in the collection, calling the provided callback synchronously on each.
 func (p *BeetsProvider) Iterate(callback func(token string)) error {
 	p.isScanning = true
 	p.fileCount = 0
-	p.scanID = hasher.GetHashFromInt(time.Now().Unix())
 
 	// Ordered so most recently added songs are scanned first.
 	rows, err := p.beets.Query("SELECT id FROM items ORDER BY id DESC")
@@ -133,7 +125,7 @@ func (p *BeetsProvider) GetInfo(token string) (*entities.FileInfo, error) {
 			Album:         album,
 			Artist:        artist,
 			AlbumArtist:   albumArtist,
-			Genre:         genre, 
+			Genre:         genre,
 			Track:         track,
 			Disc:          disc,
 			Year:          year,

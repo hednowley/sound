@@ -7,7 +7,6 @@ import (
 
 type DAL interface {
 	PutPlaylist(id uint, name string, songIDs []uint) (uint, error)
-	DeleteMissingSongs(scanID string, scannerID string)
 	GetSong(id uint, genre bool, album bool, artist bool, art bool) (*dao.Song, error)
 	GetAlbum(id uint, genre bool, artist bool, songs bool) (*dao.Album, error)
 	GetArt(id uint) (*dao.Art, error)
@@ -23,7 +22,6 @@ type DAL interface {
 	GetPlaylists() []*dao.Playlist
 	SynchroniseAlbum(id uint) (*dao.Album, error)
 	SynchroniseArtist(id uint) error
-	UpdateSongScanID(song *dao.Song, scanID string)
 	PutSong(song *dao.Song, data *entities.FileInfo) *dao.Song
 	Empty()
 	DeleteMissing(tokens []string, providerID string)

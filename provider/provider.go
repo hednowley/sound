@@ -23,9 +23,6 @@ type Provider interface {
 
 	// How many files the provider has processed in the current scan.
 	FileCount() int64
-
-	// An identifier for the current scan
-	ScanID() string
 }
 
 func NewProviders(config *config.Config) []Provider {
