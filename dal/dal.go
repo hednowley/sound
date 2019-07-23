@@ -260,14 +260,6 @@ func (dal *DAL) GetAlbum(id uint, genre bool, artist bool, songs bool) (*dao.Alb
 	return s, nil
 }
 
-func (dal *DAL) GetArt(id uint) (*dao.Art, error) {
-	a := dal.db.GetArt(id)
-	if a == nil {
-		return nil, &dao.ErrNotFound{}
-	}
-	return a, nil
-}
-
 func (dal *DAL) GetArtist(id uint) (*dao.Artist, error) {
 	a := dal.db.GetArtist(id, true, true)
 	if a == nil {

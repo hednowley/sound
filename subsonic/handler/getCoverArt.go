@@ -6,6 +6,7 @@ import (
 	"net/url"
 	"os"
 	"path/filepath"
+	"strings"
 
 	"github.com/cihub/seelog"
 
@@ -36,9 +37,9 @@ func NewGetCoverArtHandler(dal interfaces.DAL) api.BinaryHandler {
 			return nil
 		}
 
-		dir := filepath.Dir(path)
-		ext := filepath.Ext(path)
-		resized := filepath.Join(dir, fmt.Sprintf("%v_%v%v", art.ID, size, ext))
+		dir, filename := filepath.Split(path)
+		ext := filepath.Ext(filename)
+		resized := filepath.Join(dir, fmt.Sprintf("%v_%v%v", strings.TrimSuffix(filename, ext), size, ext))
 		_, err = os.Stat(resized)
 		if os.IsNotExist(err) {
 			seelog.Tracef("Resizing %v to %v", id, size)
