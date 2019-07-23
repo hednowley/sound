@@ -13,7 +13,7 @@ type Album struct {
 	Name      string     `xml:"name,attr" json:"name"`
 	Artist    string     `xml:"artist,attr" json:"artist"`
 	ArtistID  uint       `xml:"artistId,attr" json:"artistId,string"`
-	ArtID     string     `xml:"coverArt,attr,omitempty" json:"coverArt,string,omitempty"`
+	ArtID     string     `xml:"coverArt,attr,omitempty" json:"coverArt,omitempty"`
 	SongCount int        `xml:"songCount,attr" json:"songCount"`
 	Duration  int        `xml:"duration,attr" json:"duration"`
 	Created   *time.Time `xml:"created,attr" json:"created"`

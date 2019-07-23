@@ -10,7 +10,7 @@ type Artist struct {
 	XMLName    xml.Name `xml:"artist" json:"-"`
 	ID         uint     `xml:"id,attr" json:"id,string"`
 	Name       string   `xml:"name,attr" json:"name"`
-	ArtID      string   `xml:"coverArt,attr,omitempty" json:"coverArt,string,omitempty"`
+	ArtID      string   `xml:"coverArt,attr,omitempty" json:"coverArt,omitempty"`
 	AlbumCount int      `xml:"albumCount,attr" json:"albumCount"`
 	Albums     []*Album `xml:"album" json:"album,omitempty"`
 	Duration   int      `xml:"duration,attr" json:"duration"`
