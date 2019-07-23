@@ -39,7 +39,7 @@ func NewDAL(config *config.Config, database *database.Default) interfaces.DAL {
 func (dal *DAL) PutSong(song *dao.Song, data *entities.FileInfo) *dao.Song {
 
 	genre := dal.db.PutGenreByName(data.Genre)
-	art := dal.putArt(data.CoverArt)
+	art := dal.PutArt(data.CoverArt)
 	album := dal.db.PutAlbumByAttributes(data.Album, data.AlbumArtist, data.Disambiguator)
 
 	song.Path = data.Path
@@ -62,7 +62,7 @@ func (dal *DAL) PutSong(song *dao.Song, data *entities.FileInfo) *dao.Song {
 	return song
 }
 
-func (dal *DAL) putArt(art *entities.CoverArtData) *dao.Art {
+func (dal *DAL) PutArt(art *entities.CoverArtData) *dao.Art {
 
 	if art == nil {
 		return nil

@@ -23,6 +23,7 @@ type DAL interface {
 	SynchroniseAlbum(id uint) (*dao.Album, error)
 	SynchroniseArtist(id uint) error
 	PutSong(song *dao.Song, data *entities.FileInfo) *dao.Song
+	PutArt(art *entities.CoverArtData) *dao.Art
 	Empty()
 	DeleteMissing(tokens []string, providerID string)
 

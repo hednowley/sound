@@ -153,6 +153,7 @@ func TestPutSong(t *testing.T) {
 		AlbumID: 2,          // Different
 		Path:    "new_path", // Different
 		Title:   "djndjnd",  // Different
+
 	})
 
 	s := m.GetSong(2, false, false, false)

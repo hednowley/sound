@@ -7,6 +7,7 @@ import (
 	"github.com/hednowley/sound/dal"
 	"github.com/hednowley/sound/dao"
 	"github.com/hednowley/sound/database"
+	"github.com/hednowley/sound/entities"
 )
 
 func TestPutPlaylist(t *testing.T) {
@@ -56,5 +57,32 @@ func TestSearchArtist(t *testing.T) {
 	artists = dal.SearchArtists("artist", 2, 2)
 	if len(artists) != 1 {
 		t.Error("Search offset is not working")
+	}
+}
+
+func TestPutArt(t *testing.T) {
+	m := database.NewMock()
+	dal := dal.NewDAL(&config.Config{}, m)
+
+	data1 := &entities.CoverArtData{
+		Extension: "jpg",
+		Raw:       []byte("Hello"),
+	}
+
+	a1 := dal.PutArt(data1)
+	if a1 == nil || a1.ID == 0 {
+		t.Error("Could not add new art")
+	}
+
+	t.Errorf("Path is: %v", a1.Path)
+
+	data2 := &entities.CoverArtData{
+		Extension: "jpg",
+		Raw:       []byte("Hello"),
+	}
+
+	a2 := dal.PutArt(data2)
+	if a2.ID != a1.ID {
+		t.Error("Art should be the same")
 	}
 }
