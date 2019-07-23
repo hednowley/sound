@@ -81,10 +81,7 @@ func (dal *DAL) PutArt(art *entities.CoverArtData) *dao.Art {
 	}
 	dal.db.PutArt(a)
 
-	a = &dao.Art{
-		Path: fmt.Sprintf("%v.%v", a.ID, art.Extension),
-		Hash: hash,
-	}
+	a.Path = fmt.Sprintf("%v.%v", a.ID, art.Extension)
 
 	err := ioutil.WriteFile(path.Join(dal.artDir, "art", a.Path), art.Raw, 0644)
 	if err != nil {

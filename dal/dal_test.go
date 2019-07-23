@@ -70,11 +70,9 @@ func TestPutArt(t *testing.T) {
 	}
 
 	a1 := dal.PutArt(data1)
-	if a1 == nil || a1.ID == 0 {
+	if a1 == nil || a1.ID == 0 || a1.Path == "" || a1.Hash == "" {
 		t.Error("Could not add new art")
 	}
-
-	t.Errorf("Path is: %v", a1.Path)
 
 	data2 := &entities.CoverArtData{
 		Extension: "jpg",
