@@ -71,7 +71,7 @@ func NewStreamHandler(database interfaces.DAL) api.BinaryHandler {
 			}
 		*/
 
-		file, err := database.GetSong(id, false, false, false, false)
+		file, err := database.GetSong(id, false, false, false)
 		if err != nil {
 			return api.NewErrorReponse(dto.Generic, err.Error())
 		}

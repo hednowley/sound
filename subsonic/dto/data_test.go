@@ -30,6 +30,7 @@ func GenerateArt(id int) *dao.Art {
 	return &dao.Art{
 		ID:   uint(id),
 		Hash: fmt.Sprintf("cde22cace9e39eee25f1ece6%v", id),
+		Path: fmt.Sprintf("%v.jpg", id),
 	}
 }
 
@@ -44,9 +45,9 @@ func GenerateArts(count int) []*dao.Art {
 func GenerateSong(i int, genre *dao.Genre, album *dao.Album, art *dao.Art) *dao.Song {
 	t := time.Date(2000+i, time.August, 15, 0, 0, 0, 0, time.UTC)
 
-	var artID uint
+	var artPath string
 	if art != nil {
-		artID = art.ID
+		artPath = art.Path
 	}
 
 	var genreID uint
@@ -64,8 +65,7 @@ func GenerateSong(i int, genre *dao.Genre, album *dao.Album, art *dao.Art) *dao.
 		Genre:     genre,
 		Album:     album,
 		AlbumID:   album.ID,
-		Art:       art,
-		ArtID:     artID,
+		Art:       artPath,
 		Path:      fmt.Sprintf("D:\\music\\%v.mp3", i),
 		Size:      int64(i * 100000),
 		Year:      1900 + i,
@@ -90,9 +90,9 @@ func GenerateSongs(count int, genre *dao.Genre, album *dao.Album, art *dao.Art) 
 func GenerateAlbum(i int, genre *dao.Genre, artist *dao.Artist, art *dao.Art) *dao.Album {
 	t := time.Date(2000+i, time.August, 15, 0, 0, 0, 0, time.UTC)
 
-	var artID uint
+	var artPath string
 	if art != nil {
-		artID = art.ID
+		artPath = art.Path
 	}
 
 	var genreID uint
@@ -108,8 +108,7 @@ func GenerateAlbum(i int, genre *dao.Genre, artist *dao.Artist, art *dao.Art) *d
 		Genre:    genre,
 		Artist:   artist,
 		ArtistID: artist.ID,
-		Art:      art,
-		ArtID:    artID,
+		Art:      artPath,
 		Created:  &t,
 		Duration: i,
 	}
@@ -131,16 +130,15 @@ func GenerateAlbums(count int, genre *dao.Genre, artist *dao.Artist, art *dao.Ar
 
 func GenerateArtist(i int, art *dao.Art) *dao.Artist {
 
-	var artID uint
+	var artPath string
 	if art != nil {
-		artID = art.ID
+		artPath = art.Path
 	}
 
 	a := dao.Artist{
 		ID:       uint(i),
 		Name:     fmt.Sprintf("artist%v", i),
-		Art:      art,
-		ArtID:    artID,
+		Art:      artPath,
 		Duration: i,
 	}
 

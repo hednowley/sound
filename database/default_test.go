@@ -155,7 +155,7 @@ func TestPutSong(t *testing.T) {
 		Title:   "djndjnd",  // Different
 	})
 
-	s := m.GetSong(2, false, false, false, false)
+	s := m.GetSong(2, false, false, false)
 	if s.AlbumID != 2 || s.Path != "new_path" || s.Title != "djndjnd" {
 		t.Error()
 	}
@@ -172,7 +172,7 @@ func TestPutSong(t *testing.T) {
 		t.Error()
 	}
 
-	s = m.GetSong(10001, false, false, false, false)
+	s = m.GetSong(10001, false, false, false)
 	if s.AlbumID != 2 || s.Path != "new_path" || s.Title != "djndjnd" {
 		t.Error()
 	}

@@ -222,7 +222,7 @@ func (db *Default) GetArtist(id uint, albums bool, songs bool) *dao.Artist {
 	return &a
 }
 
-func (db *Default) GetSong(id uint, genre bool, album bool, artist bool, art bool) *dao.Song {
+func (db *Default) GetSong(id uint, genre bool, album bool, artist bool) *dao.Song {
 	var s dao.Song
 	d := db.db
 	if genre {
@@ -233,9 +233,6 @@ func (db *Default) GetSong(id uint, genre bool, album bool, artist bool, art boo
 	}
 	if artist {
 		d = d.Preload("Album.Artist")
-	}
-	if art {
-		d = d.Preload("Art")
 	}
 	if d.Where(dao.Song{ID: id}).
 		First(&s).

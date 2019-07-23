@@ -19,7 +19,7 @@ func NewGetSongHandler(database interfaces.DAL) api.Handler {
 			return api.NewErrorReponse(dto.MissingParameter, "Required param (id) is missing")
 		}
 
-		file, err := database.GetSong(id, true, true, true, true)
+		file, err := database.GetSong(id, true, true, true)
 		if err != nil {
 			if dao.IsErrNotFound(err) {
 				return api.NewErrorReponse(dto.NotFound, "Song not found.")

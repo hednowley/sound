@@ -224,7 +224,7 @@ func (dal *DAL) PutPlaylist(id uint, name string, songIDs []uint) (uint, error) 
 	for _, songID := range songIDs {
 
 		// We can't trust the song actually exists!
-		_, err := dal.GetSong(songID, false, false, false, false)
+		_, err := dal.GetSong(songID, false, false, false)
 		if err == nil {
 			e := &dao.PlaylistEntry{
 				PlaylistID: p.ID,
@@ -240,8 +240,8 @@ func (dal *DAL) PutPlaylist(id uint, name string, songIDs []uint) (uint, error) 
 	return p.ID, nil
 }
 
-func (dal *DAL) GetSong(id uint, genre bool, album bool, artist bool, art bool) (*dao.Song, error) {
-	s := dal.db.GetSong(id, genre, album, artist, art)
+func (dal *DAL) GetSong(id uint, genre bool, album bool, artist bool) (*dao.Song, error) {
+	s := dal.db.GetSong(id, genre, album, artist)
 	if s == nil {
 		return nil, &dao.ErrNotFound{}
 	}

@@ -26,9 +26,9 @@ func TestArtistCollection(t *testing.T) {
 		<index name="A">
 		</index>
 		<index name="B">
-			<artist id="1" name="bhusadiu sdu" coverArt="1" albumCount="0" duration="1">
+			<artist id="1" name="bhusadiu sdu" coverArt="1.jpg" albumCount="0" duration="1">
 			</artist>
-			<artist id="5" name="Bdfgfdg" coverArt="1" albumCount="0" duration="5">
+			<artist id="5" name="Bdfgfdg" coverArt="1.jpg" albumCount="0" duration="5">
 			</artist>
 		</index>
 		<index name="C">
@@ -42,7 +42,7 @@ func TestArtistCollection(t *testing.T) {
 		<index name="G">
 		</index>
 		<index name="H">
-			<artist id="2" name="Hsetr" coverArt="1" albumCount="0" duration="2">
+			<artist id="2" name="Hsetr" coverArt="1.jpg" albumCount="0" duration="2">
 			</artist>
 		</index>
 		<index name="I">
@@ -82,11 +82,11 @@ func TestArtistCollection(t *testing.T) {
 		<index name="Z">
 		</index>
 		<index name="#">
-			<artist id="3" name="2 4" coverArt="1" albumCount="3" duration="3">
+			<artist id="3" name="2 4" coverArt="1.jpg" albumCount="3" duration="3">
 			</artist>
-			<artist id="4" name="#sdgs" coverArt="1" albumCount="1" duration="4">
+			<artist id="4" name="#sdgs" coverArt="1.jpg" albumCount="1" duration="4">
 			</artist>
-			<artist id="6" name="&#34;d&#34;" coverArt="1" albumCount="0" duration="6">
+			<artist id="6" name="&#34;d&#34;" coverArt="1.jpg" albumCount="0" duration="6">
 			</artist>
 		</index>
 		</artists>
@@ -108,14 +108,14 @@ func TestArtistCollection(t *testing.T) {
 				 {
 					"id":"1",
 					"name":"bhusadiu sdu",
-					"coverArt":"1",
+					"coverArt":"1.jpg",
 					"albumCount":0,
 					"duration":1
 				 },
 				 {
 					"id":"5",
 					"name":"Bdfgfdg",
-					"coverArt":"1",
+					"coverArt":"1.jpg",
 					"albumCount":0,
 					"duration":5
 				 }
@@ -157,7 +157,7 @@ func TestArtistCollection(t *testing.T) {
 				 {
 					"id":"2",
 					"name":"Hsetr",
-					"coverArt":"1",
+					"coverArt":"1.jpg",
 					"albumCount":0,
 					"duration":2
 				 }
@@ -277,21 +277,21 @@ func TestArtistCollection(t *testing.T) {
 				 {
 					"id":"3",
 					"name":"2 4",
-					"coverArt":"1",
+					"coverArt":"1.jpg",
 					"albumCount":3,
 					"duration":3
 				 },
 				 {
 					"id":"4",
 					"name":"#sdgs",
-					"coverArt":"1",
+					"coverArt":"1.jpg",
 					"albumCount":1,
 					"duration":4
 				 },
 				 {
 					"id":"6",
 					"name":"\"d\"",
-					"coverArt":"1",
+					"coverArt":"1.jpg",
 					"albumCount":0,
 					"duration":6
 				 }

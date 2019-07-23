@@ -15,7 +15,7 @@ func TestSong(t *testing.T) {
 	DTO := NewSong(song)
 
 	xml := `
-	<song id="1" parent="1" isDir="false" title="title1" album="album1" artist="artist1" track="1" year="1901" genre="genre1" coverArt="1" size="100000" contentType="" suffix="mp1" duration="0" bitRate="0" path="D:\music\1.mp3" isVideo="false" playCount="0" discNumber="1" created="2001-08-15T00:00:00Z" albumId="1" artistId="1" type="music"></song>
+	<song id="1" parent="1" isDir="false" title="title1" album="album1" artist="artist1" track="1" year="1901" genre="genre1" coverArt="1.jpg" size="100000" contentType="" suffix="mp1" duration="0" bitRate="0" path="D:\music\1.mp3" isVideo="false" playCount="0" discNumber="1" created="2001-08-15T00:00:00Z" albumId="1" artistId="1" type="music"></song>
 	`
 
 	json := `
@@ -29,7 +29,7 @@ func TestSong(t *testing.T) {
 		"track":1,
 		"year":1901,
 		"genre":"genre1",
-		"coverArt":"1",
+		"coverArt":"1.jpg",
 		"size":100000,
 		"contentType":"",
 		"suffix":"mp1",
@@ -64,7 +64,7 @@ func TestSongWithoutYear(t *testing.T) {
 	DTO := NewSong(song)
 
 	xml := `
-	<song id="1" parent="1" isDir="false" title="title1" album="album1" artist="artist1" track="1" genre="genre1" coverArt="1" size="100000" contentType="" suffix="mp1" duration="0" bitRate="0" path="D:\music\1.mp3" isVideo="false" playCount="0" discNumber="1" created="2001-08-15T00:00:00Z" albumId="1" artistId="1" type="music"></song>
+	<song id="1" parent="1" isDir="false" title="title1" album="album1" artist="artist1" track="1" genre="genre1" coverArt="1.jpg" size="100000" contentType="" suffix="mp1" duration="0" bitRate="0" path="D:\music\1.mp3" isVideo="false" playCount="0" discNumber="1" created="2001-08-15T00:00:00Z" albumId="1" artistId="1" type="music"></song>
 	`
 
 	json := `
@@ -77,7 +77,7 @@ func TestSongWithoutYear(t *testing.T) {
 		"artist":"artist1",
 		"track":1,
 		"genre":"genre1",
-		"coverArt":"1",
+		"coverArt":"1.jpg",
 		"size":100000,
 		"contentType":"",
 		"suffix":"mp1",
@@ -158,7 +158,7 @@ func TestSongWithoutGenre(t *testing.T) {
 	DTO := NewSong(song)
 
 	xml := `
-	<song id="1" parent="1" isDir="false" title="title1" album="album1" artist="artist1" track="1" year="1901" coverArt="1" size="100000" contentType="" suffix="mp1" duration="0" bitRate="0" path="D:\music\1.mp3" isVideo="false" playCount="0" discNumber="1" created="2001-08-15T00:00:00Z" albumId="1" artistId="1" type="music"></song>
+	<song id="1" parent="1" isDir="false" title="title1" album="album1" artist="artist1" track="1" year="1901" coverArt="1.jpg" size="100000" contentType="" suffix="mp1" duration="0" bitRate="0" path="D:\music\1.mp3" isVideo="false" playCount="0" discNumber="1" created="2001-08-15T00:00:00Z" albumId="1" artistId="1" type="music"></song>
 	`
 
 	json := `
@@ -171,7 +171,7 @@ func TestSongWithoutGenre(t *testing.T) {
 		"artist":"artist1",
 		"track":1,
 		"year":1901,
-		"coverArt":"1",
+		"coverArt":"1.jpg",
 		"size":100000,
 		"contentType":"",
 		"suffix":"mp1",

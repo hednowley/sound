@@ -18,7 +18,7 @@ type PlaylistCore struct {
 	Duration  int       `xml:"duration,attr" json:"duration"`
 	Created   time.Time `xml:"created,attr" json:"created"`
 	Changed   time.Time `xml:"changed,attr" json:"changed"`
-	ArtID     uint      `xml:"coverArt,attr,omitempty" json:"coverArt,omitempty,string"`
+	Art       string    `xml:"coverArt,attr,omitempty" json:"coverArt,omitempty"`
 }
 
 type Playlist struct {

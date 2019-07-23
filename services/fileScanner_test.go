@@ -3,6 +3,7 @@ package services_test
 import (
 	"fmt"
 	"os"
+	"path/filepath"
 	"strings"
 	"testing"
 
@@ -18,16 +19,17 @@ func TestScanner(t *testing.T) {
 	b2 := false
 	b3 := false
 
-	files["\\music\\1.mp3"] = &b1
-	files["\\music\\2.mp3"] = &b2
-	files["\\music\\subfolder\\3.mp3"] = &b3
+	files[filepath.Join("..", "testdata", "music", "1.mp3")] = &b1
+	files[filepath.Join("..", "testdata", "music", "2.mp3")] = &b2
+	files[filepath.Join("..", "testdata", "music", "subfolder", "3.mp3")] = &b3
 
 	e := []string{
 		"mp3",
 		"flac",
 	}
 
-	services.IterateFiles("../testdata/music", e, func(path string, info *os.FileInfo) {
+	path := filepath.Join("..", "testdata", "music")
+	services.IterateFiles(path, e, func(path string, info *os.FileInfo) {
 		for k, v := range files {
 			if strings.HasSuffix(path, k) {
 				if *v {

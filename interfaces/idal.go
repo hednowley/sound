@@ -7,7 +7,7 @@ import (
 
 type DAL interface {
 	PutPlaylist(id uint, name string, songIDs []uint) (uint, error)
-	GetSong(id uint, genre bool, album bool, artist bool, art bool) (*dao.Song, error)
+	GetSong(id uint, genre bool, album bool, artist bool) (*dao.Song, error)
 	GetAlbum(id uint, genre bool, artist bool, songs bool) (*dao.Album, error)
 	GetArtPath(id string) (string, error)
 	GetArtist(id uint) (*dao.Artist, error)

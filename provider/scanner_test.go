@@ -41,25 +41,25 @@ func TestAddOnlyScan(t *testing.T) {
 	scanner.StartAllScans(false, false)
 
 	// Title shouldn't change
-	s, err := dal.GetSong(2, false, false, false, false)
+	s, err := dal.GetSong(2, false, false, false)
 	if err != nil || s.Title != "title_2" {
 		t.Error()
 	}
 
 	// Song shouldn't change as this song wasn't provided
-	s, err = dal.GetSong(1, false, false, false, false)
+	s, err = dal.GetSong(1, false, false, false)
 	if err != nil {
 		t.Error()
 	}
 
 	// Song shouldn't change as this song has another provider
-	s, err = dal.GetSong(22, false, false, false, false)
+	s, err = dal.GetSong(22, false, false, false)
 	if err != nil {
 		t.Error()
 	}
 
 	// New song should have been added
-	s, err = dal.GetSong(10001, false, false, false, false)
+	s, err = dal.GetSong(10001, false, false, false)
 	if err != nil || s == nil || s.Title != "new_title" {
 		t.Error()
 	}
@@ -107,7 +107,7 @@ func TestUpdateScan(t *testing.T) {
 	scanner.StartAllScans(true, false)
 
 	// Should change
-	s, err := dal.GetSong(2, false, true, false, false)
+	s, err := dal.GetSong(2, false, true, false)
 	if err != nil || s.Title != "Y.M.C.A." {
 		t.Error()
 	}
@@ -119,19 +119,19 @@ func TestUpdateScan(t *testing.T) {
 	}
 
 	// Song shouldn't change as this song wasn't provided
-	s, err = dal.GetSong(1, false, false, false, false)
+	s, err = dal.GetSong(1, false, false, false)
 	if err != nil {
 		t.Error()
 	}
 
 	// Song shouldn't change as this song has another provider
-	s, err = dal.GetSong(22, false, false, false, false)
+	s, err = dal.GetSong(22, false, false, false)
 	if err != nil {
 		t.Error()
 	}
 
 	// New song should have been added
-	s, err = dal.GetSong(10001, true, true, true, true)
+	s, err = dal.GetSong(10001, true, true, true)
 	if err != nil || s == nil || s.Title != "new_title" {
 		t.Error()
 	}
