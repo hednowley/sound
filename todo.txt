@@ -13,3 +13,5 @@
 - beets disambiguation
 - Play counts
 - Implement getartistinfo2
+- "Various artists" fix
+- SQL injection in search
