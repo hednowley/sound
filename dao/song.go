@@ -4,6 +4,7 @@ import "time"
 
 type Song struct {
 	ID         uint `gorm:"PRIMARY_KEY"`
+	Artist     string
 	Album      *Album
 	AlbumID    uint
 	Path       string

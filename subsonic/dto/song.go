@@ -57,7 +57,7 @@ func newSongBody(song *dao.Song) *songBody {
 		Title:      song.Title,
 		AlbumName:  song.Album.Name,
 		ArtistID:   song.Album.ArtistID,
-		ArtistName: song.Album.Artist.Name,
+		ArtistName: song.Artist,
 		Path:       song.Path,
 		Genre:      genreName,
 		Year:       song.Year,
