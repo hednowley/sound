@@ -25,6 +25,7 @@ func NewArtist(artist *dao.Artist, includeAlbums bool) *Artist {
 		albums = make([]*Album, albumCount)
 		for index, album := range artist.Albums {
 			albums[index] = NewAlbum(album, false)
+			albums[index].Artist = artist.Name
 		}
 	}
 
