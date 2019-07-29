@@ -58,6 +58,7 @@ func GenerateSong(i int, genre *dao.Genre, album *dao.Album, art *dao.Art) *dao.
 	s := dao.Song{
 		ID:        uint(i),
 		Title:     fmt.Sprintf("title%v", i),
+		Artist:    album.Artist.Name,
 		Track:     i,
 		Disc:      i,
 		Extension: fmt.Sprintf("mp%v", i),
