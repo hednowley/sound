@@ -387,3 +387,7 @@ func (dal *DAL) GetArtPath(id string) (string, error) {
 	}
 	return p, nil
 }
+
+func (dal *DAL) GetRandomSongs(size uint, from uint, to uint, genre string) []*dao.Song {
+	return dal.db.GetRandomSongs(size, from, to, genre)
+}

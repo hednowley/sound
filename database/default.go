@@ -358,3 +358,27 @@ func (db *Default) SearchSongs(query string, count uint, offset uint) []*dao.Son
 		Find(&songs)
 	return songs
 }
+
+func (db *Default) GetRandomSongs(size uint, from uint, to uint, genre string) []*dao.Song {
+	var songs []*dao.Song
+	query := db.db.Preload("Genre").
+		Preload("Album").
+		Preload("Album.Artist").
+		Order(gorm.Expr("random()")).
+		Limit(size)
+
+	if from != 0 {
+		query = query.Where("Year >= ?", from)
+	}
+
+	if to != 0 {
+		query = query.Where("Year <= ?", to)
+	}
+
+	if len(genre) > 0 {
+		query = query.Joins("JOIN genres ON songs.genre_id = genres.id").Where("genres.name ILIKE ?", genre)
+	}
+
+	query.Find(&songs)
+	return songs
+}

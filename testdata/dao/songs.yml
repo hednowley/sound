@@ -6,6 +6,7 @@
   genre_id: 1
   provider_id: "mock"
   token: "path_1"
+  year: 2000
 
 - id: 2
   album_id: 2
@@ -14,6 +15,7 @@
   created: 2018-06-12 11:11:11
   provider_id: "mock"
   token: "path_2"
+  year: 2010
 
 # Gap for missing song #3
 
@@ -25,6 +27,7 @@
   genre_id: 1
   provider_id: "mock"
   token: "path_10"
+  year: 2008
 
 - id: 14
   album_id: 2
@@ -34,6 +37,7 @@
   genre_id: 2
   provider_id: "mock"
   token: "path_14"
+  year: 0
 
 - id: 15
   album_id: 2
@@ -42,8 +46,9 @@
   created: 2018-06-12 11:11:11
   provider_id: "mock"
   token: "path_15"
+  year: -100
 
-# Same as song #2 but with different provider  
+# Same as song #2 but with different provider
 - id: 22
   album_id: 2
   path: "path_2"

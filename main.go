@@ -41,6 +41,7 @@ func registerSubsonicHandlers(factory *api.HandlerFactory, config *config.Config
 	handlers["/subsonic/rest/getartist"] = factory.PublishHandler(handler.NewGetArtistHandler(dal))
 	handlers["/subsonic/rest/getalbum"] = factory.PublishHandler(handler.NewGetAlbumHandler(dal))
 	handlers["/subsonic/rest/getsong"] = factory.PublishHandler(handler.NewGetSongHandler(dal))
+	handlers["/subsonic/rest/getrandomsongs"] = factory.PublishHandler(handler.NewGetRandomSongsHandler(dal))
 	handlers["/subsonic/rest/getmusicdirectory"] = factory.PublishHandler(handler.NewGetMusicDirectoryHandler(dal))
 	handlers["/subsonic/rest/getgenres"] = factory.PublishHandler(handler.NewGetGenresHandler(dal))
 	handlers["/subsonic/rest/getsongsbygenre"] = factory.PublishHandler(handler.NewGetSongsByGenreHandler(dal))
