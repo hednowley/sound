@@ -1,5 +1,6 @@
 - id: 1
   album_id: 1
+  artist: "artist_1"
   path: "path_1"
   title: "title_1"
   created: 2018-06-12 11:11:11
@@ -10,6 +11,7 @@
 
 - id: 2
   album_id: 2
+  artist: "artist_1"
   path: "path_2"
   title: "title_2"
   created: 2018-06-12 11:11:11
@@ -21,6 +23,7 @@
 
 - id: 10
   album_id: 2
+  artist: "artist_1"
   path: "path_10"
   title: "title_2"
   created: 2018-06-12 11:11:11
@@ -31,6 +34,7 @@
 
 - id: 14
   album_id: 2
+  artist: "artist_1"
   path: "path_14"
   title: "title_2"
   created: 2018-06-12 11:11:11
@@ -41,6 +45,7 @@
 
 - id: 15
   album_id: 2
+  artist: "artist_1"
   path: "path_15"
   title: "title_2"
   created: 2018-06-12 11:11:11
@@ -50,6 +55,7 @@
 
 # Same as song #2 but with different provider
 - id: 22
+  artist: "artist_1"
   album_id: 2
   path: "path_2"
   title: "title_2"

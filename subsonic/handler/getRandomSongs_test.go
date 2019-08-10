@@ -38,8 +38,14 @@ func TestGetRandomSongs(t *testing.T) {
 		t.Error("Should have two songs")
 	}
 
-	if songs.Songs[0].ID == songs.Songs[1].ID {
+	s := songs.Songs[0]
+
+	if s.ID == songs.Songs[1].ID {
 		t.Error("Songs should be different")
+	}
+
+	if s.AlbumName == "" || s.ArtistName == "" || s.Genre == "" {
+		t.Error("Songs should have joins")
 	}
 }
 
