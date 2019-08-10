@@ -52,7 +52,13 @@ func (db *Default) PutArtist(artist *dao.Artist) {
 // or creates a new one and returns its ID if there is no such artist.
 func (db *Default) putArtistByName(name string) *dao.Artist {
 	var artist dao.Artist
-	db.db.FirstOrCreate(&artist, dao.Artist{Name: name})
+	db.db.Where("name ILIKE ?", name).Limit(1).Find(&artist)
+	if artist.ID != 0 {
+		return &artist
+	}
+
+	artist.Name = name
+	db.db.Create(&artist)
 	return &artist
 }
 

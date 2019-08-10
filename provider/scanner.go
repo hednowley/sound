@@ -26,37 +26,37 @@ func NewScanner(providers []Provider, dal interfaces.DAL, hub interfaces.Hub) *S
 	}
 }
 
-func (dal *Scanner) GetScanFileCount() int64 {
+func (scanner *Scanner) GetScanFileCount() int64 {
 	count := int64(0)
-	for _, p := range dal.providers {
+	for _, p := range scanner.providers {
 		count += p.FileCount()
 	}
 	return count
 }
 
-func (dal *Scanner) GetScanStatus() bool {
+func (scanner *Scanner) GetScanStatus() bool {
 	scanning := false
-	for _, p := range dal.providers {
+	for _, p := range scanner.providers {
 		scanning = scanning || p.IsScanning()
 	}
 	return scanning
 }
 
 // StartAllScans asks all providers to start scanning in parallel.
-func (dal *Scanner) StartAllScans(update bool, delete bool) {
+func (scanner *Scanner) StartAllScans(update bool, delete bool) {
 	seelog.Info("Starting all scans.")
 	var wg sync.WaitGroup
-	for _, p := range dal.providers {
+	for _, p := range scanner.providers {
 		wg.Add(1)
 		go func() {
 			defer wg.Done()
-			dal.startScan(p, update, delete)
+			scanner.startScan(p, update, delete)
 		}()
 	}
 	wg.Wait()
 }
 
-func (dal *Scanner) startScan(provider Provider, update bool, delete bool) {
+func (scanner *Scanner) startScan(provider Provider, update bool, delete bool) {
 	providerID := provider.ID()
 
 	if provider.IsScanning() {
@@ -65,20 +65,20 @@ func (dal *Scanner) startScan(provider Provider, update bool, delete bool) {
 	}
 
 	seelog.Infof("Started '%v' scan.", providerID)
-	synch := NewSynchroniser(dal.dal, 10)
+	synch := NewSynchroniser(scanner.dal, 10)
 
-	dal.hub.Notify(dto.NewScanStatusNotification(provider.IsScanning(), provider.FileCount()))
+	scanner.hub.Notify(dto.NewScanStatusNotification(provider.IsScanning(), provider.FileCount()))
 
 	tokens := []string{}
 
 	err := provider.Iterate(func(token string) {
-		dal.hub.Notify(dto.NewScanStatusNotification(provider.IsScanning(), provider.FileCount()))
+		scanner.hub.Notify(dto.NewScanStatusNotification(provider.IsScanning(), provider.FileCount()))
 
 		if delete {
 			tokens = append(tokens, token)
 		}
 
-		s := dal.dal.GetSongFromToken(token, providerID)
+		s := scanner.dal.GetSongFromToken(token, providerID)
 		if s == nil || update {
 			data, err2 := provider.GetInfo(token)
 			if err2 != nil {
@@ -99,7 +99,7 @@ func (dal *Scanner) startScan(provider Provider, update bool, delete bool) {
 				synch.Notify(s.AlbumID) // Notify of potential change to old album
 			}
 
-			s = dal.dal.PutSong(s, data)
+			s = scanner.dal.PutSong(s, data)
 
 			// Notify of change to new album
 			synch.Notify(s.AlbumID)
@@ -117,7 +117,7 @@ func (dal *Scanner) startScan(provider Provider, update bool, delete bool) {
 
 	if delete {
 		seelog.Info("Deleting unscanned items")
-		dal.dal.DeleteMissing(tokens, providerID)
+		scanner.dal.DeleteMissing(tokens, providerID)
 
 		// Find unscanned songs from same provider
 
@@ -127,5 +127,5 @@ func (dal *Scanner) startScan(provider Provider, update bool, delete bool) {
 
 	seelog.Infof("Finished '%v' scan.", providerID)
 
-	dal.hub.Notify(dto.NewScanStatusNotification(provider.IsScanning(), provider.FileCount()))
+	scanner.hub.Notify(dto.NewScanStatusNotification(provider.IsScanning(), provider.FileCount()))
 }

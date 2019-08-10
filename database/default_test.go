@@ -126,6 +126,16 @@ func TestPutAlbumByAttributest(t *testing.T) {
 	if a.ID != 10005 {
 		t.Error()
 	}
+
+	// Put album with same artist but different capitalisation
+	a = m.PutAlbumByAttributes("album_3", "ArtisT_1", "")
+	if a.ID != 10006 {
+		t.Error()
+	}
+
+	if a.ArtistID != 1 {
+		t.Error()
+	}
 }
 
 func TestPutGenreByName(t *testing.T) {
