@@ -36,8 +36,8 @@ func registerSubsonicHandlers(factory *api.HandlerFactory, config *config.Config
 
 	// Querying
 	handlers["/subsonic/rest/getalbumlist2"] = factory.PublishHandler(handler.NewGetAlbumList2Handler(dal))
-	handlers["/subsonic/rest/getartists"] = factory.PublishHandler(handler.NewGetArtistsHandler(dal))
-	handlers["/subsonic/rest/getindexes"] = factory.PublishHandler(handler.NewGetIndexesHandler(dal))
+	handlers["/subsonic/rest/getartists"] = factory.PublishHandler(handler.NewGetArtistsHandler(dal, config))
+	handlers["/subsonic/rest/getindexes"] = factory.PublishHandler(handler.NewGetIndexesHandler(dal, config))
 	handlers["/subsonic/rest/getartist"] = factory.PublishHandler(handler.NewGetArtistHandler(dal))
 	handlers["/subsonic/rest/getalbum"] = factory.PublishHandler(handler.NewGetAlbumHandler(dal))
 	handlers["/subsonic/rest/getsong"] = factory.PublishHandler(handler.NewGetSongHandler(dal))

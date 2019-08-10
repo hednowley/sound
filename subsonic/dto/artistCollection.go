@@ -4,35 +4,36 @@ import (
 	"encoding/xml"
 	"strings"
 
+	"github.com/hednowley/sound/config"
 	"github.com/hednowley/sound/dao"
 )
 
 type ArtistCollection struct {
 	XMLName         xml.Name       `xml:"artists" json:"-"`
 	IgnoredArticles string         `xml:"ignoredArticles,attr" json:"ignoredArticles"`
-	Indexes         []*ArtistIndex `xml:"index" json:"index"`
+	Indexes         []*artistIndex `xml:"index" json:"index"`
 }
 
-type Indexes struct {
+type indexCollection struct {
 	XMLName         xml.Name       `xml:"indexes" json:"-"`
 	IgnoredArticles string         `xml:"ignoredArticles,attr" json:"ignoredArticles"`
-	Indexes         []*ArtistIndex `xml:"index" json:"index"`
+	Indexes         []*artistIndex `xml:"index" json:"index"`
 }
 
-type ArtistIndex struct {
+type artistIndex struct {
 	XMLName xml.Name  `xml:"index" json:"-"`
 	Name    string    `xml:"name,attr" json:"name"`
 	Artists []*Artist `xml:"artist" json:"artist"`
 }
 
-func NewArtistIndex(artists []*dao.Artist, name string) *ArtistIndex {
+func newArtistIndex(artists []*dao.Artist, name string) *artistIndex {
 
 	dtoArtists := make([]*Artist, len(artists))
 	for index, a := range artists {
 		dtoArtists[index] = NewArtist(a, false)
 	}
 
-	return &ArtistIndex{
+	return &artistIndex{
 		Name:    name,
 		Artists: dtoArtists,
 	}
@@ -50,7 +51,7 @@ func putArtist(indexes map[string][]*dao.Artist, artist *dao.Artist, letter stri
 	indexes[letter] = value
 }
 
-func makeArtistIndexes(artists []*dao.Artist) []*ArtistIndex {
+func makeArtistIndexes(artists []*dao.Artist, ignoredArticles []string) ([]*artistIndex, string) {
 
 	indexes := make(map[string][]*dao.Artist)
 	letters := []string{"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"}
@@ -58,6 +59,10 @@ func makeArtistIndexes(artists []*dao.Artist) []*ArtistIndex {
 	for _, a := range artists {
 
 		name := strings.ToUpper(a.Name)
+		for _, ia := range ignoredArticles {
+			name = strings.TrimPrefix(name, strings.ToUpper(ia)+" ")
+		}
+
 		found := false
 
 		for _, letter := range letters {
@@ -73,31 +78,31 @@ func makeArtistIndexes(artists []*dao.Artist) []*ArtistIndex {
 		}
 	}
 
-	o := make([]*ArtistIndex, 27)
+	o := make([]*artistIndex, 27)
 	for i, l := range letters {
-		o[i] = NewArtistIndex(indexes[l], l)
+		o[i] = newArtistIndex(indexes[l], l)
 	}
-	o[26] = NewArtistIndex(indexes["#"], "#")
+	o[26] = newArtistIndex(indexes["#"], "#")
 
-	return o
+	return o, strings.Join(ignoredArticles, " ")
 }
 
-func NewArtistCollection(artists []*dao.Artist) *ArtistCollection {
+func NewArtistCollection(artists []*dao.Artist, conf *config.Config) *ArtistCollection {
 
-	indexes := makeArtistIndexes(artists)
+	indexes, ignored := makeArtistIndexes(artists, conf.IgnoredArticles)
 
 	return &ArtistCollection{
-		IgnoredArticles: "the",
+		IgnoredArticles: ignored,
 		Indexes:         indexes,
 	}
 }
 
-func NewIndexes(artists []*dao.Artist) *Indexes {
+func NewIndexCollection(artists []*dao.Artist, conf *config.Config) *indexCollection {
 
-	indexes := makeArtistIndexes(artists)
+	indexes, ignored := makeArtistIndexes(artists, conf.IgnoredArticles)
 
-	return &Indexes{
-		IgnoredArticles: "the",
+	return &indexCollection{
+		IgnoredArticles: ignored,
 		Indexes:         indexes,
 	}
 }

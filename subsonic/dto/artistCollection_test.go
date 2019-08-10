@@ -2,15 +2,21 @@ package dto
 
 import (
 	"testing"
+
+	"github.com/hednowley/sound/config"
 )
 
 func TestArtistCollection(t *testing.T) {
+
+	conf := &config.Config{
+		IgnoredArticles: []string{"the", "los"},
+	}
 
 	art := GenerateArt(1)
 	artists := GenerateArtists(6, art)
 
 	artists[0].Name = "bhusadiu sdu"
-	artists[1].Name = "Hsetr"
+	artists[1].Name = "the Hsetr"
 	artists[2].Name = "2 4"
 	artists[3].Name = "#sdgs"
 	artists[4].Name = "Bdfgfdg"
@@ -19,10 +25,10 @@ func TestArtistCollection(t *testing.T) {
 	GenerateAlbums(3, nil, artists[2], nil)
 	GenerateAlbums(1, nil, artists[3], nil)
 
-	DTO := NewArtistCollection(artists)
+	DTO := NewArtistCollection(artists, conf)
 
 	xml := `
-	<artists ignoredArticles="the">
+	<artists ignoredArticles="the los">
 		<index name="A">
 		</index>
 		<index name="B">
@@ -42,7 +48,7 @@ func TestArtistCollection(t *testing.T) {
 		<index name="G">
 		</index>
 		<index name="H">
-			<artist id="2" name="Hsetr" coverArt="1.jpg" albumCount="0" duration="2">
+			<artist id="2" name="the Hsetr" coverArt="1.jpg" albumCount="0" duration="2">
 			</artist>
 		</index>
 		<index name="I">
@@ -94,7 +100,7 @@ func TestArtistCollection(t *testing.T) {
 
 	json := `
 	{
-		"ignoredArticles":"the",
+		"ignoredArticles":"the los",
 		"index":[
 		   {
 			  "name":"A",
@@ -156,7 +162,7 @@ func TestArtistCollection(t *testing.T) {
 			  "artist":[
 				 {
 					"id":"2",
-					"name":"Hsetr",
+					"name":"the Hsetr",
 					"coverArt":"1.jpg",
 					"albumCount":0,
 					"duration":2

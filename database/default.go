@@ -363,9 +363,7 @@ func (db *Default) GetRandomSongs(size uint, from uint, to uint, genre string) [
 	var songs []*dao.Song
 	query := db.db.Preload("Genre").
 		Preload("Album").
-		Preload("Album.Artist").
-		Order(gorm.Expr("random()")).
-		Limit(size)
+		Preload("Album.Artist")
 
 	if from != 0 {
 		query = query.Where("Year >= ?", from)
@@ -379,6 +377,6 @@ func (db *Default) GetRandomSongs(size uint, from uint, to uint, genre string) [
 		query = query.Joins("JOIN genres ON songs.genre_id = genres.id").Where("genres.name ILIKE ?", genre)
 	}
 
-	query.Find(&songs)
+	query.Order(gorm.Expr("random()")).Limit(size).Find(&songs)
 	return songs
 }

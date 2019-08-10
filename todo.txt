@@ -1,17 +1,13 @@
 - ignored articles
 - Get duration and bitrate from files
-- think about image resizing
 - transcoding
 - scheduling
 - https://golang.org/pkg/sync/#Pool
 - Deploy to web server
-- Web UI
 - Make scans stoppable
-- Allow songs to be deleted
-- Move subsonic API to subpath
 - Test beets provider
-- beets disambiguation
+- Disambiguation (find first different fields?)
 - Play counts
 - Implement getartistinfo2
-- "Various artists" fix
 - SQL injection in search
+- Speed up artist first-letter code
