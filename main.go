@@ -28,6 +28,7 @@ func registerSubsonicHandlers(factory *api.HandlerFactory, config *config.Config
 	handlers := make(map[string]http.HandlerFunc)
 
 	handlers["/subsonic/rest/ping"] = factory.PublishHandler(handler.NewPingHandler())
+	handlers["/subsonic/rest/getlicense"] = factory.PublishHandler(handler.NewGetLicenseHandler())
 
 	// Scanning
 	handlers["/subsonic/rest/getscanstatus"] = factory.PublishHandler(handler.NewGetScanStatusHandler(scanner))
