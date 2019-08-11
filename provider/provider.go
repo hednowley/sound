@@ -28,8 +28,8 @@ type Provider interface {
 func NewProviders(config *config.Config) []Provider {
 	ps := []Provider{}
 
-	if len(config.Path) > 0 {
-		p, err := NewFsProvider("fs", config.Path, config.Extensions)
+	for _, fs := range config.FileSystemProviders {
+		p, err := NewFsProvider("fs", fs.Path, fs.Extensions)
 		if err != nil {
 			seelog.Errorf("Could not create file system provider: %v", err)
 		} else {
@@ -37,8 +37,8 @@ func NewProviders(config *config.Config) []Provider {
 		}
 	}
 
-	if len(config.BeetsDB) > 0 {
-		p, err := NewBeetsProvider("beets", config.BeetsDB)
+	for _, b := range config.BeetsProviders {
+		p, err := NewBeetsProvider("beets", b.Database)
 		if err != nil {
 			seelog.Errorf("Could not create beets provider: %v", err)
 		} else {

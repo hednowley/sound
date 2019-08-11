@@ -8,18 +8,27 @@ import (
 
 type Config struct {
 	Port                     string
-	Path                     string
 	ArtPath                  string `yaml:"art path"`
-	ResizeArt                bool   `yaml:"resize art`
 	Db                       string
-	LogConfig                string `yaml:"log config"`
-	Extensions               []string
+	LogConfig                string   `yaml:"log config"`
 	IgnoredArticles          []string `yaml:"ignored articles"`
 	Users                    []User
-	BeetsDB                  string `yaml:"beets db"`
 	Secret                   string
-	AccessControlAllowOrigin string `yaml:"access control allow origin"`
-	WebsocketTicketExpiry    int    `yaml:"websocket ticket expiry"`
+	AccessControlAllowOrigin string               `yaml:"access control allow origin"`
+	WebsocketTicketExpiry    int                  `yaml:"websocket ticket expiry"`
+	BeetsProviders           []BeetsProvider      `yaml:"beets"`
+	FileSystemProviders      []FileSystemProvider `yaml:"filesystem"`
+}
+
+type BeetsProvider struct {
+	Database string
+	Name     string
+}
+
+type FileSystemProvider struct {
+	Path       string
+	Name       string
+	Extensions []string
 }
 
 type User struct {

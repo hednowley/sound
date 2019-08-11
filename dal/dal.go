@@ -21,7 +21,6 @@ import (
 type DAL struct {
 	db     *database.Default
 	artDir string
-	resize bool
 }
 
 // NewDAL constructs a new DAL.
@@ -29,7 +28,6 @@ func NewDAL(config *config.Config, database *database.Default) interfaces.DAL {
 	return &DAL{
 		db:     database,
 		artDir: config.ArtPath,
-		resize: config.ResizeArt,
 	}
 }
 
