@@ -11,9 +11,6 @@ func NewDeleteHandler(dal interfaces.DAL) api.Handler {
 
 	return func(params url.Values) *api.Response {
 		dal.Empty()
-		return &api.Response{
-			Body:      nil,
-			IsSuccess: true,
-		}
+		return api.NewEmptyReponse()
 	}
 }

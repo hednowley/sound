@@ -32,4 +32,8 @@ type DAL interface {
 	SearchSongs(query string, count uint, offset uint) []*dao.Song
 
 	GetRandomSongs(size uint, from uint, to uint, genre string) []*dao.Song
+
+	StarSong(songID uint, star bool) error
+	StarAlbum(albumID uint, star bool) error
+	StarArtist(artistID uint, star bool) error
 }

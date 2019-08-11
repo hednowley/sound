@@ -48,9 +48,6 @@ func NewUpdatePlaylistHandler(database interfaces.DAL) api.Handler {
 			api.NewErrorReponse(0, err.Error())
 		}
 
-		return &api.Response{
-			Body:      nil,
-			IsSuccess: true,
-		}
+		return api.NewEmptyReponse()
 	}
 }

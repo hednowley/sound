@@ -10,9 +10,6 @@ import (
 // It replies to any request with an empty success response.
 func NewPingHandler() api.Handler {
 	return func(params url.Values) *api.Response {
-		return &api.Response{
-			Body:      nil,
-			IsSuccess: true,
-		}
+		return api.NewEmptyReponse()
 	}
 }

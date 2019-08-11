@@ -22,3 +22,10 @@ func NewSuccessfulReponse(body interface{}) *Response {
 		IsSuccess: true,
 	}
 }
+
+func NewEmptyReponse() *Response {
+	return &Response{
+		Body:      nil,
+		IsSuccess: true,
+	}
+}

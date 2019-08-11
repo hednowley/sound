@@ -386,3 +386,15 @@ func (db *Default) GetRandomSongs(size uint, from uint, to uint, genre string) [
 	query.Order(gorm.Expr("random()")).Limit(size).Find(&songs)
 	return songs
 }
+
+func (db *Default) StarSong(songID uint, star bool) error {
+	return db.db.Model(dao.Song{ID: songID}).Updates(dao.Song{Starred: star}).Error
+}
+
+func (db *Default) StarAlbum(albumID uint, star bool) error {
+	return db.db.Model(dao.Album{ID: albumID}).Updates(dao.Album{Starred: star}).Error
+}
+
+func (db *Default) StarArtist(artistID uint, star bool) error {
+	return db.db.Model(dao.Artist{ID: artistID}).Updates(dao.Artist{Starred: star}).Error
+}

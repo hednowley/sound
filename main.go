@@ -66,6 +66,9 @@ func registerSubsonicHandlers(factory *api.HandlerFactory, config *config.Config
 	handlers["/subsonic/rest/deleteplaylist"] = factory.PublishHandler(handler.NewDeletePlaylistHandler(dal))
 	handlers["/subsonic/rest/updateplaylist"] = factory.PublishHandler(handler.NewUpdatePlaylistHandler(dal))
 
+	handlers["/subsonic/rest/star"] = factory.PublishHandler(handler.NewStarHandler(dal, true))
+	handlers["/subsonic/rest/unstar"] = factory.PublishHandler(handler.NewStarHandler(dal, false))
+
 	http.HandleFunc("/subsonic/", func(w http.ResponseWriter, r *http.Request) {
 		defer log.Flush()
 		log.Info(fmt.Sprintf("Request received: %v", r.URL.Path))

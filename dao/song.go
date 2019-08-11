@@ -22,4 +22,5 @@ type Song struct {
 	Duration   int    // Duration in seconds
 	Token      string `gorm:"index:songs_token_idx"` // An ID unique to this song amongst other songs from its provider
 	ProviderID string `gorm:"index:songs_token_idx"` // THe ID of the provider which supplied this song
+	Starred    bool
 }

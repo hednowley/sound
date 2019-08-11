@@ -158,38 +158,6 @@ func (dal *DAL) SynchroniseArtist(id uint) error {
 	return nil
 }
 
-func (dal *DAL) deleteSong(song *dao.Song) {
-
-	for _, p := range dal.db.GetPlaylists() {
-
-		// Indexes of entries to delete
-		var d []int
-
-		for i, e := range p.Entries {
-			if e.SongID == song.ID {
-				d = append(d, i)
-			}
-		}
-
-		if len(d) > 0 {
-
-		}
-
-	}
-
-	// Delete songs
-
-	// Delete albums
-
-	// Delete artists
-
-	// Delete genres
-
-	// Delete from playlists
-
-	// Delete art
-}
-
 func (dal *DAL) PutPlaylist(id uint, name string, songIDs []uint) (uint, error) {
 
 	now := time.Now()
@@ -390,4 +358,16 @@ func (dal *DAL) GetArtPath(id string) (string, error) {
 
 func (dal *DAL) GetRandomSongs(size uint, from uint, to uint, genre string) []*dao.Song {
 	return dal.db.GetRandomSongs(size, from, to, genre)
+}
+
+func (dal *DAL) StarSong(songID uint, star bool) error {
+	return dal.db.StarSong(songID, star)
+}
+
+func (dal *DAL) StarAlbum(albumID uint, star bool) error {
+	return dal.db.StarAlbum(albumID, star)
+}
+
+func (dal *DAL) StarArtist(artistID uint, star bool) error {
+	return dal.db.StarArtist(artistID, star)
 }

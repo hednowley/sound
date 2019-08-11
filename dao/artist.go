@@ -6,4 +6,5 @@ type Artist struct {
 	Albums   []*Album `gorm:"foreignkey:ArtistID"`
 	Art      string
 	Duration int
+	Starred  bool
 }
