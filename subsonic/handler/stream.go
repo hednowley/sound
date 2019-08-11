@@ -9,6 +9,7 @@ import (
 	"github.com/hednowley/sound/interfaces"
 	"github.com/hednowley/sound/subsonic/api"
 	"github.com/hednowley/sound/subsonic/dto"
+	"github.com/hednowley/sound/util"
 )
 
 type StreamFormat int
@@ -46,7 +47,7 @@ func NewStreamHandler(database interfaces.DAL) api.BinaryHandler {
 	return func(params url.Values, w *http.ResponseWriter, r *http.Request) *api.Response {
 
 		idParam := params.Get("id")
-		id := api.ParseUint(idParam, 0)
+		id := util.ParseUint(idParam, 0)
 		if id == 0 {
 			return api.NewErrorReponse(dto.Generic, fmt.Sprintf("Song not found: %v", idParam))
 		}

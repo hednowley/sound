@@ -7,6 +7,7 @@ import (
 	"github.com/hednowley/sound/interfaces"
 	"github.com/hednowley/sound/subsonic/api"
 	"github.com/hednowley/sound/subsonic/dto"
+	"github.com/hednowley/sound/util"
 )
 
 func NewUpdatePlaylistHandler(database interfaces.DAL) api.Handler {
@@ -14,7 +15,7 @@ func NewUpdatePlaylistHandler(database interfaces.DAL) api.Handler {
 	return func(params url.Values) *api.Response {
 
 		idParam := params.Get("playlistId")
-		id := api.ParseUint(idParam, 0)
+		id := util.ParseUint(idParam, 0)
 		if id == 0 {
 			message := fmt.Sprintf("Playlist not found: %v", idParam)
 			return api.NewErrorReponse(dto.NotFound, message)
@@ -23,12 +24,12 @@ func NewUpdatePlaylistHandler(database interfaces.DAL) api.Handler {
 		name := params.Get("name")
 		comment := params.Get("comment")
 
-		public := api.ParseBool(params.Get("public"))
+		public := util.ParseBool(params.Get("public"))
 
 		addedSongsParam := params["songIdToAdd"]
 		addedSongs := []uint{}
 		for _, idStr := range addedSongsParam {
-			songID := api.ParseUint(idStr, 0)
+			songID := util.ParseUint(idStr, 0)
 			if songID != 0 {
 				addedSongs = append(addedSongs, songID)
 			}
@@ -37,7 +38,7 @@ func NewUpdatePlaylistHandler(database interfaces.DAL) api.Handler {
 		removedSongsParam := params["songIndexToRemove"]
 		removedSongs := []uint{}
 		for _, idStr := range removedSongsParam {
-			songID := api.ParseUint(idStr, 0)
+			songID := util.ParseUint(idStr, 0)
 			if songID != 0 {
 				removedSongs = append(removedSongs, songID)
 			}

@@ -14,6 +14,7 @@ import (
 	"github.com/hednowley/sound/services"
 	"github.com/hednowley/sound/subsonic/api"
 	"github.com/hednowley/sound/subsonic/dto"
+	"github.com/hednowley/sound/util"
 )
 
 func NewGetCoverArtHandler(dal interfaces.DAL) api.BinaryHandler {
@@ -31,7 +32,7 @@ func NewGetCoverArtHandler(dal interfaces.DAL) api.BinaryHandler {
 		}
 
 		sizeParam := params.Get("size")
-		size := api.ParseUint(sizeParam, 0)
+		size := util.ParseUint(sizeParam, 0)
 		if size == 0 {
 			http.ServeFile(*w, r, path)
 			return nil

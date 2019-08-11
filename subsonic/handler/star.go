@@ -6,6 +6,7 @@ import (
 	"github.com/hednowley/sound/interfaces"
 	"github.com/hednowley/sound/subsonic/api"
 	"github.com/hednowley/sound/subsonic/dto"
+	"github.com/hednowley/sound/util"
 )
 
 func NewStarHandler(dal interfaces.DAL, star bool) api.Handler {
@@ -13,7 +14,7 @@ func NewStarHandler(dal interfaces.DAL, star bool) api.Handler {
 	return func(params url.Values) *api.Response {
 
 		param := params.Get("id")
-		id := api.ParseUint(param, 0)
+		id := util.ParseUint(param, 0)
 		if id == 0 {
 			err := dal.StarSong(id, star)
 			if err != nil {
@@ -24,7 +25,7 @@ func NewStarHandler(dal interfaces.DAL, star bool) api.Handler {
 		}
 
 		param = params.Get("albumId")
-		id = api.ParseUint(param, 0)
+		id = util.ParseUint(param, 0)
 		if id == 0 {
 			err := dal.StarAlbum(id, star)
 			if err != nil {
@@ -35,7 +36,7 @@ func NewStarHandler(dal interfaces.DAL, star bool) api.Handler {
 		}
 
 		param = params.Get("artistId")
-		id = api.ParseUint(param, 0)
+		id = util.ParseUint(param, 0)
 		if id == 0 {
 			err := dal.StarArtist(id, star)
 			if err != nil {

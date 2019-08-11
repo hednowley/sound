@@ -8,6 +8,7 @@ import (
 	"github.com/hednowley/sound/interfaces"
 	"github.com/hednowley/sound/subsonic/api"
 	"github.com/hednowley/sound/subsonic/dto"
+	"github.com/hednowley/sound/util"
 )
 
 func parseListType(param string) *dao.AlbumList2Type {
@@ -55,12 +56,12 @@ func NewGetAlbumList2Handler(database interfaces.DAL) api.Handler {
 			return api.NewErrorReponse(dto.Generic, "Unknown type.")
 		}
 
-		size := api.ParseUint(params.Get("size"), 10)
+		size := util.ParseUint(params.Get("size"), 10)
 		if size > 500 {
 			return api.NewErrorReponse(dto.Generic, "Invalid size.")
 		}
 
-		offset := api.ParseUint(params.Get("offset"), 0)
+		offset := util.ParseUint(params.Get("offset"), 0)
 
 		albums := database.GetAlbums(*listType, size, offset)
 		return api.NewSuccessfulReponse(dto.NewAlbumList2(albums))

@@ -8,6 +8,7 @@ import (
 	"github.com/hednowley/sound/interfaces"
 	"github.com/hednowley/sound/subsonic/api"
 	"github.com/hednowley/sound/subsonic/dto"
+	"github.com/hednowley/sound/util"
 )
 
 // NewCreatePlaylistHandler is a handler for creating or updating playlists.
@@ -16,7 +17,7 @@ func NewCreatePlaylistHandler(dal interfaces.DAL) api.Handler {
 	return func(params url.Values) *api.Response {
 
 		idParam := params.Get("playlistId")
-		id := api.ParseUint(idParam, 0)
+		id := util.ParseUint(idParam, 0)
 		name := params.Get("name")
 
 		if id == 0 && name == "" {
@@ -27,7 +28,7 @@ func NewCreatePlaylistHandler(dal interfaces.DAL) api.Handler {
 
 		songIdsNum := []uint{}
 		for _, idStr := range songIds {
-			id := api.ParseUint(idStr, 0)
+			id := util.ParseUint(idStr, 0)
 			if id != 0 {
 				songIdsNum = append(songIdsNum, id)
 			}

@@ -12,16 +12,34 @@ func NewGetMusicDirectoryHandler(database interfaces.DAL) api.Handler {
 
 	return func(params url.Values) *api.Response {
 
-		id := api.ParseUint(params.Get("id"), 0)
-		if id == 0 {
-			return api.NewErrorReponse(dto.Generic, "Bad id")
-		}
-
-		album, err := database.GetAlbum(id, true, true, true)
+		id, err := dto.ParseDirectoryID(params.Get("id"))
 		if err != nil {
 			return api.NewErrorReponse(dto.Generic, err.Error())
 		}
 
-		return api.NewSuccessfulReponse(dto.NewDirectory(album))
+		switch id.Type {
+		case dto.ArtistDirectory:
+			artist, err := database.GetArtist(id.ID)
+			if err != nil {
+				return api.NewErrorReponse(dto.Generic, err.Error())
+			}
+			return api.NewSuccessfulReponse(dto.NewArtistDirectory(artist))
+
+		case dto.AlbumDirectory:
+			album, err := database.GetAlbum(id.ID, true, true, true)
+			if err != nil {
+				return api.NewErrorReponse(dto.Generic, err.Error())
+			}
+			return api.NewSuccessfulReponse(dto.NewAlbumDirectory(album))
+
+		case dto.SongDirectory:
+			song, err := database.GetSong(id.ID, true, true, true)
+			if err != nil {
+				return api.NewErrorReponse(dto.Generic, err.Error())
+			}
+			return api.NewSuccessfulReponse(dto.NewSongDirectory(song))
+		}
+
+		return api.NewErrorReponse(dto.Generic, "Unknown ID")
 	}
 }

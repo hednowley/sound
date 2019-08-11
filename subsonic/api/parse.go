@@ -2,7 +2,6 @@ package api
 
 import (
 	"net/url"
-	"strconv"
 	"strings"
 )
 
@@ -22,35 +21,6 @@ func parseResponseFormat(param string) *responseFormat {
 	if param == "xml" {
 		f := xmlFormat
 		return &f
-	}
-
-	return nil
-}
-
-// ParseUint tries to parse a string into a uint. If this is not possible
-// then the given default is returned instead.
-func ParseUint(param string, defaultValue uint) uint {
-
-	id, err := strconv.ParseUint(param, 10, 32)
-	if err != nil {
-		return defaultValue
-	}
-	return uint(id)
-}
-
-// ParseBool tries to parse a string into a bool. If this is not possible
-// then a nil pointer is returned instead.
-func ParseBool(param string) *bool {
-
-	var b bool
-	param = strings.ToLower(param)
-	if param == "true" || param == "1" {
-		b = true
-		return &b
-	}
-	if param == "false" || param == "0" {
-		b = false
-		return &b
 	}
 
 	return nil

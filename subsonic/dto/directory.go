@@ -8,13 +8,13 @@ import (
 
 type Directory struct {
 	XMLName  xml.Name `xml:"directory" json:"-"`
-	ID       uint     `xml:"id,attr" json:"id"`
+	ID       string   `xml:"id,attr" json:"id"`
 	Name     string   `xml:"name" json:"name"`
 	IsDir    bool     `xml:"isDir" json:"isDir"`
 	Children []*Song  `xml:"child" json:"child"`
 }
 
-func NewDirectory(album *dao.Album) *Directory {
+func NewAlbumDirectory(album *dao.Album) *Directory {
 
 	songs := make([]*Song, len(album.Songs))
 	for index, song := range album.Songs {
@@ -22,9 +22,27 @@ func NewDirectory(album *dao.Album) *Directory {
 	}
 
 	return &Directory{
-		ID:       album.ID,
+		ID:       NewAlbumID(album.ID),
 		Name:     album.Name,
 		IsDir:    true,
 		Children: songs,
+	}
+}
+
+func NewArtistDirectory(artist *dao.Artist) *Directory {
+
+	return &Directory{
+		ID:    NewArtistID(artist.ID),
+		Name:  artist.Name,
+		IsDir: true,
+	}
+}
+
+func NewSongDirectory(song *dao.Song) *Directory {
+
+	return &Directory{
+		ID:    NewSongID(song.ID),
+		Name:  song.Title,
+		IsDir: false,
 	}
 }

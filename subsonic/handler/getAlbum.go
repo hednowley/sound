@@ -7,6 +7,7 @@ import (
 	"github.com/hednowley/sound/interfaces"
 	"github.com/hednowley/sound/subsonic/api"
 	"github.com/hednowley/sound/subsonic/dto"
+	"github.com/hednowley/sound/util"
 )
 
 // NewGetAlbumHandler is a handler for getting information about an album.
@@ -15,7 +16,7 @@ func NewGetAlbumHandler(database interfaces.DAL) api.Handler {
 	return func(params url.Values) *api.Response {
 
 		idParam := params.Get("id")
-		id := api.ParseUint(idParam, 0)
+		id := util.ParseUint(idParam, 0)
 		if id == 0 {
 			return api.NewErrorReponse(dto.MissingParameter, "Required param (id) is missing")
 		}

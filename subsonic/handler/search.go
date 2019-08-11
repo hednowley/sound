@@ -6,6 +6,7 @@ import (
 	"github.com/hednowley/sound/interfaces"
 	"github.com/hednowley/sound/subsonic/api"
 	"github.com/hednowley/sound/subsonic/dto"
+	"github.com/hednowley/sound/util"
 )
 
 type SearchVersion int
@@ -25,13 +26,13 @@ func NewSearchHandler(dal interfaces.DAL, version SearchVersion) api.Handler {
 			return api.NewErrorReponse(dto.Generic, "No query provided.")
 		}
 
-		artistCount := api.ParseUint(params.Get("artistCount"), 20)
-		albumCount := api.ParseUint(params.Get("albumCount"), 20)
-		songCount := api.ParseUint(params.Get("songCount"), 20)
+		artistCount := util.ParseUint(params.Get("artistCount"), 20)
+		albumCount := util.ParseUint(params.Get("albumCount"), 20)
+		songCount := util.ParseUint(params.Get("songCount"), 20)
 
-		artistOffset := api.ParseUint(params.Get("artistOffset"), 0)
-		albumOffset := api.ParseUint(params.Get("albumOffset"), 0)
-		songOffset := api.ParseUint(params.Get("songOffset"), 0)
+		artistOffset := util.ParseUint(params.Get("artistOffset"), 0)
+		albumOffset := util.ParseUint(params.Get("albumOffset"), 0)
+		songOffset := util.ParseUint(params.Get("songOffset"), 0)
 
 		artists := dal.SearchArtists(query, artistCount, artistOffset)
 		albums := dal.SearchAlbums(query, albumCount, albumOffset)

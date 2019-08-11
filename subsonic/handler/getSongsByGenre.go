@@ -7,6 +7,7 @@ import (
 	"github.com/hednowley/sound/interfaces"
 	"github.com/hednowley/sound/subsonic/api"
 	"github.com/hednowley/sound/subsonic/dto"
+	"github.com/hednowley/sound/util"
 )
 
 func NewGetSongsByGenreHandler(dal interfaces.DAL) api.Handler {
@@ -19,10 +20,10 @@ func NewGetSongsByGenreHandler(dal interfaces.DAL) api.Handler {
 		}
 
 		countParam := params.Get("count")
-		count := api.ParseUint(countParam, 10)
+		count := util.ParseUint(countParam, 10)
 
 		offsetParam := params.Get("offset")
-		offset := api.ParseUint(offsetParam, 0)
+		offset := util.ParseUint(offsetParam, 0)
 
 		genre, err := dal.GetGenre(genreParam)
 		if err != nil {
