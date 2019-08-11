@@ -5,7 +5,7 @@ import (
 	"net/url"
 )
 
-var version = "1.15.0"
+var version = "1.16.1"
 
 // Handler is a web controller action.
 // It accepts a set of parameters and returns an unserialised Response.
