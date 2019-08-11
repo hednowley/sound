@@ -14,14 +14,14 @@ type Directory struct {
 	Children []*Song  `xml:"child" json:"child"`
 }
 
-func NewDirectory(album *dao.Album) Directory {
+func NewDirectory(album *dao.Album) *Directory {
 
 	songs := make([]*Song, len(album.Songs))
 	for index, song := range album.Songs {
 		songs[index] = NewSong(song)
 	}
 
-	return Directory{
+	return &Directory{
 		ID:       album.ID,
 		Name:     album.Name,
 		IsDir:    true,
