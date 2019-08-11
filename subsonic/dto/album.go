@@ -12,7 +12,7 @@ type albumBody struct {
 	Artist    string     `xml:"artist,attr" json:"artist"`
 	ArtistID  uint       `xml:"artistId,attr" json:"artistId,string"`
 	Art       string     `xml:"coverArt,attr,omitempty" json:"coverArt,omitempty"`
-	SongCount int        `xml:"songCount,attr" json:"songCount"`
+	SongCount uint       `xml:"songCount,attr" json:"songCount"`
 	Duration  int        `xml:"duration,attr" json:"duration"`
 	Created   *time.Time `xml:"created,attr" json:"created"`
 	Year      int        `xml:"year,attr,omitempty" json:"year,omitempty"`
@@ -22,34 +22,23 @@ type albumBody struct {
 
 func newAlbumBody(album *dao.Album, includeSongs bool) *albumBody {
 
-	count := len(album.Songs)
 	var songs []*Song
 	if includeSongs {
-		songs = make([]*Song, count)
+		songs = make([]*Song, len(album.Songs))
 		for index, song := range album.Songs {
 			songs[index] = NewSong(song)
 		}
 	}
 
-	var artistName string
-	if album.Artist != nil {
-		artistName = album.Artist.Name
-	}
-
-	var genreName string
-	if album.Genre != nil {
-		genreName = album.Genre.Name
-	}
-
 	return &albumBody{
 		Name:      album.Name,
 		ArtistID:  album.ArtistID,
-		SongCount: count,
-		Artist:    artistName,
+		SongCount: album.SongCount,
+		Artist:    album.ArtistName,
 		Songs:     songs,
 		Art:       album.Art,
 		Created:   album.Created,
-		Genre:     genreName,
+		Genre:     album.GenreName,
 		Year:      album.Year,
 		Duration:  album.Duration,
 	}

@@ -17,7 +17,7 @@ type DAL interface {
 	UpdatePlaylist(id uint, name string, comment string, public *bool, addedSongs []uint, removedSongs []uint) error
 	DeletePlaylist(id uint) error
 	GetAlbums(listType dao.AlbumList2Type, size uint, offset uint) []*dao.Album
-	GetArtists() []*dao.Artist
+	GetArtists(includeAlbums bool) []*dao.Artist
 	GetGenres() []*dao.Genre
 	GetPlaylists() []*dao.Playlist
 	SynchroniseAlbum(id uint) (*dao.Album, error)

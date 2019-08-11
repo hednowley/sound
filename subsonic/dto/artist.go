@@ -11,28 +11,26 @@ type Artist struct {
 	ID         uint     `xml:"id,attr" json:"id,string"`
 	Name       string   `xml:"name,attr" json:"name"`
 	Art        string   `xml:"coverArt,attr,omitempty" json:"coverArt,omitempty"`
-	AlbumCount int      `xml:"albumCount,attr" json:"albumCount"`
+	AlbumCount uint     `xml:"albumCount,attr" json:"albumCount"`
 	Albums     []*Album `xml:"album" json:"album,omitempty"`
 	Duration   int      `xml:"duration,attr" json:"duration"`
 }
 
 func NewArtist(artist *dao.Artist, includeAlbums bool) *Artist {
 
-	albumCount := len(artist.Albums)
 	var albums []*Album
 
 	if includeAlbums {
-		albums = make([]*Album, albumCount)
+		albums = make([]*Album, len(artist.Albums))
 		for index, album := range artist.Albums {
 			albums[index] = NewAlbum(album, false)
-			albums[index].Artist = artist.Name
 		}
 	}
 
 	return &Artist{
 		ID:         artist.ID,
 		Name:       artist.Name,
-		AlbumCount: albumCount,
+		AlbumCount: artist.AlbumCount,
 		Albums:     albums,
 		Art:        artist.Art,
 		Duration:   artist.Duration,

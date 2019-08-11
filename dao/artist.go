@@ -7,4 +7,7 @@ type Artist struct {
 	Art      string
 	Duration int
 	Starred  bool
+
+	// Precalculated fields which are stored for performance
+	AlbumCount uint
 }

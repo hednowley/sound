@@ -10,9 +10,8 @@ import (
 )
 
 func NewGetIndexesHandler(database interfaces.DAL, conf *config.Config) api.Handler {
-
 	return func(params url.Values) *api.Response {
-		artists := database.GetArtists()
+		artists := database.GetArtists(false)
 		return api.NewSuccessfulReponse(dto.NewIndexCollection(artists, conf))
 	}
 }

@@ -7,7 +7,7 @@ import (
 
 func MakeGetArtistsHandler(dal interfaces.DAL) interfaces.WsHandler {
 	return func(request *dto.Request) interface{} {
-		artists := dal.GetArtists()
+		artists := dal.GetArtists(false)
 		return dto.NewArtistCollection(artists)
 	}
 }

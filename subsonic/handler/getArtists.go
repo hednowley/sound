@@ -9,10 +9,9 @@ import (
 	"github.com/hednowley/sound/subsonic/dto"
 )
 
-func NewGetArtistsHandler(database interfaces.DAL, conf *config.Config) api.Handler {
-
+func NewGetArtistsHandler(dal interfaces.DAL, conf *config.Config) api.Handler {
 	return func(params url.Values) *api.Response {
-		artists := database.GetArtists()
+		artists := dal.GetArtists(false)
 		return api.NewSuccessfulReponse(dto.NewArtistCollection(artists, conf))
 	}
 }

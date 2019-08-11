@@ -12,3 +12,6 @@
 - SQL injection in search
 - Speed up artist first-letter code
 - Artists with different capitalisations
+- Think about emopty album names, genre etc
+- Podcasts
+- Add real providers to user folders

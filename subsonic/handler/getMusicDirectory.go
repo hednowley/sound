@@ -26,14 +26,14 @@ func NewGetMusicDirectoryHandler(database interfaces.DAL) api.Handler {
 			return api.NewSuccessfulReponse(dto.NewArtistDirectory(artist))
 
 		case dto.AlbumDirectoryType:
-			album, err := database.GetAlbum(id.ID, true, true, true)
+			album, err := database.GetAlbum(id.ID, false, false, true)
 			if err != nil {
 				return api.NewErrorReponse(dto.Generic, err.Error())
 			}
 			return api.NewSuccessfulReponse(dto.NewAlbumDirectory(album))
 
 		case dto.SongDirectoryType:
-			song, err := database.GetSong(id.ID, true, true, true)
+			song, err := database.GetSong(id.ID, false, false, false)
 			if err != nil {
 				return api.NewErrorReponse(dto.Generic, err.Error())
 			}

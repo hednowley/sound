@@ -184,7 +184,7 @@ func TestDeleteScan(t *testing.T) {
 		t.Error()
 	}
 
-	artists := dal.GetArtists()
+	artists := dal.GetArtists(false)
 	if len(artists) != 1 {
 		t.Error()
 	}

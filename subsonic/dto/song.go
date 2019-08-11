@@ -38,24 +38,14 @@ type Song struct {
 
 func newSongBody(song *dao.Song) *songBody {
 
-	// Fix for playlists with nonsense songs
-	if song == nil {
-		song = &dao.Song{}
-	}
-
-	var genreName string
-	if song.Genre != nil {
-		genreName = song.Genre.Name
-	}
-
 	return &songBody{
 		AlbumID:    song.AlbumID,
 		Title:      song.Title,
-		AlbumName:  song.Album.Name,
-		ArtistID:   song.Album.ArtistID,
+		AlbumName:  song.AlbumName,
+		ArtistID:   song.AlbumArtistID,
 		ArtistName: song.Artist,
 		Path:       song.Path,
-		Genre:      genreName,
+		Genre:      song.GenreName,
 		Year:       song.Year,
 		Art:        song.Art,
 		Track:      song.Track,

@@ -3,6 +3,8 @@ package api
 import (
 	"net/url"
 	"testing"
+
+	"github.com/hednowley/sound/util"
 )
 
 func TestParseReponseFormat(t *testing.T) {
@@ -34,22 +36,22 @@ func TestParseReponseFormat(t *testing.T) {
 
 func TestParseUint(t *testing.T) {
 
-	i := ParseUint("", 56)
+	i := util.ParseUint("", 56)
 	if i != 56 {
 		t.Error()
 	}
 
-	i = ParseUint("dfhgfdh", 435)
+	i = util.ParseUint("dfhgfdh", 435)
 	if i != 435 {
 		t.Error()
 	}
 
-	i = ParseUint("344343", 435)
+	i = util.ParseUint("344343", 435)
 	if i != 344343 {
 		t.Error()
 	}
 
-	i = ParseUint("-57", 435)
+	i = util.ParseUint("-57", 435)
 	if i != 435 {
 		t.Error()
 	}
@@ -57,32 +59,32 @@ func TestParseUint(t *testing.T) {
 
 func TestParseBool(t *testing.T) {
 
-	b := ParseBool("")
+	b := util.ParseBool("")
 	if b != nil {
 		t.Error()
 	}
 
-	b = ParseBool("faalse")
+	b = util.ParseBool("faalse")
 	if b != nil {
 		t.Error()
 	}
 
-	b = ParseBool("1")
+	b = util.ParseBool("1")
 	if !*b {
 		t.Error()
 	}
 
-	b = ParseBool("tRue")
+	b = util.ParseBool("tRue")
 	if !*b {
 		t.Error()
 	}
 
-	b = ParseBool("0")
+	b = util.ParseBool("0")
 	if *b {
 		t.Error()
 	}
 
-	b = ParseBool("faLse")
+	b = util.ParseBool("faLse")
 	if *b {
 		t.Error()
 	}

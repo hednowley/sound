@@ -193,7 +193,7 @@ func TestDelete(t *testing.T) {
 	m := database.NewMock()
 	m.Empty()
 
-	if len(m.GetArtists()) > 0 {
+	if len(m.GetArtists(false)) > 0 {
 		t.Error()
 	}
 }

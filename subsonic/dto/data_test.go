@@ -51,29 +51,35 @@ func GenerateSong(i int, genre *dao.Genre, album *dao.Album, art *dao.Art) *dao.
 	}
 
 	var genreID uint
+	var genreName string
 	if genre != nil {
 		genreID = genre.ID
+		genreName = genre.Name
 	}
 
 	s := dao.Song{
-		ID:        uint(i),
-		Title:     fmt.Sprintf("title%v", i),
-		Artist:    album.Artist.Name,
-		Track:     i,
-		Disc:      i,
-		Extension: fmt.Sprintf("mp%v", i),
-		GenreID:   genreID,
-		Genre:     genre,
-		Album:     album,
-		AlbumID:   album.ID,
-		Art:       artPath,
-		Path:      fmt.Sprintf("D:\\music\\%v.mp3", i),
-		Size:      int64(i * 100000),
-		Year:      1900 + i,
-		Created:   &t,
+		ID:            uint(i),
+		Title:         fmt.Sprintf("title%v", i),
+		Artist:        album.Artist.Name,
+		Track:         i,
+		Disc:          i,
+		Extension:     fmt.Sprintf("mp%v", i),
+		GenreID:       genreID,
+		Genre:         genre,
+		Album:         album,
+		AlbumID:       album.ID,
+		Art:           artPath,
+		Path:          fmt.Sprintf("D:\\music\\%v.mp3", i),
+		Size:          int64(i * 100000),
+		Year:          1900 + i,
+		Created:       &t,
+		GenreName:     genreName,
+		AlbumArtistID: album.Artist.ID,
+		AlbumName:     album.Name,
 	}
 
 	album.Songs = append(album.Songs, &s)
+	album.SongCount++
 	if genre != nil {
 		genre.Songs = append(genre.Songs, &s)
 	}
@@ -97,24 +103,29 @@ func GenerateAlbum(i int, genre *dao.Genre, artist *dao.Artist, art *dao.Art) *d
 	}
 
 	var genreID uint
+	var genreName string
 	if genre != nil {
 		genreID = genre.ID
+		genreName = genre.Name
 	}
 
 	a := dao.Album{
-		ID:       uint(i),
-		Name:     fmt.Sprintf("album%v", i),
-		Year:     1900 + i,
-		GenreID:  genreID,
-		Genre:    genre,
-		Artist:   artist,
-		ArtistID: artist.ID,
-		Art:      artPath,
-		Created:  &t,
-		Duration: i,
+		ID:         uint(i),
+		Name:       fmt.Sprintf("album%v", i),
+		Year:       1900 + i,
+		GenreID:    genreID,
+		Genre:      genre,
+		Artist:     artist,
+		ArtistID:   artist.ID,
+		Art:        artPath,
+		Created:    &t,
+		Duration:   i,
+		ArtistName: artist.Name,
+		GenreName:  genreName,
 	}
 
 	artist.Albums = append(artist.Albums, &a)
+	artist.AlbumCount++
 	if genre != nil {
 		genre.Albums = append(genre.Albums, &a)
 	}

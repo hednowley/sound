@@ -8,6 +8,9 @@
   provider_id: "mock"
   token: "path_1"
   year: 2000
+  album_name: "album_1"
+  album_artist_id: 1
+  genre_name: "genre_1"
 
 - id: 2
   album_id: 2
@@ -18,6 +21,8 @@
   provider_id: "mock"
   token: "path_2"
   year: 2010
+  album_name: "album_2"
+  album_artist_id: 1
 
 # Gap for missing song #3
 
@@ -31,7 +36,10 @@
   provider_id: "mock"
   token: "path_10"
   year: 2008
-
+  album_name: "album_2"
+  album_artist_id: 1
+  genre_name: "genre_1"
+ 
 - id: 14
   album_id: 2
   artist: "artist_1"
@@ -42,7 +50,10 @@
   provider_id: "mock"
   token: "path_14"
   year: 0
-
+  album_name: "album_2"
+  album_artist_id: 1
+  genre_name: "genre_2"
+ 
 - id: 15
   album_id: 2
   artist: "artist_1"
@@ -52,7 +63,9 @@
   provider_id: "mock"
   token: "path_15"
   year: -100
-
+  album_name: "album_2"
+  album_artist_id: 1
+ 
 # Same as song #2 but with different provider
 - id: 22
   artist: "artist_1"
@@ -62,3 +75,6 @@
   created: 2018-06-12 11:11:11
   provider_id: "mock2"
   token: "path_2"
+  album_name: "album_1"
+  album_artist_id: 1
+ 

@@ -1,8 +1,11 @@
 - id: 1
   name: "artist_1"
+  album_count: 1
 
 - id: 2
   name: "artist_2"
+  album_count: 1
 
 - id: 4
   name: "artist_4"
+  album_count: 0

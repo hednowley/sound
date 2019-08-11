@@ -16,7 +16,7 @@ func TestUser(t *testing.T) {
 	DTO := NewUser(user)
 
 	xml := `
-	<user username="dsauid" email="sdfhjfsd@dsid.com" scrobblingEnabled="false" adminRole="true" settingsRole="true" downloadRole="true" uploadRole="true" playlistRole="true" coverArtRole="true" commentRole="true" podcastRole="true" streamRole="true" jukeboxRole="true" shareRole="true"></user>
+	<user username="dsauid" email="sdfhjfsd@dsid.com" scrobblingEnabled="false" adminRole="true" settingsRole="true" downloadRole="true" uploadRole="true" playlistRole="true" coverArtRole="false" commentRole="false" podcastRole="false" streamRole="true" jukeboxRole="false" shareRole="false" videoConversionRole="false" folder="0"></user>
 	`
 
 	json := `
@@ -29,12 +29,14 @@ func TestUser(t *testing.T) {
 		"downloadRole":true,
 		"uploadRole":true,
 		"playlistRole":true,
-		"coverArtRole":true,
-		"commentRole":true,
-		"podcastRole":true,
+		"coverArtRole":false,
+		"commentRole":false,
+		"podcastRole":false,
 		"streamRole":true,
-		"jukeboxRole":true,
-		"shareRole":true
+		"jukeboxRole":false,
+		"shareRole":false,
+		"videoConversionRole":false,
+		"folder":[0]
 	 }
 	 `
 

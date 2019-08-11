@@ -53,6 +53,10 @@ func (dal *DAL) PutSong(song *dao.Song, data *entities.FileInfo) *dao.Song {
 	song.Bitrate = data.Bitrate
 	song.Duration = data.Duration
 
+	song.AlbumName = album.Name
+	song.AlbumArtistID = album.ArtistID
+	song.GenreName = genre.Name
+
 	if art != nil {
 		song.Art = art.Path
 	}
@@ -97,7 +101,7 @@ func (dal *DAL) SynchroniseAlbum(id uint) (*dao.Album, error) {
 
 	seelog.Infof("Synchronising album %v", id)
 
-	a, err := dal.GetAlbum(id, false, false, true)
+	a, err := dal.GetAlbum(id, true, true, true)
 	if err != nil {
 		return nil, err
 	}
@@ -106,9 +110,11 @@ func (dal *DAL) SynchroniseAlbum(id uint) (*dao.Album, error) {
 	genreSet := false
 	yearSet := false
 	duration := 0
+	var count uint
 
 	for _, song := range a.Songs {
 
+		count++
 		duration = duration + song.Duration
 
 		if !artSet && song.Art != "" {
@@ -126,6 +132,13 @@ func (dal *DAL) SynchroniseAlbum(id uint) (*dao.Album, error) {
 	}
 
 	a.Duration = duration
+	a.SongCount = count
+	a.ArtistName = a.Artist.Name
+
+	if a.Genre != nil {
+		a.GenreName = a.Genre.Name
+	}
+
 	dal.db.PutAlbum(a)
 	return a, nil
 }
@@ -152,6 +165,7 @@ func (dal *DAL) SynchroniseArtist(id uint) error {
 	}
 
 	a.Duration = duration
+	a.AlbumCount = uint(len(a.Albums))
 	dal.db.PutArtist(a)
 	return nil
 }
@@ -169,7 +183,7 @@ func (dal *DAL) PutPlaylist(id uint, name string, songIDs []uint) (uint, error) 
 		}
 		dal.db.AddPlaylist(p)
 	} else {
-		p = dal.db.GetPlaylist(id, false, false, false, false)
+		p = dal.db.GetPlaylist(id, false, false)
 		if p == nil {
 			return 0, &dao.ErrNotFound{}
 		}
@@ -241,7 +255,7 @@ func (dal *DAL) GetGenre(name string) (*dao.Genre, error) {
 }
 
 func (dal *DAL) GetPlaylist(id uint) (*dao.Playlist, error) {
-	p := dal.db.GetPlaylist(id, true, true, true, true)
+	p := dal.db.GetPlaylist(id, true, true)
 	if p == nil {
 		return nil, &dao.ErrNotFound{}
 	}
@@ -255,7 +269,7 @@ func (dal *DAL) GetPlaylist(id uint) (*dao.Playlist, error) {
 
 func (dal *DAL) UpdatePlaylist(id uint, name string, comment string, public *bool, addedSongs []uint, removedSongs []uint) error {
 
-	p := dal.db.GetPlaylist(id, true, false, false, false)
+	p := dal.db.GetPlaylist(id, true, false)
 	if p == nil {
 		return &dao.ErrNotFound{}
 	}
@@ -304,8 +318,8 @@ func (dal *DAL) GetAlbums(listType dao.AlbumList2Type, size uint, offset uint) [
 	return dal.db.GetAlbums(listType, size, offset)
 }
 
-func (dal *DAL) GetArtists() []*dao.Artist {
-	return dal.db.GetArtists()
+func (dal *DAL) GetArtists(includeAlbums bool) []*dao.Artist {
+	return dal.db.GetArtists(includeAlbums)
 }
 
 func (dal *DAL) GetGenres() []*dao.Genre {

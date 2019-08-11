@@ -23,4 +23,9 @@ type Song struct {
 	Token      string `gorm:"index:songs_token_idx"` // An ID unique to this song amongst other songs from its provider
 	ProviderID string `gorm:"index:songs_token_idx"` // THe ID of the provider which supplied this song
 	Starred    bool
+
+	// Precalculated fields which are stored for performance
+	AlbumName     string
+	AlbumArtistID uint
+	GenreName     string
 }

@@ -24,7 +24,7 @@ func NewDefault(config *config.Config) (*Default, error) {
 		Set("gorm:association_autocreate", false)
 	database := Default{db: db}
 
-	// db.LogMode(true)
+	//db.LogMode(true)
 
 	db.AutoMigrate(dao.Song{})
 	db.AutoMigrate(dao.Artist{})
@@ -139,7 +139,7 @@ func (db *Default) ReplacePlaylistEntries(playlist *dao.Playlist, entries []*dao
 
 // Getters
 
-func (db *Default) GetPlaylist(id uint, entries bool, songs bool, albums bool, artists bool) *dao.Playlist {
+func (db *Default) GetPlaylist(id uint, entries bool, songs bool) *dao.Playlist {
 	var p dao.Playlist
 	d := db.db
 	if entries {
@@ -147,12 +147,6 @@ func (db *Default) GetPlaylist(id uint, entries bool, songs bool, albums bool, a
 	}
 	if songs {
 		d = d.Preload("Entries.Song")
-	}
-	if albums {
-		d = d.Preload("Entries.Song.Album")
-	}
-	if artists {
-		d = d.Preload("Entries.Song.Album.Artist")
 	}
 	if d.Where(dao.Playlist{ID: id}).
 		First(&p).
@@ -262,7 +256,7 @@ func (db *Default) GetGenres() []*dao.Genre {
 func (db *Default) GetAlbums(listType dao.AlbumList2Type, size uint, offset uint) []*dao.Album {
 
 	var albums []*dao.Album
-	query := db.db.Preload("Songs").Preload("Artist")
+	query := db.db
 
 	switch listType {
 	case dao.Random:
@@ -280,7 +274,7 @@ func (db *Default) GetAlbums(listType dao.AlbumList2Type, size uint, offset uint
 	case dao.AlphabeticalByArtist:
 		query = query.Joins("JOIN artists ON albums.artist_id = artists.id").Order("UPPER(artists.name) asc")
 	case dao.ByYear:
-		query = query
+		query = query.Order("year asc")
 	case dao.ByGenre:
 		query = query
 	}
@@ -289,9 +283,15 @@ func (db *Default) GetAlbums(listType dao.AlbumList2Type, size uint, offset uint
 	return albums
 }
 
-func (db *Default) GetArtists() []*dao.Artist {
+func (db *Default) GetArtists(includeAlbums bool) []*dao.Artist {
 	var artists []*dao.Artist
-	db.db.Preload("Albums").Find(&artists)
+	query := db.db
+
+	if includeAlbums {
+		query = query.Preload("Albums")
+	}
+
+	query.Find(&artists)
 	return artists
 }
 
@@ -315,7 +315,7 @@ func (db *Default) UpdatePlaylist(playlist *dao.Playlist) {
 // Deleters
 
 func (db *Default) DeletePlaylist(id uint) error {
-	p := db.GetPlaylist(id, false, false, false, false)
+	p := db.GetPlaylist(id, false, false)
 	if p == nil {
 		return &dao.ErrNotFound{}
 	}
