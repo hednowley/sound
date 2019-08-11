@@ -27,9 +27,9 @@ type artistIndex struct {
 }
 
 type directoryIndex struct {
-	XMLName    xml.Name     `xml:"index" json:"-"`
-	Name       string       `xml:"name,attr" json:"name"`
-	Directorys []*Directory `xml:"artist" json:"artist"`
+	XMLName    xml.Name                  `xml:"index" json:"-"`
+	Name       string                    `xml:"name,attr" json:"name"`
+	Directorys []*ArtistDirectorySummary `xml:"artist" json:"artist"`
 }
 
 func newArtistIndex(artists []*dao.Artist, letter rune) *artistIndex {
@@ -47,9 +47,9 @@ func newArtistIndex(artists []*dao.Artist, letter rune) *artistIndex {
 
 func newDirectoryIndex(artists []*dao.Artist, letter rune) *directoryIndex {
 
-	dirs := make([]*Directory, len(artists))
+	dirs := make([]*ArtistDirectorySummary, len(artists))
 	for index, a := range artists {
-		dirs[index] = NewArtistDirectory(a)
+		dirs[index] = NewArtistDirectorySummary(a)
 	}
 
 	return &directoryIndex{

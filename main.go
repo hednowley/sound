@@ -23,7 +23,7 @@ import (
 )
 
 // registerSubsonicHandlers associates routes with handlers.
-func registerSubsonicHandlers(factory *api.HandlerFactory, config *config.Config, dal interfaces.DAL, scanner *provider.Scanner) {
+func registerSubsonicHandlers(factory *api.HandlerFactory, config *config.Config, dal interfaces.DAL, scanner *provider.Scanner, providers []provider.Provider) {
 
 	handlers := make(map[string]http.HandlerFunc)
 
@@ -43,7 +43,7 @@ func registerSubsonicHandlers(factory *api.HandlerFactory, config *config.Config
 	handlers["/subsonic/rest/getalbum"] = factory.PublishHandler(handler.NewGetAlbumHandler(dal))
 	handlers["/subsonic/rest/getsong"] = factory.PublishHandler(handler.NewGetSongHandler(dal))
 	handlers["/subsonic/rest/getrandomsongs"] = factory.PublishHandler(handler.NewGetRandomSongsHandler(dal))
-	handlers["/subsonic/rest/getmusicfolders"] = factory.PublishHandler(handler.NewGetMusicFoldersHandler())
+	handlers["/subsonic/rest/getmusicfolders"] = factory.PublishHandler(handler.NewGetMusicFoldersHandler(providers))
 	handlers["/subsonic/rest/getmusicdirectory"] = factory.PublishHandler(handler.NewGetMusicDirectoryHandler(dal))
 	handlers["/subsonic/rest/getgenres"] = factory.PublishHandler(handler.NewGetGenresHandler(dal))
 	handlers["/subsonic/rest/getsongsbygenre"] = factory.PublishHandler(handler.NewGetSongsByGenreHandler(dal))

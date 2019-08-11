@@ -10,12 +10,12 @@ import (
 type DirectoryType int
 
 const (
-	SongDirectory   DirectoryType = 0
-	AlbumDirectory  DirectoryType = 1
-	ArtistDirectory DirectoryType = 2
-	songPrefix                    = "song_"
-	albumPrefix                   = "album_"
-	artistPrefix                  = "artist_"
+	SongDirectoryType   DirectoryType = 0
+	AlbumDirectoryType  DirectoryType = 1
+	ArtistDirectoryType DirectoryType = 2
+	songPrefix                        = "song_"
+	albumPrefix                       = "album_"
+	artistPrefix                      = "artist_"
 )
 
 type DirectoryID struct {
@@ -29,7 +29,7 @@ func ParseDirectoryID(s string) (*DirectoryID, error) {
 		if id == 0 {
 			return nil, errors.New("Bad song ID")
 		}
-		return &DirectoryID{id, SongDirectory}, nil
+		return &DirectoryID{id, SongDirectoryType}, nil
 	}
 
 	if strings.HasPrefix(s, albumPrefix) {
@@ -37,7 +37,7 @@ func ParseDirectoryID(s string) (*DirectoryID, error) {
 		if id == 0 {
 			return nil, errors.New("Bad album ID")
 		}
-		return &DirectoryID{id, AlbumDirectory}, nil
+		return &DirectoryID{id, AlbumDirectoryType}, nil
 	}
 
 	if strings.HasPrefix(s, artistPrefix) {
@@ -45,7 +45,7 @@ func ParseDirectoryID(s string) (*DirectoryID, error) {
 		if id == 0 {
 			return nil, errors.New("Bad artist ID")
 		}
-		return &DirectoryID{id, ArtistDirectory}, nil
+		return &DirectoryID{id, ArtistDirectoryType}, nil
 	}
 
 	return nil, errors.New("Unknown directory ID")

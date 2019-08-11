@@ -8,9 +8,6 @@ import (
 )
 
 type songBody struct {
-	ID          uint      `xml:"id,attr" json:"id,string"`
-	Parent      uint      `xml:"parent,attr" json:"parent,string"`
-	IsDir       bool      `xml:"isDir,attr" json:"isDir"`
 	Title       string    `xml:"title,attr" json:"title"`
 	AlbumName   string    `xml:"album,attr" json:"album"`
 	ArtistName  string    `xml:"artist,attr" json:"artist"`
@@ -35,6 +32,7 @@ type songBody struct {
 
 type Song struct {
 	XMLName xml.Name `xml:"song" json:"-"`
+	ID      uint     `xml:"id,attr" json:"id,string"`
 	*songBody
 }
 
@@ -51,8 +49,7 @@ func newSongBody(song *dao.Song) *songBody {
 	}
 
 	return &songBody{
-		ID:         song.ID,
-		Parent:     song.AlbumID,
+
 		AlbumID:    song.AlbumID,
 		Title:      song.Title,
 		AlbumName:  song.Album.Name,
@@ -64,7 +61,6 @@ func newSongBody(song *dao.Song) *songBody {
 		Art:        song.Art,
 		Track:      song.Track,
 		Disc:       song.Disc,
-		IsDir:      false,
 		Type:       "music",
 		IsVideo:    false,
 		Created:    *song.Created,
@@ -79,6 +75,7 @@ func NewSong(song *dao.Song) *Song {
 
 	return &Song{
 		xml.Name{},
+		song.ID,
 		newSongBody(song),
 	}
 }

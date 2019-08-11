@@ -7,9 +7,7 @@ import (
 	"github.com/hednowley/sound/dao"
 )
 
-type Album struct {
-	XMLName   xml.Name   `xml:"album" json:"-"`
-	ID        uint       `xml:"id,attr" json:"id,string"`
+type albumBody struct {
 	Name      string     `xml:"name,attr" json:"name"`
 	Artist    string     `xml:"artist,attr" json:"artist"`
 	ArtistID  uint       `xml:"artistId,attr" json:"artistId,string"`
@@ -22,7 +20,7 @@ type Album struct {
 	Songs     []*Song    `xml:"song" json:"song,omitempty"`
 }
 
-func NewAlbum(album *dao.Album, includeSongs bool) *Album {
+func newAlbumBody(album *dao.Album, includeSongs bool) *albumBody {
 
 	count := len(album.Songs)
 	var songs []*Song
@@ -43,11 +41,10 @@ func NewAlbum(album *dao.Album, includeSongs bool) *Album {
 		genreName = album.Genre.Name
 	}
 
-	return &Album{
-		ID:        album.ID,
+	return &albumBody{
 		Name:      album.Name,
 		ArtistID:  album.ArtistID,
-		SongCount: len(album.Songs),
+		SongCount: count,
 		Artist:    artistName,
 		Songs:     songs,
 		Art:       album.Art,
@@ -55,5 +52,20 @@ func NewAlbum(album *dao.Album, includeSongs bool) *Album {
 		Genre:     genreName,
 		Year:      album.Year,
 		Duration:  album.Duration,
+	}
+
+}
+
+type Album struct {
+	XMLName xml.Name `xml:"album" json:"-"`
+	ID      uint     `xml:"id,attr" json:"id,string"`
+	*albumBody
+}
+
+func NewAlbum(album *dao.Album, includeSongs bool) *Album {
+	return &Album{
+		XMLName:   xml.Name{},
+		ID:        album.ID,
+		albumBody: newAlbumBody(album, includeSongs),
 	}
 }
