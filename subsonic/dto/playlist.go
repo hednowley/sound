@@ -29,12 +29,14 @@ type Playlist struct {
 
 type PlaylistEntry struct {
 	XMLName xml.Name `xml:"entry" json:"-"`
+	ID      uint     `xml:"id,attr" json:"id,string"`
 	*songBody
 }
 
 func newPlaylistEntry(song *dao.Song) *PlaylistEntry {
 	return &PlaylistEntry{
 		xml.Name{},
+		song.ID,
 		newSongBody(song),
 	}
 }

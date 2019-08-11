@@ -49,7 +49,6 @@ func newSongBody(song *dao.Song) *songBody {
 	}
 
 	return &songBody{
-
 		AlbumID:    song.AlbumID,
 		Title:      song.Title,
 		AlbumName:  song.Album.Name,
