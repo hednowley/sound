@@ -28,6 +28,14 @@ $ go build
 
 [Cross compiling](https://golangcookbook.com/chapters/running/cross-compiling/) is possible if you want to run _sound_ on a different device to the one you're building on.
 
+## Testing
+
+Before running tests, create an empty database called `sound_test` owned by a user `sound` with password `sound`.
+
+```shell
+$ go test -p 1 ./...
+```
+
 ## Running
 
 - Make a Postgres database and user for the application use.
