@@ -94,7 +94,7 @@ func (p *BeetsProvider) GetInfo(token string) (*entities.FileInfo, error) {
 	if err != nil {
 		return nil, fmt.Errorf("Unknown token '%v'", token)
 	}
-	row := p.beets.QueryRow("SELECT path, title, artist, album, album_id, albumartist, genre, track, disc, year, bitrate, length FROM items WHERE ID = ?", id)
+	row := p.beets.QueryRow("SELECT path, title, artist, album, album_id, albumartist, genre, track, disc, original_year, year, bitrate, length FROM items WHERE ID = ?", id)
 
 	var path string
 	var title string
@@ -105,11 +105,12 @@ func (p *BeetsProvider) GetInfo(token string) (*entities.FileInfo, error) {
 	var genre string
 	var track int
 	var disc int
+	var originalYear int
 	var year int
 	var bitrate int
 	var duration float64
 
-	err = row.Scan(&path, &title, &artist, &album, &albumID, &albumArtist, &genre, &track, &disc, &year, &bitrate, &duration)
+	err = row.Scan(&path, &title, &artist, &album, &albumID, &albumArtist, &genre, &track, &disc, &originalYear, &year, &bitrate, &duration)
 
 	if err == nil {
 
@@ -117,6 +118,11 @@ func (p *BeetsProvider) GetInfo(token string) (*entities.FileInfo, error) {
 		if err != nil {
 			seelog.Errorf("Error getting art for '%v': %v", title, err)
 			art = nil
+		}
+
+		// Prefer original year
+		if originalYear != 0 {
+			year = originalYear
 		}
 
 		return &entities.FileInfo{
