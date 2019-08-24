@@ -1,0 +1,17 @@
+language: go
+
+go:
+  - 1.11.x
+
+services:
+  - postgresql
+
+before_install:
+  - go get github.com/mattn/goveralls
+
+before_script:
+  - psql -c "create user sound with password 'sound';" -U postgres
+  - psql -c "create database sound_test owner sound;" -U postgres
+
+script:
+  - $GOPATH/bin/goveralls -service=travis-ci

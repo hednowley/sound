@@ -1,22 +1,55 @@
-secret: "secret"
+# A random string used to encrypt login credentials. Change this!
+secret: "changeme"
+
+# The port the application will listen on.
 port: 3684
-#path: "D:\\data"
-art path: "D:\\temp\\art"
-resize art: true
+
+# A directory where cover art wil be stored.
+art path: "~/temp/art"
+
+# Connection string to the application's Postgres database.
 db: "host=localhost port=5432 user=postgres password=sound dbname=sound sslmode=disable"
+
+# Path to the logging configuration file.
 log config: "log-config.xml"
-extensions:
-    - mp3
+
+# Any artist whose name begins with one of these words will be sorted as if that word wasn't there.
 ignored articles:
-    - The
-    - El
+  - A
+  - The
+  - El
+  - Los
+
+# Add an entry for each folder which you want to be scanned for music.
+filesystem:
+  - # Path to the folder
+    path: "~/temp/my music"
+
+    # Any name to refer to this folder by
+    name: "Gertrude's bangers"
+
+    # Files will only be scanned if they have one of these extensions
+    extensions:
+      - mp3
+      - flac
+
+# Add an entry for each beets library which you want to be scanned for music.
+beets:
+  - # Path to the library's database file
+    database: "~/beets/beetslib.blb"
+
+    # Any name to refer to this beets library by
+    name: "My beets music"
+
+# Add an entry for each user you want to set up
 users:
-    - username: ned
-      password: hello
-      email: ned@blah.com
-    - username: ned2
-      password: hello2
-      email: ned2@blah.com
-beets db: "C:\\beetslib.blb"
+  - username: gertrude
+    password: changeme
+
+# The CORS header value which will be included in every response
+# https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin
 access control allow origin: "*"
+
+# How many seconds websocket tickets are valid for after being requested.
+# This is used by the front-end web app and does not usually need to be changed.
 websocket ticket expiry: 30
