@@ -105,7 +105,7 @@ func registerAPIHandlers(factory *api2.HandlerFactory, config *config.Config, au
 }
 
 func start(config *config.Config) {
-	log.Error(http.ListenAndServe(":"+config.Port, nil))
+	log.Error(http.ListenAndServe(fmt.Sprintf(":%v", config.Port), nil))
 	log.Info(`********************`)
 	log.Info("Application started!")
 	log.Info(`********************`)
@@ -125,7 +125,7 @@ func main() {
 
 	app := fx.New(
 		fx.Provide(
-			config.NewConfig,
+			config.NewConfig("config.yaml"),
 			database.NewDefault,
 			provider.NewProviders,
 			dal.NewDAL,

@@ -1,0 +1,39 @@
+secret: "changeme"
+
+port: 3684
+
+art path: "~/temp/art"
+
+db: "host=localhost port=5432 user=postgres password=sound dbname=sound sslmode=disable"
+
+log config: "log-config.xml"
+
+ignored articles:
+  - A
+  - The
+  - El
+  - Los
+
+filesystem:
+  - path: "~/temp/my music"
+    name: "Gertrude's bangers"
+    extensions:
+      - mp3
+      - flac
+
+  - path: "~/temp2/my music"
+    name: "Choons"
+    extensions:
+      - docx
+
+beets:
+  - database: "~/beets/beetslib.blb"
+    name: "My beets music"
+
+users:
+  - username: gertrude
+    password: changeme
+
+access control allow origin: "*"
+
+websocket ticket expiry: 30

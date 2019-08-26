@@ -7,7 +7,7 @@ import (
 )
 
 type Config struct {
-	Port                     string
+	Port                     int
 	ArtPath                  string `yaml:"art path"`
 	Db                       string
 	LogConfig                string   `yaml:"log config"`
@@ -37,13 +37,18 @@ type User struct {
 	Email    string
 }
 
-func NewConfig() (*Config, error) {
-	yamlData, err := ioutil.ReadFile("config.yaml")
-	if err != nil {
-		return nil, err
-	}
+// NewConfig creates config from the YAML at the provided path.
+// It's defined as a nullary function so we can inject the path before passing
+// the constructor to FX.
+func NewConfig(path string) func() (*Config, error) {
+	return func() (*Config, error) {
+		yamlData, err := ioutil.ReadFile(path)
+		if err != nil {
+			return nil, err
+		}
 
-	var c Config
-	err = yaml.Unmarshal(yamlData, &c)
-	return &c, err
+		var c Config
+		err = yaml.Unmarshal(yamlData, &c)
+		return &c, err
+	}
 }
