@@ -79,16 +79,19 @@ func (factory *HandlerFactory) PublishBinaryHandler(handler BinaryHandler) http.
 	return func(w http.ResponseWriter, r *http.Request) {
 
 		var response *Response
+		var format *responseFormat
+		var params url.Values
 
 		body, err := ioutil.ReadAll(r.Body)
 		if err != nil {
 			message := fmt.Sprintf("Error reading body: %v", err.Error())
 			response = NewErrorReponse(dto.Generic, message)
+			goto respond
 		}
 
-		params := parseParams(r.URL.Query(), body)
+		params = parseParams(r.URL.Query(), body)
 
-		format := parseResponseFormat(params.Get("f"))
+		format = parseResponseFormat(params.Get("f"))
 		if format == nil {
 			response = NewErrorReponse(dto.Generic, "Unknown format")
 			format = &defaultFormat
