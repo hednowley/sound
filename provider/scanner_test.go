@@ -16,14 +16,14 @@ func TestAddOnlyScan(t *testing.T) {
 
 	f := []*entities.FileInfo{
 		// Existing song with different title
-		&entities.FileInfo{
+		{
 			Album:       "album_2",
 			AlbumArtist: "artist_2",
 			Path:        "path_2",
 			Title:       "Y.M.C.A.",
 		},
 		// New song
-		&entities.FileInfo{
+		{
 			Album:       "new_album",
 			AlbumArtist: "new_artist",
 			Path:        "new_path",
@@ -81,7 +81,7 @@ func TestUpdateScan(t *testing.T) {
 
 	f := []*entities.FileInfo{
 		// Existing song with different info
-		&entities.FileInfo{
+		{
 			Album:       "album_2",
 			AlbumArtist: "artist_1",
 			Path:        "path_2",
@@ -89,7 +89,7 @@ func TestUpdateScan(t *testing.T) {
 			Genre:       "Neurofunk", // Different
 		},
 		// New song
-		&entities.FileInfo{
+		{
 			Album:       "new_album",
 			AlbumArtist: "new_artist",
 			Path:        "new_path",
@@ -154,7 +154,7 @@ func TestDeleteScan(t *testing.T) {
 
 	f := []*entities.FileInfo{
 		// Existing song with different info
-		&entities.FileInfo{
+		{
 			Album:       "album_2",
 			AlbumArtist: "artist_1",
 			Path:        "path_2",
@@ -162,7 +162,7 @@ func TestDeleteScan(t *testing.T) {
 			Genre:       "Neurofunk", // Different
 		},
 		// New song
-		&entities.FileInfo{
+		{
 			Album:       "new_album",
 			AlbumArtist: "artist_1",
 			Path:        "new_path",

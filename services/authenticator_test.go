@@ -9,12 +9,12 @@ import (
 
 var c = config.Config{
 	Users: []config.User{
-		config.User{
+		{
 			Username: "billy",
 			Password: "apple tart!!!",
 			Email:    "billy@bigbugs.com",
 		},
-		config.User{
+		{
 			Username: "tom tom",
 			Password: "sfjksdfjk",
 			Email:    "tom@bigbugs.com",

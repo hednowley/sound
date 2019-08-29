@@ -17,7 +17,7 @@ func TestController(t *testing.T) {
 	cfg := config.Config{
 		Secret: "secret",
 		Users: []config.User{
-			config.User{
+			{
 				Username: "billy",
 				Password: "apple tart!!!",
 				Email:    "billy@bigbugs.com",

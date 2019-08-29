@@ -1,4 +1,6 @@
 {
     "go.docsTool": "gogetdoc",
-    "go.formatTool": "gofmt"
+    "go.formatFlags": [
+        "-s"
+    ]
 }
