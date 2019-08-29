@@ -7,7 +7,12 @@
             "label": "Run all tests",
             "type": "shell",
             "command": "go test -p 1 ./...",
-            "problemMatcher": "$go",
+            "problemMatcher": "$go"
+        },
+        {
+            "label": "Format all go",
+            "type": "shell",
+            "command": " gofmt -s -w ./"
         }
     ]
 }
