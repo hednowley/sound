@@ -17,7 +17,7 @@ import (
 	"github.com/hednowley/sound/interfaces"
 )
 
-// DAL (data access layer) allows high-level manipulation of application data.
+// DAL (data access layer) allows querying and writing application data.
 type DAL struct {
 	db     *database.Default
 	artDir string

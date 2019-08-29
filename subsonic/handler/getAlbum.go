@@ -10,8 +10,8 @@ import (
 	"github.com/hednowley/sound/util"
 )
 
-// NewGetAlbumHandler is a handler for getting information about an album.
-func NewGetAlbumHandler(database interfaces.DAL) api.Handler {
+// NewGetAlbumHandler does http://www.subsonic.org/pages/api.jsp#getAlbum
+func NewGetAlbumHandler(dal interfaces.DAL) api.Handler {
 
 	return func(params url.Values) *api.Response {
 
@@ -21,7 +21,7 @@ func NewGetAlbumHandler(database interfaces.DAL) api.Handler {
 			return api.NewErrorReponse(dto.MissingParameter, "Required param (id) is missing")
 		}
 
-		album, err := database.GetAlbum(id, false, false, true)
+		album, err := dal.GetAlbum(id, false, false, true)
 		if err != nil {
 			if _, ok := err.(*dao.ErrNotFound); ok {
 				return api.NewErrorReponse(dto.NotFound, "Album not found.")

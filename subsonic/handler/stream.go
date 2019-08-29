@@ -42,7 +42,8 @@ func parseStreamFormat(param string) *StreamFormat {
 	return nil
 }
 
-func NewStreamHandler(database interfaces.DAL) api.BinaryHandler {
+// NewStreamHandler does http://www.subsonic.org/pages/api.jsp#stream
+func NewStreamHandler(dal interfaces.DAL) api.BinaryHandler {
 
 	return func(params url.Values, w *http.ResponseWriter, r *http.Request) *api.Response {
 
@@ -72,7 +73,7 @@ func NewStreamHandler(database interfaces.DAL) api.BinaryHandler {
 			}
 		*/
 
-		file, err := database.GetSong(id, false, false, false)
+		file, err := dal.GetSong(id, false, false, false)
 		if err != nil {
 			return api.NewErrorReponse(dto.Generic, err.Error())
 		}

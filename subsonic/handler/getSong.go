@@ -10,7 +10,8 @@ import (
 	"github.com/hednowley/sound/util"
 )
 
-func NewGetSongHandler(database interfaces.DAL) api.Handler {
+// NewGetSongHandler does http://www.subsonic.org/pages/api.jsp#getSong
+func NewGetSongHandler(dal interfaces.DAL) api.Handler {
 
 	return func(params url.Values) *api.Response {
 
@@ -20,7 +21,7 @@ func NewGetSongHandler(database interfaces.DAL) api.Handler {
 			return api.NewErrorReponse(dto.MissingParameter, "Required param (id) is missing")
 		}
 
-		file, err := database.GetSong(id, false, false, false)
+		file, err := dal.GetSong(id, false, false, false)
 		if err != nil {
 			if dao.IsErrNotFound(err) {
 				return api.NewErrorReponse(dto.NotFound, "Song not found.")

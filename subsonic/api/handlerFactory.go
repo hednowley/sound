@@ -66,6 +66,7 @@ respond:
 
 }
 
+// PublishHandler converts a friendly handler into a HandlerFunc.
 func (factory *HandlerFactory) PublishHandler(handler Handler) http.HandlerFunc {
 	b := func(params url.Values, w *http.ResponseWriter, r *http.Request) *Response {
 		return handler(params)
@@ -73,6 +74,7 @@ func (factory *HandlerFactory) PublishHandler(handler Handler) http.HandlerFunc 
 	return factory.PublishBinaryHandler(b)
 }
 
+// PublishBinaryHandler converts a friendly binary handler into a HandlerFunc.
 func (factory *HandlerFactory) PublishBinaryHandler(handler BinaryHandler) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 
@@ -84,8 +86,6 @@ func (factory *HandlerFactory) PublishBinaryHandler(handler BinaryHandler) http.
 			response = NewErrorReponse(dto.Generic, message)
 		}
 
-		//log.Debugf("\nREQUEST: %v\n%v\n", r.URL, string(body))
-
 		params := parseParams(r.URL.Query(), body)
 
 		format := parseResponseFormat(params.Get("f"))
@@ -95,6 +95,7 @@ func (factory *HandlerFactory) PublishBinaryHandler(handler BinaryHandler) http.
 			goto respond
 		}
 
+		// All endpoints require authentication
 		if !authenticate(&params, factory.authenticator) {
 			response = NewErrorReponse(dto.WrongCredentials, "Wrong username or password.")
 			goto respond
@@ -111,7 +112,6 @@ func (factory *HandlerFactory) PublishBinaryHandler(handler BinaryHandler) http.
 		if *format == xmlFormat {
 			s := serialiseToXML(response)
 			fmt.Fprint(w, s)
-			//log.Debugf("\nRESPONSE: %v\n%v\n", r.URL, s)
 			return
 		}
 
@@ -119,7 +119,6 @@ func (factory *HandlerFactory) PublishBinaryHandler(handler BinaryHandler) http.
 			w.Header().Set("Content-Type", "application/json;charset=UTF-8")
 			s := serialiseToJSON(response)
 			fmt.Fprint(w, s)
-			//log.Debugf("\nRESPONSE: %v\n%v\n", r.URL, s)
 			return
 		}
 	}

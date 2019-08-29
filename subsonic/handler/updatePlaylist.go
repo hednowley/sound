@@ -10,7 +10,8 @@ import (
 	"github.com/hednowley/sound/util"
 )
 
-func NewUpdatePlaylistHandler(database interfaces.DAL) api.Handler {
+// NewUpdatePlaylistHandler does http://www.subsonic.org/pages/api.jsp#updatePlaylist
+func NewUpdatePlaylistHandler(dal interfaces.DAL) api.Handler {
 
 	return func(params url.Values) *api.Response {
 
@@ -44,7 +45,7 @@ func NewUpdatePlaylistHandler(database interfaces.DAL) api.Handler {
 			}
 		}
 
-		err := database.UpdatePlaylist(id, name, comment, public, addedSongs, removedSongs)
+		err := dal.UpdatePlaylist(id, name, comment, public, addedSongs, removedSongs)
 		if err != nil {
 			api.NewErrorReponse(0, err.Error())
 		}

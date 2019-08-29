@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	log "github.com/cihub/seelog"
+	"github.com/hednowley/sound/api/api"
 	"github.com/hednowley/sound/api/controller"
 	"github.com/hednowley/sound/config"
 	"github.com/hednowley/sound/dal"
@@ -13,68 +14,21 @@ import (
 	"github.com/hednowley/sound/interfaces"
 	"github.com/hednowley/sound/provider"
 	"github.com/hednowley/sound/services"
-	"github.com/hednowley/sound/subsonic/api"
-	"github.com/hednowley/sound/subsonic/handler"
+	subsonic "github.com/hednowley/sound/subsonic/api"
+	subsonicRoutes "github.com/hednowley/sound/subsonic/routes"
 	"github.com/hednowley/sound/ws"
 	"github.com/hednowley/sound/ws/handlers"
 	"go.uber.org/fx"
-
-	api2 "github.com/hednowley/sound/api/api"
 )
 
-// registerSubsonicHandlers associates routes with handlers.
-func registerSubsonicHandlers(factory *api.HandlerFactory, config *config.Config, dal interfaces.DAL, scanner *provider.Scanner, providers []provider.Provider) {
+// registerRoutes starts listening for HTTP requests.
+func registerRoutes(factory *api.HandlerFactory, config *config.Config, authenticator *services.Authenticator, ticketer *ws.Ticketer, dal interfaces.DAL, hub interfaces.Hub, scanner *provider.Scanner, routes subsonicRoutes.Routes) {
 
-	handlers := make(map[string]http.HandlerFunc)
-
-	handlers["/subsonic/rest/ping"] = factory.PublishHandler(handler.NewPingHandler())
-	handlers["/subsonic/rest/getlicense"] = factory.PublishHandler(handler.NewGetLicenseHandler())
-
-	// Scanning
-	handlers["/subsonic/rest/getscanstatus"] = factory.PublishHandler(handler.NewGetScanStatusHandler(scanner))
-	handlers["/subsonic/rest/startscan"] = factory.PublishHandler(handler.NewStartScanHandler(scanner))
-	handlers["/subsonic/rest/delete"] = factory.PublishHandler(handler.NewDeleteHandler(dal))
-
-	// Querying
-	handlers["/subsonic/rest/getalbumlist2"] = factory.PublishHandler(handler.NewGetAlbumList2Handler(dal))
-	handlers["/subsonic/rest/getartists"] = factory.PublishHandler(handler.NewGetArtistsHandler(dal, config))
-	handlers["/subsonic/rest/getindexes"] = factory.PublishHandler(handler.NewGetIndexesHandler(dal, config))
-	handlers["/subsonic/rest/getartist"] = factory.PublishHandler(handler.NewGetArtistHandler(dal))
-	handlers["/subsonic/rest/getalbum"] = factory.PublishHandler(handler.NewGetAlbumHandler(dal))
-	handlers["/subsonic/rest/getsong"] = factory.PublishHandler(handler.NewGetSongHandler(dal))
-	handlers["/subsonic/rest/getrandomsongs"] = factory.PublishHandler(handler.NewGetRandomSongsHandler(dal))
-	handlers["/subsonic/rest/getmusicfolders"] = factory.PublishHandler(handler.NewGetMusicFoldersHandler(providers))
-	handlers["/subsonic/rest/getmusicdirectory"] = factory.PublishHandler(handler.NewGetMusicDirectoryHandler(dal))
-	handlers["/subsonic/rest/getgenres"] = factory.PublishHandler(handler.NewGetGenresHandler(dal))
-	handlers["/subsonic/rest/getsongsbygenre"] = factory.PublishHandler(handler.NewGetSongsByGenreHandler(dal))
-	handlers["/subsonic/rest/search2"] = factory.PublishHandler(handler.NewSearchHandler(dal, handler.Search2))
-	handlers["/subsonic/rest/search3"] = factory.PublishHandler(handler.NewSearchHandler(dal, handler.Search3))
-
-	// Users
-	handlers["/subsonic/rest/getusers"] = factory.PublishHandler(handler.NewGetUsersHandler(config))
-	handlers["/subsonic/rest/getuser"] = factory.PublishHandler(handler.NewGetUserHandler(config))
-
-	// Data
-	handlers["/subsonic/rest/getcoverart"] = factory.PublishBinaryHandler(handler.NewGetCoverArtHandler(dal))
-	handlers["/subsonic/rest/stream"] = factory.PublishBinaryHandler(handler.NewStreamHandler(dal))
-	handlers["/subsonic/rest/download"] = factory.PublishBinaryHandler(handler.NewDownloadHandler(dal))
-
-	// Playlists
-	handlers["/subsonic/rest/createplaylist"] = factory.PublishHandler(handler.NewCreatePlaylistHandler(dal))
-	handlers["/subsonic/rest/getplaylists"] = factory.PublishHandler(handler.NewGetPlaylistsHandler(dal))
-	handlers["/subsonic/rest/getplaylist"] = factory.PublishHandler(handler.NewGetPlaylistHandler(dal))
-	handlers["/subsonic/rest/deleteplaylist"] = factory.PublishHandler(handler.NewDeletePlaylistHandler(dal))
-	handlers["/subsonic/rest/updateplaylist"] = factory.PublishHandler(handler.NewUpdatePlaylistHandler(dal))
-
-	handlers["/subsonic/rest/star"] = factory.PublishHandler(handler.NewStarHandler(dal, true))
-	handlers["/subsonic/rest/unstar"] = factory.PublishHandler(handler.NewStarHandler(dal, false))
-
+	// Subsonic API routes
 	http.HandleFunc("/subsonic/", func(w http.ResponseWriter, r *http.Request) {
-		defer log.Flush()
-		log.Info(fmt.Sprintf("Request received: %v", r.URL.Path))
 		path := strings.ToLower(strings.Split(r.URL.Path, ".")[0])
 
-		for p, h := range handlers {
+		for p, h := range routes {
 			if p == path {
 				h(w, r)
 				return
@@ -84,24 +38,21 @@ func registerSubsonicHandlers(factory *api.HandlerFactory, config *config.Config
 		w.WriteHeader(http.StatusNotFound)
 	})
 
-	defer log.Flush()
-}
-
-func registerAPIHandlers(factory *api2.HandlerFactory, config *config.Config, authenticator *services.Authenticator, ticketer *ws.Ticketer, dal interfaces.DAL, hub interfaces.Hub, scanner *provider.Scanner) {
-
+	// Serves the front-end
 	http.Handle("/", http.FileServer(http.Dir("static")))
 
+	// Endpoints for websocket negotiation
 	http.HandleFunc("/api/authenticate", factory.NewHandler(controller.NewAuthenticateController(authenticator, config)))
 	http.HandleFunc("/api/ticket", factory.NewHandler(controller.NewTicketController(ticketer)))
+	http.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {
+		hub.AddClient(ticketer, dal, w, r)
+	})
 
+	// Websocket endpoints
 	hub.SetHandler("getArtists", handlers.MakeGetArtistsHandler(dal))
 	hub.SetHandler("startScan", handlers.MakeStartScanHandler(scanner))
 
 	go hub.Run()
-
-	http.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {
-		hub.AddClient(ticketer, dal, w, r)
-	})
 }
 
 func start(config *config.Config) {
@@ -133,11 +84,11 @@ func main() {
 			provider.NewScanner,
 			services.NewAuthenticator,
 			ws.NewTicketer,
+			subsonic.NewHandlerFactory,
 			api.NewHandlerFactory,
-			api2.NewHandlerFactory),
-		fx.Invoke(setUpLogger,
-			registerSubsonicHandlers,
-			registerAPIHandlers, start),
+			subsonicRoutes.NewRoutes,
+		),
+		fx.Invoke(setUpLogger, registerRoutes, start),
 	)
 
 	app.Run()

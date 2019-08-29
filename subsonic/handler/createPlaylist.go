@@ -11,7 +11,7 @@ import (
 	"github.com/hednowley/sound/util"
 )
 
-// NewCreatePlaylistHandler is a handler for creating or updating playlists.
+// NewCreatePlaylistHandler does http://www.subsonic.org/pages/api.jsp#createPlaylist
 func NewCreatePlaylistHandler(dal interfaces.DAL) api.Handler {
 
 	return func(params url.Values) *api.Response {

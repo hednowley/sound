@@ -11,8 +11,8 @@ import (
 	"github.com/hednowley/sound/util"
 )
 
-// NewDownloadHandler is a handler for downloading songs.
-func NewDownloadHandler(database interfaces.DAL) api.BinaryHandler {
+// NewDownloadHandler does http://www.subsonic.org/pages/api.jsp#download
+func NewDownloadHandler(dal interfaces.DAL) api.BinaryHandler {
 
 	return func(params url.Values, w *http.ResponseWriter, r *http.Request) *api.Response {
 
@@ -22,7 +22,7 @@ func NewDownloadHandler(database interfaces.DAL) api.BinaryHandler {
 			return api.NewErrorReponse(dto.Generic, fmt.Sprintf("Song not found: %v", idParam))
 		}
 
-		file, err := database.GetSong(id, false, false, false)
+		file, err := dal.GetSong(id, false, false, false)
 		if err != nil {
 			return api.NewErrorReponse(dto.Generic, err.Error())
 		}

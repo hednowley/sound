@@ -9,7 +9,8 @@ import (
 	"github.com/hednowley/sound/util"
 )
 
-func NewGetRandomSongsHandler(database interfaces.DAL) api.Handler {
+// NewGetRandomSongsHandler does http://www.subsonic.org/pages/api.jsp#getRandomSongs
+func NewGetRandomSongsHandler(dal interfaces.DAL) api.Handler {
 
 	return func(params url.Values) *api.Response {
 
@@ -24,7 +25,7 @@ func NewGetRandomSongsHandler(database interfaces.DAL) api.Handler {
 		toParam := params.Get("toYear")
 		to := util.ParseUint(toParam, 0)
 
-		songs := database.GetRandomSongs(size, from, to, genre)
+		songs := dal.GetRandomSongs(size, from, to, genre)
 		return api.NewSuccessfulReponse(dto.NewRandomSongs(songs))
 	}
 }

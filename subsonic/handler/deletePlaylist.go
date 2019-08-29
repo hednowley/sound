@@ -11,8 +11,8 @@ import (
 	"github.com/hednowley/sound/util"
 )
 
-// NewDeletePlaylistHandler is a handler for deleting playlists.
-func NewDeletePlaylistHandler(database interfaces.DAL) api.Handler {
+// NewDeletePlaylistHandler does http://www.subsonic.org/pages/api.jsp#deletePlaylist
+func NewDeletePlaylistHandler(dal interfaces.DAL) api.Handler {
 
 	return func(params url.Values) *api.Response {
 
@@ -22,7 +22,7 @@ func NewDeletePlaylistHandler(database interfaces.DAL) api.Handler {
 			return api.NewErrorReponse(dto.MissingParameter, "Required param (id) is missing")
 		}
 
-		err := database.DeletePlaylist(id)
+		err := dal.DeletePlaylist(id)
 		if err != nil {
 			if _, ok := err.(*dao.ErrNotFound); ok {
 				message := fmt.Sprintf("Playlist not found: %v", idParam)

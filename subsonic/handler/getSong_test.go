@@ -4,8 +4,8 @@ import (
 	"net/url"
 	"testing"
 
-	"github.com/hednowley/sound/subsonic/api"
 	"github.com/hednowley/sound/dal"
+	"github.com/hednowley/sound/subsonic/api"
 	"github.com/hednowley/sound/subsonic/dto"
 	"github.com/hednowley/sound/subsonic/handler"
 )

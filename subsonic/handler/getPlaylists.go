@@ -8,11 +8,11 @@ import (
 	"github.com/hednowley/sound/subsonic/dto"
 )
 
-func NewGetPlaylistsHandler(database interfaces.DAL) api.Handler {
+// NewGetPlaylistsHandler does http://www.subsonic.org/pages/api.jsp#getPlaylists
+func NewGetPlaylistsHandler(dal interfaces.DAL) api.Handler {
 
 	return func(params url.Values) *api.Response {
-
-		playlists := database.GetPlaylists()
+		playlists := dal.GetPlaylists()
 		return api.NewSuccessfulReponse(dto.NewPlaylistCollection(playlists))
 	}
 }

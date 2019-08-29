@@ -6,6 +6,7 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
+// Config is a data object which holds the app's settings.
 type Config struct {
 	Port                     int
 	ArtPath                  string `yaml:"art path"`

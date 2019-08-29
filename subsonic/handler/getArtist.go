@@ -10,7 +10,8 @@ import (
 	"github.com/hednowley/sound/util"
 )
 
-func NewGetArtistHandler(database interfaces.DAL) api.Handler {
+// NewGetArtistHandler does http://www.subsonic.org/pages/api.jsp#getArtist
+func NewGetArtistHandler(dal interfaces.DAL) api.Handler {
 
 	return func(params url.Values) *api.Response {
 
@@ -20,7 +21,7 @@ func NewGetArtistHandler(database interfaces.DAL) api.Handler {
 			return api.NewErrorReponse(dto.MissingParameter, "Required param (id) is missing")
 		}
 
-		artist, err := database.GetArtist(id)
+		artist, err := dal.GetArtist(id)
 		if err != nil {
 			if _, ok := err.(*dao.ErrNotFound); ok {
 				return api.NewErrorReponse(dto.NotFound, "Artist not found.")

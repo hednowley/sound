@@ -9,9 +9,10 @@ import (
 	"github.com/hednowley/sound/subsonic/dto"
 )
 
-func NewGetIndexesHandler(database interfaces.DAL, conf *config.Config) api.Handler {
+// NewGetIndexesHandler does http://www.subsonic.org/pages/api.jsp#getIndexes
+func NewGetIndexesHandler(dal interfaces.DAL, conf *config.Config) api.Handler {
 	return func(params url.Values) *api.Response {
-		artists := database.GetArtists(false)
+		artists := dal.GetArtists(false)
 		return api.NewSuccessfulReponse(dto.NewIndexCollection(artists, conf))
 	}
 }

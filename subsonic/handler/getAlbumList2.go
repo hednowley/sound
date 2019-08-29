@@ -47,7 +47,7 @@ func parseListType(param string) *dao.AlbumList2Type {
 }
 
 // NewGetAlbumList2Handler is a handler for getting information about a sample albums.
-func NewGetAlbumList2Handler(database interfaces.DAL) api.Handler {
+func NewGetAlbumList2Handler(dal interfaces.DAL) api.Handler {
 
 	return func(params url.Values) *api.Response {
 
@@ -63,7 +63,7 @@ func NewGetAlbumList2Handler(database interfaces.DAL) api.Handler {
 
 		offset := util.ParseUint(params.Get("offset"), 0)
 
-		albums := database.GetAlbums(*listType, size, offset)
+		albums := dal.GetAlbums(*listType, size, offset)
 		return api.NewSuccessfulReponse(dto.NewAlbumList2(albums))
 	}
 }

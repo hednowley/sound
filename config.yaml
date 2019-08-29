@@ -15,36 +15,36 @@ log config: "log-config.xml"
 
 # Any artist whose name begins with one of these words will be sorted as if that word wasn't there.
 ignored articles:
-  - A
-  - The
-  - El
-  - Los
+    - A
+    - The
+    - El
+    - Los
 
 # Add an entry for each folder which you want to be scanned for music.
 filesystem:
-  - # Path to the folder
-    path: "~/temp/my music"
+    - # Path to the folder
+      path: "~/temp/my music"
 
-    # Any name to refer to this folder by
-    name: "Gertrude's bangers"
+      # Any name to refer to this folder by
+      name: "Gertrude's bangers"
 
-    # Files will only be scanned if they have one of these extensions
-    extensions:
-      - mp3
-      - flac
+      # Files will only be scanned if they have one of these extensions
+      extensions:
+          - mp3
+          - flac
 
 # Add an entry for each beets library which you want to be scanned for music.
 beets:
-  - # Path to the library's database file
-    database: "~/beets/beetslib.blb"
+    - # Path to the library's database file
+      database: "~/beets/beetslib.blb"
 
-    # Any name to refer to this beets library by
-    name: "My beets music"
+      # Any name to refer to this beets library by
+      name: "My beets music"
 
 # Add an entry for each user you want to set up
 users:
-  - username: gertrude
-    password: changeme
+    - username: gertrude
+      password: changeme
 
 # The CORS header value which will be included in every response
 # https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin

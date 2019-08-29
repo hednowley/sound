@@ -8,9 +8,10 @@ import (
 	"github.com/hednowley/sound/subsonic/dto"
 )
 
-func NewGetGenresHandler(database interfaces.DAL) api.Handler {
+// NewGetGenresHandler does http://www.subsonic.org/pages/api.jsp#getGenres
+func NewGetGenresHandler(dal interfaces.DAL) api.Handler {
 	return func(params url.Values) *api.Response {
-		genres := database.GetGenres()
+		genres := dal.GetGenres()
 		return api.NewSuccessfulReponse(dto.NewGenres(genres))
 	}
 }
