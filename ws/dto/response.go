@@ -2,7 +2,7 @@ package dto
 
 const version = "2.0"
 
-// Reponse follows JSON-RPC syntax.
+// Response follows JSON-RPC syntax.
 type Response struct {
 	Error   string      `json:"error,omitempty"`
 	Result  interface{} `json:"result,omitempty"`
