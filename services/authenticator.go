@@ -85,3 +85,14 @@ func (a *Authenticator) AuthenticateFromJWT(token string) *config.User {
 	}
 	return nil
 }
+
+// MakeJWT creates a JSON web token from an auth claim.
+func (a *Authenticator) MakeJWT(username string) (string, error) {
+
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+		"u": username,
+		//"nbf": time.Date(2015, 10, 10, 12, 0, 0, 0, time.UTC).Unix(),
+	})
+
+	return token.SignedString([]byte(a.secret))
+}

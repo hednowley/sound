@@ -22,7 +22,14 @@ import (
 )
 
 // registerRoutes starts listening for HTTP requests.
-func registerRoutes(factory *api.HandlerFactory, config *config.Config, authenticator *services.Authenticator, ticketer *ws.Ticketer, dal interfaces.DAL, hub interfaces.Hub, scanner *provider.Scanner, routes subsonicRoutes.Routes) {
+func registerRoutes(
+	factory *api.HandlerFactory,
+	authenticator *services.Authenticator,
+	ticketer *ws.Ticketer,
+	dal interfaces.DAL,
+	hub interfaces.Hub,
+	scanner *provider.Scanner,
+	routes subsonicRoutes.Routes) {
 
 	// Subsonic API routes
 	http.HandleFunc("/subsonic/", func(w http.ResponseWriter, r *http.Request) {
@@ -42,7 +49,7 @@ func registerRoutes(factory *api.HandlerFactory, config *config.Config, authenti
 	http.Handle("/", http.FileServer(http.Dir("static")))
 
 	// Endpoints for websocket negotiation
-	http.HandleFunc("/api/authenticate", factory.NewHandler(controller.NewAuthenticateController(authenticator, config)))
+	http.HandleFunc("/api/authenticate", factory.NewHandler(controller.NewAuthenticateController(authenticator)))
 	http.HandleFunc("/api/ticket", factory.NewHandler(controller.NewTicketController(ticketer)))
 	http.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {
 		hub.AddClient(ticketer, dal, w, r)

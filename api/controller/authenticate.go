@@ -1,7 +1,6 @@
 package controller
 
 import (
-	jwt "github.com/dgrijalva/jwt-go"
 	"github.com/hednowley/sound/api/api"
 	"github.com/hednowley/sound/api/dto"
 	"github.com/hednowley/sound/config"
@@ -9,7 +8,7 @@ import (
 )
 
 // NewAuthenticateController makes a controller which gives out JWT tokens.
-func NewAuthenticateController(authenticator *services.Authenticator, cfg *config.Config) *api.Controller {
+func NewAuthenticateController(authenticator *services.Authenticator) *api.Controller {
 
 	input := dto.Credentials{}
 
@@ -19,14 +18,12 @@ func NewAuthenticateController(authenticator *services.Authenticator, cfg *confi
 			return api.NewErrorReponse("Bad credentials.")
 		}
 
-		token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-			"u": credentials.Username,
-			//"nbf": time.Date(2015, 10, 10, 12, 0, 0, 0, time.UTC).Unix(),
-		})
+		token, err := authenticator.MakeJWT(credentials.Username)
+		if err != nil {
+			return api.NewErrorReponse(err.Error())
+		}
 
-		// Sign and get the complete encoded token as a string using the secret
-		tokenString, _ := token.SignedString([]byte(cfg.Secret))
-		return api.NewSuccessfulReponse(&dto.Token{Token: tokenString})
+		return api.NewSuccessfulReponse(&dto.Token{Token: token})
 	}
 
 	return &api.Controller{

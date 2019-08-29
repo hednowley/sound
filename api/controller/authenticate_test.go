@@ -25,7 +25,7 @@ func TestController(t *testing.T) {
 		},
 	}
 	a := services.NewAuthenticator(&cfg)
-	c := controller.NewAuthenticateController(a, &cfg)
+	c := controller.NewAuthenticateController(a)
 
 	cred, ok := c.Input.(*dto.Credentials)
 	if !ok {
