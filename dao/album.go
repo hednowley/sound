@@ -4,6 +4,7 @@ import (
 	"time"
 )
 
+// Album is an album.
 type Album struct {
 	ID       uint `gorm:"PRIMARY_KEY"`
 	Artist   *Artist

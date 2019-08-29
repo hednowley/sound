@@ -4,6 +4,7 @@ import (
 	"time"
 )
 
+// Playlist is a playlist.
 type Playlist struct {
 	ID      uint `gorm:"PRIMARY_KEY"`
 	Name    string

@@ -8,10 +8,10 @@ import (
 
 type MusicFolderCollection struct {
 	XMLName xml.Name       `xml:"musicFolders" json:"-"`
-	Folders []*MusicFolder `xml:"musicFolder,attr" json:"musicFolder"`
+	Folders []*musicFolder `xml:"musicFolder,attr" json:"musicFolder"`
 }
 
-type MusicFolder struct {
+type musicFolder struct {
 	XMLName xml.Name `xml:"musicFolder" json:"-"`
 	ID      int      `xml:"id,attr" json:"id"`
 	Name    string   `xml:"name" json:"name"`
@@ -19,9 +19,9 @@ type MusicFolder struct {
 
 func NewMusicFolderCollection(providers []provider.Provider) *MusicFolderCollection {
 
-	folders := make([]*MusicFolder, len(providers))
+	folders := make([]*musicFolder, len(providers))
 	for i, p := range providers {
-		folders[i] = &MusicFolder{ID: i, Name: p.ID()}
+		folders[i] = &musicFolder{ID: i, Name: p.ID()}
 	}
 
 	return &MusicFolderCollection{Folders: folders}

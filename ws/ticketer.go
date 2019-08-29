@@ -1,12 +1,10 @@
 package ws
 
 import (
-	"encoding/base64"
-	"time"
-
 	"crypto/rand"
-
+	"encoding/base64"
 	"github.com/hednowley/sound/config"
+	"time"
 )
 
 // Ticket allows a user to negotiate a websocket session.

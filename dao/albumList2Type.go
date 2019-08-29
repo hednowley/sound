@@ -1,7 +1,9 @@
 package dao
 
+// AlbumList2Type is all they ways the results of AlbumList2 can be sorted: http://www.subsonic.org/pages/api.jsp#getAlbumList2
 type AlbumList2Type int
 
+// One of the ways the results of AlbumList2 can be sorted.
 const (
 	Random               AlbumList2Type = 0
 	Newest               AlbumList2Type = 1

@@ -9,8 +9,7 @@ import (
 	"github.com/hednowley/sound/ws/dto"
 )
 
-// Hub maintains the set of active clients and broadcasts messages to the
-// clients.
+// Hub maintains the set of active clients and broadcasts messages to the clients.
 type Hub struct {
 	// Registered clients.
 	clients map[*Client]bool
@@ -47,6 +46,7 @@ func NewHub() interfaces.Hub {
 	}
 }
 
+// SetHandler makes sure all messages with the given method are passed to the given handler.
 func (h *Hub) SetHandler(method string, handler interfaces.WsHandler) {
 	h.handlers[method] = handler
 }

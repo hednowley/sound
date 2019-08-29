@@ -7,7 +7,7 @@ import (
 	"github.com/hednowley/sound/services"
 )
 
-// NewAuthenticateController makes a controller which gives out JWT tokens.
+// NewAuthenticateController makes a controller which gives out JWT tokens in return for credentials.
 func NewAuthenticateController(authenticator *services.Authenticator) *api.Controller {
 
 	input := dto.Credentials{}
@@ -20,7 +20,7 @@ func NewAuthenticateController(authenticator *services.Authenticator) *api.Contr
 
 		token, err := authenticator.MakeJWT(credentials.Username)
 		if err != nil {
-			return api.NewErrorReponse(err.Error())
+			return api.NewErrorReponse("Could not make token.")
 		}
 
 		return api.NewSuccessfulReponse(&dto.Token{Token: token})

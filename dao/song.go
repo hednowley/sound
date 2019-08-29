@@ -2,6 +2,7 @@ package dao
 
 import "time"
 
+// Song is a song.
 type Song struct {
 	ID         uint   `gorm:"PRIMARY_KEY"`
 	Artist     string // Name of the artist of the song. Can differ from the album's artist.
