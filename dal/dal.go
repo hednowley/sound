@@ -48,7 +48,6 @@ func (dal *DAL) PutSong(song *dao.Song, data *entities.FileInfo) *dao.Song {
 	song.Disc = data.Disc
 	song.GenreID = genre.ID
 	song.Year = data.Year
-	song.Extension = data.Extension
 	song.Size = data.Size
 	song.Bitrate = data.Bitrate
 	song.Duration = data.Duration

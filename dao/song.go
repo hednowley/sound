@@ -17,7 +17,6 @@ type Song struct {
 	Year       int
 	Art        string
 	Created    *time.Time
-	Extension  string // File extension (without leading full stop)
 	Size       int64  // File size in bytes
 	Bitrate    int    // Bitrate in kb/s
 	Duration   int    // Duration in seconds

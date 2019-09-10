@@ -2,6 +2,8 @@ package dto
 
 import (
 	"encoding/xml"
+	"path"
+	"strings"
 	"time"
 
 	"github.com/hednowley/sound/dao"
@@ -53,7 +55,7 @@ func newSongBody(song *dao.Song) *songBody {
 		Type:       "music",
 		IsVideo:    false,
 		Created:    *song.Created,
-		Extension:  song.Extension,
+		Extension:  strings.TrimPrefix(path.Ext(song.Path), "."),
 		Size:       song.Size,
 		Duration:   song.Duration,
 		Bitrate:    song.Bitrate,

@@ -125,6 +125,11 @@ func (p *BeetsProvider) GetInfo(token string) (*entities.FileInfo, error) {
 			year = originalYear
 		}
 
+		// Prefer original year
+		if originalYear != 0 {
+			year = originalYear
+		}
+
 		return &entities.FileInfo{
 			Path:          path,
 			Title:         title,

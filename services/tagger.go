@@ -2,8 +2,6 @@ package services
 
 import (
 	"os"
-	"path"
-	"strings"
 
 	"github.com/dhowden/tag"
 	"github.com/hednowley/sound/entities"
@@ -52,6 +50,5 @@ func GetMusicData(filePath string) (*entities.FileInfo, error) {
 		Disc:        disc,
 		CoverArt:    art,
 		Size:        info.Size(),
-		Extension:   strings.TrimPrefix(path.Ext(filePath), "."),
 	}, nil
 }

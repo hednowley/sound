@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"path"
 	"strings"
 
 	"github.com/hednowley/sound/interfaces"
@@ -76,6 +77,13 @@ func NewStreamHandler(dal interfaces.DAL) api.BinaryHandler {
 		file, err := dal.GetSong(id, false, false, false)
 		if err != nil {
 			return api.NewErrorReponse(dto.Generic, err.Error())
+		}
+
+		// http.ServeFile incorrectly guesses the Content-Type as "video/mp4" for AAC files
+		// so we override it here.
+		ext := strings.ToLower(path.Ext(file.Path))
+		if ext == ".aac" || ext == ".m4a" {
+			(*w).Header()["Content-Type"] = []string{"audio/aac"}
 		}
 
 		http.ServeFile(*w, r, file.Path)

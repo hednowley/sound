@@ -12,7 +12,6 @@ type FileInfo struct {
 	Year          int
 	CoverArt      *CoverArtData
 	Size          int64
-	Extension     string
 	Bitrate       int // Bitrate in kb/s
 	Duration      int // Duration in seconds
 	Disambiguator string
