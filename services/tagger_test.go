@@ -47,10 +47,6 @@ func TestTagReader(t *testing.T) {
 	if d.Disc != 0 {
 		t.Error()
 	}
-
-	if d.Extension != "mp3" {
-		t.Error()
-	}
 }
 
 func TestReadMissingFile(t *testing.T) {
