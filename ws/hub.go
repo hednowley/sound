@@ -81,7 +81,15 @@ func (h *Hub) Run() {
 func (h *Hub) runHandler(incoming *incoming) {
 	handler, ok := h.handlers[incoming.request.Method]
 	if ok {
-		handler(incoming.request)
+		response := handler(incoming.request)
+		if response == nil {
+			return
+		}
+		
+		j, err := json.Marshal(dto.NewResponse(response, incoming.request.ID))
+		if err == nil {
+			incoming.client.send <- j
+		}
 	}
 }
 
