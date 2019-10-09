@@ -8,7 +8,7 @@ port: 3684
 art path: "~/temp/art"
 
 # Connection string to the application's Postgres database.
-db: "host=localhost port=5432 user=postgres password=sound dbname=sound sslmode=disable"
+db: "host=localhost port=5432 user=sound password=sound dbname=sound sslmode=disable"
 
 # Path to the logging configuration file.
 log config: "log-config.xml"
