@@ -5,23 +5,23 @@ import (
 )
 
 type Artist struct {
-	ID         uint     `json:"id"`
-	Name       string   `json:"name"`
-	Art        string   `json:"coverArt,omitempty"`
-	Albums     []*Album `json:"albums"`
+	ID     uint            `json:"id"`
+	Name   string          `json:"name"`
+	Art    string          `json:"coverArt,omitempty"`
+	Albums []*AlbumSummary `json:"albums"`
 }
 
 func NewArtist(artist *dao.Artist) *Artist {
 
-	albums := make([]*Album, len(artist.Albums))
+	albums := make([]*AlbumSummary, len(artist.Albums))
 	for index, album := range artist.Albums {
-		albums[index] = NewAlbum(album)
+		albums[index] = NewAlbumSummary(album)
 	}
 
 	return &Artist{
-		ID:         artist.ID,
-		Name:       artist.Name,
-		Albums:     albums,
-		Art:        artist.Art,
+		ID:     artist.ID,
+		Name:   artist.Name,
+		Albums: albums,
+		Art:    artist.Art,
 	}
 }
