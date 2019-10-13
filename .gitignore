@@ -6,3 +6,4 @@
 /dal/*.test
 *.test
 *.log
+__debug_bin

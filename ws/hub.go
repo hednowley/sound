@@ -85,7 +85,7 @@ func (h *Hub) runHandler(incoming *incoming) {
 		if response == nil {
 			return
 		}
-		
+
 		j, err := json.Marshal(dto.NewResponse(response, incoming.request.ID))
 		if err == nil {
 			incoming.client.send <- j
