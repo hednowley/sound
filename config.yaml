@@ -36,7 +36,7 @@ filesystem:
 # Add an entry for each beets library which you want to be scanned for music.
 beets:
   - # Path to the library's database file
-    database: "~/beets/beetslib.blb"
+    database: "./testdata/beetslib.blb"
 
     # Any name to refer to this beets library by
     name: "My beets music"
