@@ -24,7 +24,6 @@ func NewAlbum(album *dao.Album) *Album {
 		Name:      album.Name,
 		ID:        album.ID,
 		ArtistID:  album.ArtistID,
-		SongCount: album.SongCount,
 		Artist:    album.ArtistName,
 		Art:       album.Art,
 		Created:   album.Created,

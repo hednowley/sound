@@ -8,7 +8,7 @@ type Artist struct {
 	ID         uint     `json:"id"`
 	Name       string   `json:"name"`
 	Art        string   `json:"coverArt,omitempty"`
-	Albums     []*Album `json:"album,omitempty"`
+	Albums     []*Album `json:"albums"`
 }
 
 func NewArtist(artist *dao.Artist) *Artist {
