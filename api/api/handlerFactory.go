@@ -42,7 +42,8 @@ func (factory *HandlerFactory) NewBinaryHandler(controller *BinaryController) ht
 		// Set CORS headers
 		w.Header().Set("Access-Control-Allow-Origin", factory.config.AccessControlAllowOrigin)
 		w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
-		w.Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
+		w.Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization, Set-Cookie, DNT, Sec-Fetch-Mode")
+		w.Header().Set("Access-Control-Allow-Credentials", "true")
 
 		// Send no more to preflight requests
 		if r.Method == "OPTIONS" {

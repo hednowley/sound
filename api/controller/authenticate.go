@@ -31,14 +31,17 @@ func NewAuthenticateController(authenticator *services.Authenticator) *api.Binar
 			return api.NewErrorReponse("Bad credentials.")
 		}
 
-		token, err := authenticator.MakeJWT(credentials.Username)
+		_, err = authenticator.MakeJWT(credentials.Username)
 		if err != nil {
 			return api.NewErrorReponse("Could not make token.")
 		}
 
+		//expire := time.Now().AddDate(0, 0, 1)
 		cookie := http.Cookie{
-			Name:  "access_token",
-			Value: token,
+			Name:  "token",
+			Value: "hello",
+			//Domain:  "false",
+			//Expires: expire,
 		}
 		http.SetCookie(*w, &cookie)
 
