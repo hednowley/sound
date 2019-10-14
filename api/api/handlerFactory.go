@@ -3,7 +3,6 @@ package api
 import (
 	"fmt"
 	"net/http"
-	"strings"
 
 	"github.com/hednowley/sound/config"
 	"github.com/hednowley/sound/services"
@@ -55,14 +54,14 @@ func (factory *HandlerFactory) NewBinaryHandler(controller *BinaryController) ht
 
 		// Authenticate!!!
 		if controller.Secure {
-			h := r.Header.Get("Authorization")
-			if len(h) == 0 {
+
+			cookie, err := r.Cookie("token")
+			if err != nil {
 				w.WriteHeader(http.StatusUnauthorized)
 				return
 			}
 
-			h = strings.TrimPrefix(h, "Bearer ")
-			user = factory.authenticator.AuthenticateFromJWT(h)
+			user = factory.authenticator.AuthenticateFromJWT(cookie.Value)
 			if user == nil {
 				w.WriteHeader(http.StatusUnauthorized)
 				return
