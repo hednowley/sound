@@ -49,7 +49,7 @@ func registerRoutes(
 	http.Handle("/", http.FileServer(http.Dir("static")))
 
 	// Endpoints for websocket negotiation
-	http.HandleFunc("/api/authenticate", factory.NewHandler(controller.NewAuthenticateController(authenticator)))
+	http.HandleFunc("/api/authenticate", factory.NewBinaryHandler(controller.NewAuthenticateController(authenticator)))
 	http.HandleFunc("/api/ticket", factory.NewHandler(controller.NewTicketController(ticketer)))
 	http.HandleFunc("/api/stream", factory.NewBinaryHandler(controller.NewStreamController(dal)))
 	http.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {
