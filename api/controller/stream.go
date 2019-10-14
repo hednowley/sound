@@ -13,8 +13,6 @@ import (
 
 func NewStreamController(dal interfaces.DAL) *api.BinaryController {
 
-	input := struct{}{}
-
 	run := func(w *http.ResponseWriter, r *http.Request, _ *config.User) *api.Response {
 
 		params := r.URL.Query()
@@ -42,7 +40,6 @@ func NewStreamController(dal interfaces.DAL) *api.BinaryController {
 	}
 
 	return &api.BinaryController{
-		Input:  &input,
 		Run:    run,
 		Secure: true,
 	}

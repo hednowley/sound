@@ -31,7 +31,6 @@ func (factory *HandlerFactory) NewHandler(controller *Controller) http.HandlerFu
 		return controller.Run(u)
 	}
 	return factory.NewBinaryHandler(&BinaryController{
-		Input:  controller.Input,
 		Run:    b,
 		Secure: controller.Secure,
 	})
@@ -52,15 +51,6 @@ func (factory *HandlerFactory) NewBinaryHandler(controller *BinaryController) ht
 
 		var response *Response
 		var user *config.User
-
-		if r.Body != http.NoBody {
-			d := json.NewDecoder(r.Body)
-			err := d.Decode(&controller.Input)
-			if err != nil {
-				response = NewErrorReponse("Bad request.")
-				goto respond
-			}
-		}
 
 		// Authenticate!!!
 		if controller.Secure {

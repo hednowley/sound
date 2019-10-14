@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"encoding/json"
 	"net/http"
 
 	"github.com/hednowley/sound/api/api"
@@ -12,10 +13,20 @@ import (
 // NewAuthenticateController makes a controller which gives out JWT tokens in return for credentials.
 func NewAuthenticateController(authenticator *services.Authenticator) *api.BinaryController {
 
-	input := dto.Credentials{}
-
 	run := func(w *http.ResponseWriter, r *http.Request, _ *config.User) *api.Response {
-		credentials := &input
+
+		credentials := &dto.Credentials{}
+
+		if r.Body == http.NoBody {
+			return api.NewErrorReponse("Bad request.")
+		}
+
+		d := json.NewDecoder(r.Body)
+		err := d.Decode(credentials)
+		if err != nil {
+			return api.NewErrorReponse("Bad request.")
+		}
+
 		if !authenticator.AuthenticateFromPassword(credentials.Username, credentials.Password) {
 			return api.NewErrorReponse("Bad credentials.")
 		}
@@ -35,7 +46,6 @@ func NewAuthenticateController(authenticator *services.Authenticator) *api.Binar
 	}
 
 	return &api.BinaryController{
-		Input:  &input,
 		Run:    run,
 		Secure: false,
 	}
