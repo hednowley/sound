@@ -23,7 +23,7 @@ ignored articles:
 # Add an entry for each folder which you want to be scanned for music.
 filesystem:
   - # Path to the folder
-    path: "~/temp/my music"
+    path: "./testdata/music"
 
     # Any name to refer to this folder by
     name: "Gertrude's bangers"
@@ -35,11 +35,10 @@ filesystem:
 
 # Add an entry for each beets library which you want to be scanned for music.
 beets:
-  - # Path to the library's database file
-    database: "./testdata/beetslib.blb"
-
-    # Any name to refer to this beets library by
-    name: "My beets music"
+  # - # Path to the library's database file
+  # database: "./testdata/beetslib.blb"
+  # Any name to refer to this beets library by
+  # name: "My beets music"
 
 # Add an entry for each user you want to set up
 users:
