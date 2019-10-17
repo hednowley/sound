@@ -5,13 +5,15 @@ import (
 )
 
 type SongSummary struct {
-	ID   uint   `json:"id"`
-	Name string `json:"name"`
+	ID    uint   `json:"id"`
+	Name  string `json:"name"`
+	Track int    `json:"track"`
 }
 
 func NewSongSummary(song *dao.Song) *SongSummary {
 	return &SongSummary{
-		Name: song.Title,
-		ID:   song.ID,
+		Name:  song.Title,
+		ID:    song.ID,
+		Track: song.Track,
 	}
 }
