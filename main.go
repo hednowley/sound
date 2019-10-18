@@ -52,6 +52,7 @@ func registerRoutes(
 	http.HandleFunc("/api/authenticate", factory.NewBinaryHandler(controller.NewAuthenticateController(authenticator)))
 	http.HandleFunc("/api/ticket", factory.NewHandler(controller.NewTicketController(ticketer)))
 	http.HandleFunc("/api/stream", factory.NewBinaryHandler(controller.NewStreamController(dal)))
+	http.HandleFunc("/api/art", factory.NewBinaryHandler(controller.NewArtController(dal)))
 	http.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {
 		hub.AddClient(ticketer, dal, w, r)
 	})
