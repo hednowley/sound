@@ -1,3 +1,1 @@
-#docker build ./docker/nas --tag sound
-
-docker run --rm -v "$PWD":/go/src/github.com/hednowley/sound -w /go/src/github.com/hednowley/sound golang:latest go get -d -v && GOOS=linux GOARCH=arm GOARM=7 CGO_ENABLED=0 go build -v
+docker run -v "$PWD":/go/src/github.com/hednowley/sound -w /go/src/github.com/hednowley/sound golang:1.12-stretch /bin/bash -c "apt-get update; apt-get install build-essential gcc-6-arm-linux-gnueabihf -y; go get -d -v; GOOS=linux GOARCH=arm GOARM=7 CGO_ENABLED=1 CC=arm-linux-gnueabihf-gcc-6 go build"
