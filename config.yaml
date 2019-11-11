@@ -47,7 +47,7 @@ users:
 
 # The CORS header value which will be included in every response
 # https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin
-access control allow origin: "http://localhost:8080"
+access control allow origin: "*"
 
 # How many seconds websocket tickets are valid for after being requested.
 # This is used by the front-end web app and does not usually need to be changed.
