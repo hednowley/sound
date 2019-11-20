@@ -6,5 +6,5 @@ type PlaylistEntry struct {
 	PlaylistID uint
 	SongID     uint
 	Song       *Song
-	Index      int
+	Index      int 
 }

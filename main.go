@@ -28,7 +28,7 @@ func registerRoutes(
 	ticketer *ws.Ticketer,
 	dal interfaces.DAL,
 	hub interfaces.Hub,
-	scanner *provider.Scanner,
+	scanner *provider.Scanner, 
 	routes subsonicRoutes.Routes) {
 
 	// Subsonic API routes
@@ -62,6 +62,7 @@ func registerRoutes(
 	hub.SetHandler("getArtist", handlers.MakeGetArtistHandler(dal))
 	hub.SetHandler("getAlbum", handlers.MakeGetAlbumHandler(dal))
 	hub.SetHandler("getPlaylists", handlers.MakeGetPlaylistsHandler(dal))
+	hub.SetHandler("getPlaylist", handlers.MakeGetPlaylistHandler(dal))
 	hub.SetHandler("startScan", handlers.MakeStartScanHandler(scanner))
 
 	go hub.Run()
