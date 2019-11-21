@@ -1,11 +1,18 @@
 package controller
 
 import (
+	"fmt"
 	"net/http"
+	"os"
+	"path/filepath"
+	"strings"
 
+	"github.com/cihub/seelog"
 	"github.com/hednowley/sound/api/api"
 	"github.com/hednowley/sound/config"
 	"github.com/hednowley/sound/interfaces"
+	"github.com/hednowley/sound/services"
+	"github.com/hednowley/sound/util"
 )
 
 func NewArtController(dal interfaces.DAL) *api.BinaryController {
@@ -20,7 +27,27 @@ func NewArtController(dal interfaces.DAL) *api.BinaryController {
 			return api.NewErrorReponse(err.Error())
 		}
 
-		http.ServeFile(*w, r, path)
+		sizeParam := params.Get("size")
+		size := util.ParseUint(sizeParam, 0)
+		if size == 0 {
+			http.ServeFile(*w, r, path)
+			return nil
+		}
+
+		dir, filename := filepath.Split(path)
+		ext := filepath.Ext(filename)
+		resized := filepath.Join(dir, fmt.Sprintf("%v_%v%v", strings.TrimSuffix(filename, ext), size, ext))
+		_, err = os.Stat(resized)
+		if os.IsNotExist(err) {
+			seelog.Tracef("Resizing %v to %v", id, size)
+			err = services.Resize(path, resized, uint(size))
+			if err != nil {
+				seelog.Errorf("Could not resize artwork %v", id)
+				resized = path
+			}
+		}
+
+		http.ServeFile(*w, r, resized)
 		return nil
 	}
 
