@@ -1,3 +1,0 @@
-CREATE USER sound;
-CREATE DATABASE sound_test;
-GRANT ALL PRIVILEGES ON DATABASE sound_test TO sound;

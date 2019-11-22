@@ -1,0 +1,14 @@
+version: "3"
+
+services:
+  # Database
+  postgres:
+    image: postgres:11
+    environment:
+      - POSTGRES_USER=sound
+      - POSTGRES_PASSWORD=sound
+      - POSTGRES_DB=sound_test
+    volumes:
+      - ./.data/postgres/sound:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
