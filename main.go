@@ -37,7 +37,7 @@ func registerRoutes(
 	r := mux.NewRouter()
 
 	// Subsonic API routes
-	r.HandleFunc("/subsonic/", func(w http.ResponseWriter, r *http.Request) {
+	r.PathPrefix("/subsonic/").HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		path := strings.ToLower(strings.Split(r.URL.Path, ".")[0])
 
 		for p, h := range routes {
