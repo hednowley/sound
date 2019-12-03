@@ -92,6 +92,7 @@ func registerRoutes(
 	hub.SetHandler("getArtists", handlers.MakeGetArtistsHandler(dal))
 	hub.SetHandler("getArtist", handlers.MakeGetArtistHandler(dal))
 	hub.SetHandler("getAlbum", handlers.MakeGetAlbumHandler(dal))
+	hub.SetHandler("getAlbums", handlers.MakeGetAlbumsHandler(dal))
 	hub.SetHandler("getPlaylists", handlers.MakeGetPlaylistsHandler(dal))
 	hub.SetHandler("getPlaylist", handlers.MakeGetPlaylistHandler(dal))
 	hub.SetHandler("startScan", handlers.MakeStartScanHandler(scanner))
