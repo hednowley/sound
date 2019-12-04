@@ -8,7 +8,7 @@ import (
 
 func MakeGetAlbumsHandler(dal interfaces.DAL) interfaces.WsHandler {
 	return func(request *dto.Request) interface{} {
-		albums := dal.GetAlbums(dao.AlphabeticalByName, 999999999999, 0)
+		albums := dal.GetAlbums(dao.AlphabeticalByName, 9999999, 0)
 		return dto.NewAlbumCollection(albums)
 	}
 }
