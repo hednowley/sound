@@ -14,10 +14,8 @@ func NewTicketController(ticketer *ws.Ticketer) *api.Controller {
 
 	make := func() *api.ControllerContext {
 
-		body := struct{}{}
-
 		return &api.ControllerContext{
-			Body: body,
+			Body: nil,
 			Run: func(user *config.User, _ http.ResponseWriter, _ *http.Request) *api.Response {
 				r := dto.NewTicket(ticketer.MakeTicket(user))
 				return api.NewSuccessfulReponse(&r)
