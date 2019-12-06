@@ -1,0 +1,46 @@
+.login {
+  &__wrap {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+  }
+
+  &__container {
+    width: 20rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    flex-direction: column;
+  }
+
+  &__input {
+    padding: 1rem;
+    font-size: 1rem;
+    width: 100%;
+    margin: 0.5rem;
+    border: 1px #808080 solid;
+    border-radius: 0.3rem;
+  }
+
+  &__submit {
+    padding: 1.5rem;
+    font-size: 0.9rem;
+    width: 100%;
+    margin-top: 1rem;
+    border: 1px #808080 solid;
+    border-radius: 0.3rem;
+    color: white;
+    background-color: #2e2e2e;
+  }
+
+  &__logo {
+    font-family: "Shrikhand", cursive;
+    font-size: 4rem;
+    color: #2e2e2e;
+    padding-bottom: 1rem;
+  }
+}

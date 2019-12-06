@@ -1,0 +1,12 @@
+.home {
+  &__wrap {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__artist {
+    display: inline-block;
+    padding: 0.1rem 0.2rem;
+    text-decoration: underline;
+  }
+}

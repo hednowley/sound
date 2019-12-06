@@ -1,0 +1,43 @@
+{
+  "name": "sound-ui-elm",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "dependencies": {},
+  "devDependencies": {
+    "css-loader": "^3.2.1",
+    "elm": "0.19.1",
+    "elm-analyse": "^0.16.5",
+    "elm-format": "^0.8.2",
+    "elm-review": "^1.0.1",
+    "elm-webpack-loader": "^6.0.1",
+    "fibers": "^4.0.2",
+    "file-loader": "^5.0.2",
+    "node-sass": "^4.13.0",
+    "sass": "^1.23.7",
+    "sass-loader": "^8.0.0",
+    "style-loader": "^1.0.1",
+    "webpack": "^4.41.2",
+    "webpack-cli": "^3.3.10",
+    "webpack-dev-server": "^3.9.0",
+    "webpack-merge": "^4.2.2"
+  },
+  "scripts": {
+    "build": "webpack --config webpack.dev.js",
+    "build:prod": "webpack --config webpack.prod.js",
+    "start": "webpack-dev-server -d --config webpack.dev.js",
+    "start:home": "webpack-dev-server -d --config webpack.home.js",
+    "start:live": "webpack-dev-server -d --config webpack.live.js",
+    "analyse": "elm-analyse -s"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hednowley/sound-ui-elm.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hednowley/sound-ui-elm/issues"
+  },
+  "homepage": "https://github.com/hednowley/sound-ui-elm#readme"
+}

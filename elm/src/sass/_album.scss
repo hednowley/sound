@@ -1,0 +1,11 @@
+.album {
+  &__song {
+    display: flex;
+  }
+
+  &__art {
+    width: 8rem;
+    height: 8rem;
+    object-fit: contain;
+  }
+}

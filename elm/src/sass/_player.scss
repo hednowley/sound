@@ -1,0 +1,30 @@
+.player {
+  &__wrap {
+    display: flex;
+    flex-direction: column;
+
+    background-color: black;
+    color: white;
+
+    padding: 1rem;
+  }
+
+  &__slider {
+    &--wrap {
+      width: 100%;
+      background-color: blue;
+      height: 1rem;
+
+      position: relative;
+    }
+
+    &--elapsed {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+
+      background-color: red;
+    }
+  }
+}

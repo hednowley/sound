@@ -1,0 +1,16 @@
+// Google Fonts
+@import url(https://fonts.googleapis.com/css?family=Roboto);
+@import url(https://fonts.googleapis.com/css?family=Shrikhand);
+
+@import "app";
+@import "login";
+@import "home";
+@import "playlist";
+@import "album";
+@import "artist";
+@import "player";
+
+html * {
+  box-sizing: border-box !important;
+  font-family: "Roboto", sans-serif;
+}

@@ -1,0 +1,42 @@
+.app {
+  &__wrap {
+    height: 100vh;
+    width: 100vw;
+
+    display: grid;
+    grid-template-areas:
+      "header header"
+      "side main"
+      "playlist playlist"
+      "player player";
+    grid-template-rows: auto 1fr auto auto;
+    grid-template-columns: auto 1fr;
+
+    overflow: hidden;
+  }
+
+  &__header {
+    grid-area: header;
+  }
+
+  &__main {
+    grid-area: main;
+    overflow-y: auto;
+  }
+
+  &__side {
+    grid-area: side;
+  }
+
+  &__playlist {
+    grid-area: playlist;
+    max-height: 30vh;
+    overflow: auto;
+    background-color: black;
+    color: white;
+  }
+
+  &__player {
+    grid-area: player;
+  }
+}
