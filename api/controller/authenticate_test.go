@@ -1,6 +1,7 @@
 package controller_test
 
 import (
+	"net/http/httptest"
 	"testing"
 
 	"github.com/hednowley/sound/api/api"
@@ -11,6 +12,9 @@ import (
 )
 
 func TestGoodCredentials(t *testing.T) {
+
+	rr := httptest.NewRecorder()
+
 	cfg := config.Config{
 		Secret: "secret",
 		Users: []config.User{
@@ -24,7 +28,9 @@ func TestGoodCredentials(t *testing.T) {
 	a := services.NewAuthenticator(&cfg)
 	c := controller.NewAuthenticateController(a)
 
-	cred, ok := c.Input.(*dto.Credentials)
+	context := c.Make()
+
+	cred, ok := context.Body.(*dto.Credentials)
 	if !ok {
 		t.Error()
 	}
@@ -33,21 +39,13 @@ func TestGoodCredentials(t *testing.T) {
 	cred.Password = "apple tart!!!"
 
 	// Try and login with valid credentials
-	r := c.Run(&config.User{})
+	r := context.Run(&config.User{}, rr, nil)
 
 	// Assert that the correct JWT was returned
 	if r.Status != api.Success {
 		t.Error()
 	}
 
-	token, ok := r.Body.(*dto.Token)
-	if !ok {
-		t.Error()
-	}
-
-	if token.Token != "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1IjoiYmlsbHkifQ.YZyb0AaonWzRbrDRXc1sw4Y7BKYHtoR33NUmxP6iFSE" {
-		t.Error()
-	}
 }
 
 func TestEmptyCredentials(t *testing.T) {
@@ -64,16 +62,12 @@ func TestEmptyCredentials(t *testing.T) {
 	a := services.NewAuthenticator(&cfg)
 	c := controller.NewAuthenticateController(a)
 
-	cred, ok := c.Input.(*dto.Credentials)
-	if !ok {
-		t.Error()
-	}
+	context := c.Make()
 
-	cred.Username = ""
-	cred.Password = ""
+	context.Body = dto.Credentials{}
 
 	// Try and login
-	r := c.Run(&config.User{})
+	r := context.Run(&config.User{}, nil, nil)
 
 	if r.Status != api.Error {
 		t.Error()
@@ -103,16 +97,15 @@ func TestBadCredentials(t *testing.T) {
 	a := services.NewAuthenticator(&cfg)
 	c := controller.NewAuthenticateController(a)
 
-	cred, ok := c.Input.(*dto.Credentials)
-	if !ok {
-		t.Error()
+	context := c.Make()
+
+	context.Body = dto.Credentials{
+		Username: "sdfsdfd",
+		Password: "ffff",
 	}
 
-	cred.Username = "sdfsdfd"
-	cred.Password = "ffff"
-
 	// Try and login
-	r := c.Run(&config.User{})
+	r := context.Run(&config.User{}, nil, nil)
 
 	if r.Status != api.Error {
 		t.Error()

@@ -26,8 +26,20 @@ func NewHandlerFactory(authenticator *services.Authenticator, config *config.Con
 
 func (factory *HandlerFactory) NewHandler(controller *Controller) http.HandlerFunc {
 	// Convert the controller into a binary controller
-	b := func(w *http.ResponseWriter, r *http.Request, u *config.User) *Response {
-		return controller.Run(u)
+	b := func(w http.ResponseWriter, r *http.Request, u *config.User) *Response {
+
+		context := controller.Make()
+
+		d := json.NewDecoder(r.Body)
+		err := d.Decode(context.Body)
+
+		if err != nil {
+			w.WriteHeader(http.StatusBadRequest)
+
+			return nil
+		}
+
+		return context.Run(u, w, r)
 	}
 	return factory.NewBinaryHandler(&BinaryController{
 		Run:    b,
@@ -68,7 +80,7 @@ func (factory *HandlerFactory) NewBinaryHandler(controller *BinaryController) ht
 			}
 		}
 
-		response = controller.Run(&w, r, user)
+		response = controller.Run(w, r, user)
 		if response != nil {
 			goto respond
 		}

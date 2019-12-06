@@ -13,7 +13,7 @@ import (
 
 func NewStreamController(dal interfaces.DAL) *api.BinaryController {
 
-	run := func(w *http.ResponseWriter, r *http.Request, _ *config.User) *api.Response {
+	run := func(w http.ResponseWriter, r *http.Request, _ *config.User) *api.Response {
 
 		params := r.URL.Query()
 		idStr := params.Get("id")
@@ -32,10 +32,10 @@ func NewStreamController(dal interfaces.DAL) *api.BinaryController {
 		// so we override it here.
 		ext := strings.ToLower(path.Ext(file.Path))
 		if ext == ".aac" || ext == ".m4a" {
-			(*w).Header()["Content-Type"] = []string{"audio/aac"}
+			w.Header()["Content-Type"] = []string{"audio/aac"}
 		}
 
-		http.ServeFile(*w, r, file.Path)
+		http.ServeFile(w, r, file.Path)
 		return nil
 	}
 

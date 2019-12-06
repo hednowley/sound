@@ -51,7 +51,7 @@ func registerRoutes(
 	})
 
 	// Endpoints for websocket negotiation
-	r.HandleFunc("/api/authenticate", factory.NewBinaryHandler(controller.NewAuthenticateController(authenticator)))
+	r.HandleFunc("/api/authenticate", factory.NewHandler(controller.NewAuthenticateController(authenticator)))
 	r.HandleFunc("/api/ticket", factory.NewHandler(controller.NewTicketController(ticketer)))
 	r.HandleFunc("/api/stream", factory.NewBinaryHandler(controller.NewStreamController(dal)))
 	r.HandleFunc("/api/art", factory.NewBinaryHandler(controller.NewArtController(dal)))

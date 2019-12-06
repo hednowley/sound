@@ -1,6 +1,8 @@
 package controller
 
 import (
+	"net/http"
+
 	"github.com/hednowley/sound/api/api"
 	"github.com/hednowley/sound/api/dto"
 	"github.com/hednowley/sound/config"
@@ -10,13 +12,21 @@ import (
 // NewTicketController makes a controller which returns a new Websocket ticket.
 func NewTicketController(ticketer *ws.Ticketer) *api.Controller {
 
-	w := func(user *config.User) *api.Response {
-		r := dto.NewTicket(ticketer.MakeTicket(user))
-		return api.NewSuccessfulReponse(&r)
+	make := func() *api.ControllerContext {
+
+		body := struct{}{}
+
+		return &api.ControllerContext{
+			Body: body,
+			Run: func(user *config.User, _ http.ResponseWriter, _ *http.Request) *api.Response {
+				r := dto.NewTicket(ticketer.MakeTicket(user))
+				return api.NewSuccessfulReponse(&r)
+			},
+		}
 	}
 
 	return &api.Controller{
-		Run:    w,
 		Secure: true,
+		Make:   make,
 	}
 }

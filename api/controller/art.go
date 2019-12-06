@@ -17,7 +17,7 @@ import (
 
 func NewArtController(dal interfaces.DAL) *api.BinaryController {
 
-	run := func(w *http.ResponseWriter, r *http.Request, _ *config.User) *api.Response {
+	run := func(w http.ResponseWriter, r *http.Request, _ *config.User) *api.Response {
 
 		params := r.URL.Query()
 		id := params.Get("id")
@@ -30,7 +30,7 @@ func NewArtController(dal interfaces.DAL) *api.BinaryController {
 		sizeParam := params.Get("size")
 		size := util.ParseUint(sizeParam, 0)
 		if size == 0 {
-			http.ServeFile(*w, r, path)
+			http.ServeFile(w, r, path)
 			return nil
 		}
 
@@ -47,7 +47,7 @@ func NewArtController(dal interfaces.DAL) *api.BinaryController {
 			}
 		}
 
-		http.ServeFile(*w, r, resized)
+		http.ServeFile(w, r, resized)
 		return nil
 	}
 
