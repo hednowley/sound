@@ -15,15 +15,14 @@ before_deploy:
   - ssh-add /tmp/deploy_rsa
 
 before_install:
-#  - go get github.com/mattn/goveralls
+  - go get github.com/mattn/goveralls
 
 before_script:
   - psql -c "create user sound with password 'sound';" -U postgres
   - psql -c "create database sound_test owner sound;" -U postgres
 
 script:
-  #  - "$GOPATH/bin/goveralls -service=travis-ci"
-  - echo "skipping tests"
+  - "$GOPATH/bin/goveralls -service=travis-ci"
 
 deploy:
   provider: script
