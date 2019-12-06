@@ -30,13 +30,13 @@ func (factory *HandlerFactory) NewHandler(controller *Controller) http.HandlerFu
 
 		context := controller.Make()
 
-		d := json.NewDecoder(r.Body)
-		err := d.Decode(context.Body)
-
-		if err != nil {
-			w.WriteHeader(http.StatusBadRequest)
-
-			return nil
+		if r.Body != http.NoBody {
+			d := json.NewDecoder(r.Body)
+			err := d.Decode(&context.Body)
+			if err != nil {
+				w.WriteHeader(http.StatusBadRequest)
+				return nil
+			}
 		}
 
 		return context.Run(u, w, r)
