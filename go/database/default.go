@@ -166,7 +166,9 @@ func (db *Default) GetAlbum(id uint, genre bool, artist bool, songs bool) *dao.A
 		d = d.Preload("Artist")
 	}
 	if songs {
-		d = d.Preload("Songs")
+		d = d.Preload("Songs", func(db *gorm.DB) *gorm.DB {
+			return db.Order("songs.track ASC")
+		})
 	}
 	if d.Where(dao.Album{ID: id}).
 		First(&a).
