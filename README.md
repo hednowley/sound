@@ -5,10 +5,10 @@
 
 A snappy music server written in Go using the [Subsonic](http://www.subsonic.org) API.
 
--   Scan file systems and [beets](https://beets.io) databases for your music
--   Browse and stream music
--   Manage playlists
--   View cover art
+- Scan file systems and [beets](https://beets.io) databases for your music
+- Browse and stream music
+- Manage playlists
+- View cover art
 
 _sound_ targets version 1.16.1 of the Subsonic API.
 
@@ -16,12 +16,13 @@ _sound_ targets version 1.16.1 of the Subsonic API.
 
 You'll need
 
--   Go 1.11.x
--   A [PostgreSQL](https://www.postgresql.org/) database
+- Go 1.11.x
+- A [PostgreSQL](https://www.postgresql.org/) database or Docker
 
 ## Building
 
 ```shell
+$ cd go
 $ go get
 $ go build
 ```
@@ -30,17 +31,17 @@ $ go build
 
 ## Testing
 
-Before running tests, create an empty database called `sound_test` owned by a user `sound` with password `sound`.
+Before running tests, create an empty database called `sound_test` owned by a user `sound` with password `sound`. Docker can do this for you (`$ docker-compose up -d`).
 
 ```shell
-$ go test -p 1 ./...
+$ go test -p 1 ./go/...
 ```
 
 ## Running
 
--   Make a Postgres database and user for the application use.
--   Copy your built binary along with [config.yaml](config.yaml) to your deployment directory. Configure _sound_ by editing `config.yaml`, following the comments inside the file.
--   Run _sound_ as a standalone web service or behind a proxy such as [Nginx](https://www.nginx.com/).
+- Make a Postgres database and user for the application use.
+- Copy your built binary along with [config.yaml](go/config.yaml) to your deployment directory. Configure _sound_ by editing `config.yaml`, following the comments inside the file.
+- Run _sound_ as a standalone web service or behind a proxy such as [Nginx](https://www.nginx.com/).
 
 ## Connecting with a Subsonic client
 
@@ -48,11 +49,11 @@ You can connect a Subsonic client to _sound_ by pointing the client to the `/sub
 
 ## Roadmap
 
--   Integrate the Elm [front-end ](https://github.com/hednowley/sound-ui-elm)
--   Transcoding
--   FastCGI
--   Scheduling
--   Starring
--   Podcasts
--   User roles
--   More music providers
+- Finish the Elm [front-end](elm)
+- Transcoding
+- FastCGI
+- Scheduling
+- Starring
+- Podcasts
+- User roles
+- More music providers
