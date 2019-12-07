@@ -5,9 +5,9 @@ import (
 )
 
 type Playlist struct {
-	ID       uint           `json:"id"`
-	Name     string         `json:"name"` 
-	Songs    []*SongSummary `json:"songs"`
+	ID    uint           `json:"id"`
+	Name  string         `json:"name"`
+	Songs []*SongSummary `json:"songs"`
 }
 
 func NewPlaylist(playlist *dao.Playlist) *Playlist {
@@ -18,8 +18,8 @@ func NewPlaylist(playlist *dao.Playlist) *Playlist {
 	}
 
 	return &Playlist{
-		Name:     playlist.Name,
-		ID:       playlist.ID,
-		Songs:    songs,
+		Name:  playlist.Name,
+		ID:    playlist.ID,
+		Songs: songs,
 	}
 }
