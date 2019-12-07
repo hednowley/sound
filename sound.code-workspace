@@ -1,0 +1,14 @@
+{
+  "folders": [
+    {
+      "path": "."
+    },
+    {
+      "path": "go"
+    },
+    {
+      "path": "elm"
+    }
+  ],
+  "settings": {}
+}
