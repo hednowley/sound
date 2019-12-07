@@ -3,14 +3,14 @@ package handler
 import (
 	"net/url"
 
-	"github.com/hednowley/sound/interfaces"
+	"github.com/hednowley/sound/dal"
 	"github.com/hednowley/sound/subsonic/api"
 	"github.com/hednowley/sound/subsonic/dto"
 	"github.com/hednowley/sound/util"
 )
 
 // NewGetRandomSongsHandler does http://www.subsonic.org/pages/api.jsp#getRandomSongs
-func NewGetRandomSongsHandler(dal interfaces.DAL) api.Handler {
+func NewGetRandomSongsHandler(dal *dal.DAL) api.Handler {
 
 	return func(params url.Values) *api.Response {
 

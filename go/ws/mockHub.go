@@ -26,5 +26,5 @@ func (h *MockHub) Notify(notification *dto.Notification) {
 }
 
 // Notify sends a notification to all clients.
-func (h *MockHub) AddClient(ticketer interfaces.Ticketer, dal interfaces.DAL, w http.ResponseWriter, r *http.Request) {
+func (h *MockHub) AddClient(ticketer interfaces.Ticketer, w http.ResponseWriter, r *http.Request) {
 }

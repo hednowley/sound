@@ -14,7 +14,6 @@ import (
 	"github.com/hednowley/sound/database"
 	"github.com/hednowley/sound/entities"
 	"github.com/hednowley/sound/hasher"
-	"github.com/hednowley/sound/interfaces"
 )
 
 // DAL (data access layer) allows querying and writing application data.
@@ -24,7 +23,7 @@ type DAL struct {
 }
 
 // NewDAL constructs a new DAL.
-func NewDAL(config *config.Config, database *database.Default) interfaces.DAL {
+func NewDAL(config *config.Config, database *database.Default) *DAL {
 	return &DAL{
 		db:     database,
 		artDir: config.ArtPath,

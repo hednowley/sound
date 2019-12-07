@@ -3,7 +3,7 @@ package handler
 import (
 	"net/url"
 
-	"github.com/hednowley/sound/interfaces"
+	"github.com/hednowley/sound/dal"
 	"github.com/hednowley/sound/subsonic/api"
 	"github.com/hednowley/sound/subsonic/dto"
 	"github.com/hednowley/sound/util"
@@ -17,7 +17,7 @@ const (
 )
 
 // NewSearchHandler is a handler for searching for albums, artists and songs.
-func NewSearchHandler(dal interfaces.DAL, version SearchVersion) api.Handler {
+func NewSearchHandler(dal *dal.DAL, version SearchVersion) api.Handler {
 
 	return func(params url.Values) *api.Response {
 

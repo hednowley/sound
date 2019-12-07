@@ -103,7 +103,7 @@ func (h *Hub) Notify(notification *dto.Notification) {
 }
 
 // AddClient tries to set up a new client and register it with the hub.
-func (h *Hub) AddClient(ticketer interfaces.Ticketer, dal interfaces.DAL, w http.ResponseWriter, r *http.Request) {
+func (h *Hub) AddClient(ticketer interfaces.Ticketer, w http.ResponseWriter, r *http.Request) {
 
 	// Allow all origins
 	upgrader.CheckOrigin = func(r *http.Request) bool {
@@ -156,7 +156,6 @@ func (h *Hub) AddClient(ticketer interfaces.Ticketer, dal interfaces.DAL, w http
 		hub:  h,
 		conn: c,
 		send: make(chan []byte, 256),
-		dal:  dal,
 	}
 
 	h.register <- client

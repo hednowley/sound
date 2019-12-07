@@ -7,7 +7,7 @@ import (
 	"path"
 	"strings"
 
-	"github.com/hednowley/sound/interfaces"
+	"github.com/hednowley/sound/dal"
 	"github.com/hednowley/sound/subsonic/api"
 	"github.com/hednowley/sound/subsonic/dto"
 	"github.com/hednowley/sound/util"
@@ -44,7 +44,7 @@ func parseStreamFormat(param string) *StreamFormat {
 }
 
 // NewStreamHandler does http://www.subsonic.org/pages/api.jsp#stream
-func NewStreamHandler(dal interfaces.DAL) api.BinaryHandler {
+func NewStreamHandler(dal *dal.DAL) api.BinaryHandler {
 
 	return func(params url.Values, w *http.ResponseWriter, r *http.Request) *api.Response {
 

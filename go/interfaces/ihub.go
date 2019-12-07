@@ -18,6 +18,6 @@ type Ticketer interface {
 type Hub interface {
 	Notify(notification *dto.Notification)
 	SetHandler(method string, handler WsHandler)
-	AddClient(ticketer Ticketer, dal DAL, w http.ResponseWriter, r *http.Request)
+	AddClient(ticketer Ticketer, w http.ResponseWriter, r *http.Request)
 	Run()
 }

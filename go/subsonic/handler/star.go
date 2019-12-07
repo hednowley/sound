@@ -3,13 +3,13 @@ package handler
 import (
 	"net/url"
 
-	"github.com/hednowley/sound/interfaces"
+	"github.com/hednowley/sound/dal"
 	"github.com/hednowley/sound/subsonic/api"
 	"github.com/hednowley/sound/subsonic/dto"
 	"github.com/hednowley/sound/util"
 )
 
-func NewStarHandler(dal interfaces.DAL, star bool) api.Handler {
+func NewStarHandler(dal *dal.DAL, star bool) api.Handler {
 
 	return func(params url.Values) *api.Response {
 

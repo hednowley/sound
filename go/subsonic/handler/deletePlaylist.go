@@ -4,15 +4,15 @@ import (
 	"fmt"
 	"net/url"
 
+	"github.com/hednowley/sound/dal"
 	"github.com/hednowley/sound/dao"
-	"github.com/hednowley/sound/interfaces"
 	"github.com/hednowley/sound/subsonic/api"
 	"github.com/hednowley/sound/subsonic/dto"
 	"github.com/hednowley/sound/util"
 )
 
 // NewDeletePlaylistHandler does http://www.subsonic.org/pages/api.jsp#deletePlaylist
-func NewDeletePlaylistHandler(dal interfaces.DAL) api.Handler {
+func NewDeletePlaylistHandler(dal *dal.DAL) api.Handler {
 
 	return func(params url.Values) *api.Response {
 

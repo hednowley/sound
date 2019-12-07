@@ -3,11 +3,12 @@ package handlers
 import (
 	"encoding/json"
 
+	"github.com/hednowley/sound/dal"
 	"github.com/hednowley/sound/interfaces"
 	"github.com/hednowley/sound/ws/dto"
 )
 
-func MakeGetAlbumHandler(dal interfaces.DAL) interfaces.WsHandler {
+func MakeGetAlbumHandler(dal *dal.DAL) interfaces.WsHandler {
 	return func(request *dto.Request) interface{} {
 		var id uint
 

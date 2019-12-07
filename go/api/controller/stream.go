@@ -7,11 +7,11 @@ import (
 
 	"github.com/hednowley/sound/api/api"
 	"github.com/hednowley/sound/config"
-	"github.com/hednowley/sound/interfaces"
+	"github.com/hednowley/sound/dal"
 	"github.com/hednowley/sound/util"
 )
 
-func NewStreamController(dal interfaces.DAL) *api.BinaryController {
+func NewStreamController(dal *dal.DAL) *api.BinaryController {
 
 	run := func(w http.ResponseWriter, r *http.Request, _ *config.User) *api.Response {
 

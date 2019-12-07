@@ -10,14 +10,14 @@ import (
 
 	"github.com/cihub/seelog"
 
-	"github.com/hednowley/sound/interfaces"
+	"github.com/hednowley/sound/dal"
 	"github.com/hednowley/sound/services"
 	"github.com/hednowley/sound/subsonic/api"
 	"github.com/hednowley/sound/subsonic/dto"
 	"github.com/hednowley/sound/util"
 )
 
-func NewGetCoverArtHandler(dal interfaces.DAL) api.BinaryHandler {
+func NewGetCoverArtHandler(dal *dal.DAL) api.BinaryHandler {
 
 	return func(params url.Values, w *http.ResponseWriter, r *http.Request) *api.Response {
 

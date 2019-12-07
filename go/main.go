@@ -29,7 +29,7 @@ func registerRoutes(
 	factory *api.HandlerFactory,
 	authenticator *services.Authenticator,
 	ticketer *ws.Ticketer,
-	dal interfaces.DAL,
+	dal *dal.DAL,
 	hub interfaces.Hub,
 	scanner *provider.Scanner,
 	routes subsonicRoutes.Routes) {
@@ -56,7 +56,7 @@ func registerRoutes(
 	r.HandleFunc("/api/stream", factory.NewBinaryHandler(controller.NewStreamController(dal)))
 	r.HandleFunc("/api/art", factory.NewBinaryHandler(controller.NewArtController(dal)))
 	r.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {
-		hub.AddClient(ticketer, dal, w, r)
+		hub.AddClient(ticketer, w, r)
 	})
 
 	// Serves the front-end

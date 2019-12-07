@@ -4,8 +4,6 @@ import (
 	"log"
 	"time"
 
-	"github.com/hednowley/sound/interfaces"
-
 	"github.com/gorilla/websocket"
 )
 
@@ -36,8 +34,6 @@ type Client struct {
 
 	// Buffered channel of outbound messages.
 	send chan []byte
-
-	dal interfaces.DAL
 }
 
 // readPump pumps messages from the websocket connection to the hub.

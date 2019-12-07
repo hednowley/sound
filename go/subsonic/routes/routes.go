@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"github.com/hednowley/sound/config"
-	"github.com/hednowley/sound/interfaces"
+	"github.com/hednowley/sound/dal"
 	"github.com/hednowley/sound/provider"
 	"github.com/hednowley/sound/subsonic/api"
 	"github.com/hednowley/sound/subsonic/handler"
@@ -14,7 +14,7 @@ import (
 type Routes map[string]http.HandlerFunc
 
 // NewRoutes constructs a new description of the routes for the Subsonic API.
-func NewRoutes(factory *api.HandlerFactory, config *config.Config, dal interfaces.DAL, scanner *provider.Scanner, providers []provider.Provider) Routes {
+func NewRoutes(factory *api.HandlerFactory, config *config.Config, dal *dal.DAL, scanner *provider.Scanner, providers []provider.Provider) Routes {
 	routes := make(map[string]http.HandlerFunc)
 
 	routes["/subsonic/rest/ping"] = factory.PublishHandler(handler.NewPingHandler())

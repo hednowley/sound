@@ -4,8 +4,8 @@ import (
 	"net/url"
 	"strings"
 
+	"github.com/hednowley/sound/dal"
 	"github.com/hednowley/sound/dao"
-	"github.com/hednowley/sound/interfaces"
 	"github.com/hednowley/sound/subsonic/api"
 	"github.com/hednowley/sound/subsonic/dto"
 	"github.com/hednowley/sound/util"
@@ -47,7 +47,7 @@ func parseListType(param string) *dao.AlbumList2Type {
 }
 
 // NewGetAlbumList2Handler is a handler for getting information about a sample albums.
-func NewGetAlbumList2Handler(dal interfaces.DAL) api.Handler {
+func NewGetAlbumList2Handler(dal *dal.DAL) api.Handler {
 
 	return func(params url.Values) *api.Response {
 
