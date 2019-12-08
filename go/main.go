@@ -29,7 +29,7 @@ func registerRoutes(
 	authenticator *services.Authenticator,
 	ticketer *socket.Ticketer,
 	dal *dal.DAL,
-	hub *socket.Hub,
+	hub socket.IHub,
 	scanner *provider.Scanner,
 	routes subsonicRoutes.Routes) {
 

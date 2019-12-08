@@ -8,16 +8,16 @@ import (
 	"github.com/hednowley/sound/socket/dto"
 )
 
-// Hub manages a selection of clients who can send and receive messages.
+// IHub maintains the set of active clients and broadcasts messages to the clients.
 type IHub interface {
 	Notify(notification *dto.Notification)
 	SetHandler(method string, handler Handler)
-	AddClient(ticketer Ticketer, w http.ResponseWriter, r *http.Request)
+	AddClient(ticketer *Ticketer, w http.ResponseWriter, r *http.Request)
 	Run()
 }
 
 // Hub maintains the set of active clients and broadcasts messages to the clients.
-type Hub struct {
+type hub struct {
 	// Registered clients.
 	clients map[*Client]bool
 
@@ -42,8 +42,8 @@ type incoming struct {
 }
 
 // NewHub creates a new hub.
-func NewHub() *Hub {
-	return &Hub{
+func NewHub() IHub {
+	return &hub{
 		broadcast:  make(chan []byte),
 		register:   make(chan *Client),
 		unregister: make(chan *Client),
@@ -54,12 +54,12 @@ func NewHub() *Hub {
 }
 
 // SetHandler makes sure all messages with the given method are passed to the given handler.
-func (h *Hub) SetHandler(method string, handler Handler) {
+func (h *hub) SetHandler(method string, handler Handler) {
 	h.handlers[method] = handler
 }
 
 // Run starts the hub.
-func (h *Hub) Run() {
+func (h *hub) Run() {
 	for {
 		select {
 		case client := <-h.register:
@@ -85,7 +85,7 @@ func (h *Hub) Run() {
 	}
 }
 
-func (h *Hub) runHandler(incoming *incoming) {
+func (h *hub) runHandler(incoming *incoming) {
 	handler, ok := h.handlers[incoming.request.Method]
 	if ok {
 		response := handler(incoming.request)
@@ -101,7 +101,7 @@ func (h *Hub) runHandler(incoming *incoming) {
 }
 
 // Notify sends a notification to all clients.
-func (h *Hub) Notify(notification *dto.Notification) {
+func (h *hub) Notify(notification *dto.Notification) {
 	b, err := json.Marshal(notification)
 	if err != nil {
 		h.broadcast <- []byte("oops")
@@ -110,7 +110,7 @@ func (h *Hub) Notify(notification *dto.Notification) {
 }
 
 // AddClient tries to set up a new client and register it with the hub.
-func (h *Hub) AddClient(ticketer *Ticketer, w http.ResponseWriter, r *http.Request) {
+func (h *hub) AddClient(ticketer *Ticketer, w http.ResponseWriter, r *http.Request) {
 
 	// Allow all origins
 	upgrader.CheckOrigin = func(r *http.Request) bool {

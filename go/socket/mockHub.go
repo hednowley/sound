@@ -9,7 +9,7 @@ import (
 type MockHub struct {
 }
 
-func NewMockHub() *MockHub {
+func NewMockHub() IHub {
 	return &MockHub{}
 }
 
@@ -25,5 +25,5 @@ func (h *MockHub) Notify(notification *dto.Notification) {
 }
 
 // Notify sends a notification to all clients.
-func (h *MockHub) AddClient(ticketer Ticketer, w http.ResponseWriter, r *http.Request) {
+func (h *MockHub) AddClient(ticketer *Ticketer, w http.ResponseWriter, r *http.Request) {
 }
