@@ -3,7 +3,6 @@ package ws
 import (
 	"net/http"
 
-	"github.com/hednowley/sound/interfaces"
 	"github.com/hednowley/sound/ws/dto"
 )
 
@@ -14,7 +13,7 @@ func NewMockHub() *MockHub {
 	return &MockHub{}
 }
 
-func (h *MockHub) SetHandler(method string, handler interfaces.WsHandler) {
+func (h *MockHub) SetHandler(method string, handler WsHandler) {
 }
 
 // Run starts the hub.
@@ -26,5 +25,5 @@ func (h *MockHub) Notify(notification *dto.Notification) {
 }
 
 // Notify sends a notification to all clients.
-func (h *MockHub) AddClient(ticketer interfaces.Ticketer, w http.ResponseWriter, r *http.Request) {
+func (h *MockHub) AddClient(ticketer Ticketer, w http.ResponseWriter, r *http.Request) {
 }

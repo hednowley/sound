@@ -4,11 +4,11 @@ import (
 	"encoding/json"
 
 	"github.com/hednowley/sound/dal"
-	"github.com/hednowley/sound/interfaces"
+	"github.com/hednowley/sound/ws"
 	"github.com/hednowley/sound/ws/dto"
 )
 
-func MakeGetPlaylistHandler(dal *dal.DAL) interfaces.WsHandler {
+func MakeGetPlaylistHandler(dal *dal.DAL) ws.WsHandler {
 	return func(request *dto.Request) interface{} {
 		var id uint
 

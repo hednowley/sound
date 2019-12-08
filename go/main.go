@@ -14,7 +14,6 @@ import (
 	"github.com/hednowley/sound/config"
 	"github.com/hednowley/sound/dal"
 	"github.com/hednowley/sound/database"
-	"github.com/hednowley/sound/interfaces"
 	"github.com/hednowley/sound/provider"
 	"github.com/hednowley/sound/services"
 	subsonic "github.com/hednowley/sound/subsonic/api"
@@ -30,7 +29,7 @@ func registerRoutes(
 	authenticator *services.Authenticator,
 	ticketer *ws.Ticketer,
 	dal *dal.DAL,
-	hub interfaces.Hub,
+	hub *ws.Hub,
 	scanner *provider.Scanner,
 	routes subsonicRoutes.Routes) {
 

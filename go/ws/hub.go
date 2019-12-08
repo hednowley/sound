@@ -5,9 +5,17 @@ import (
 	"net/http"
 
 	"github.com/cihub/seelog"
-	"github.com/hednowley/sound/interfaces"
 	"github.com/hednowley/sound/ws/dto"
 )
+
+
+// Hub manages a selection of clients who can send and receive messages.
+type IHub interface {
+	Notify(notification *dto.Notification)
+	SetHandler(method string, handler WsHandler)
+	AddClient(ticketer Ticketer, w http.ResponseWriter, r *http.Request)
+	Run()
+}
 
 // Hub maintains the set of active clients and broadcasts messages to the clients.
 type Hub struct {
@@ -26,7 +34,7 @@ type Hub struct {
 	// Receives requests forwarded by clients
 	incoming chan *incoming
 
-	handlers map[string]interfaces.WsHandler
+	handlers map[string]WsHandler
 }
 
 type incoming struct {
@@ -35,19 +43,19 @@ type incoming struct {
 }
 
 // NewHub creates a new hub.
-func NewHub() interfaces.Hub {
+func NewHub() *Hub {
 	return &Hub{
 		broadcast:  make(chan []byte),
 		register:   make(chan *Client),
 		unregister: make(chan *Client),
 		incoming:   make(chan *incoming),
 		clients:    make(map[*Client]bool),
-		handlers:   make(map[string]interfaces.WsHandler),
+		handlers:   make(map[string]WsHandler),
 	}
 }
 
 // SetHandler makes sure all messages with the given method are passed to the given handler.
-func (h *Hub) SetHandler(method string, handler interfaces.WsHandler) {
+func (h *Hub) SetHandler(method string, handler WsHandler) {
 	h.handlers[method] = handler
 }
 
@@ -103,7 +111,7 @@ func (h *Hub) Notify(notification *dto.Notification) {
 }
 
 // AddClient tries to set up a new client and register it with the hub.
-func (h *Hub) AddClient(ticketer interfaces.Ticketer, w http.ResponseWriter, r *http.Request) {
+func (h *Hub) AddClient(ticketer *Ticketer, w http.ResponseWriter, r *http.Request) {
 
 	// Allow all origins
 	upgrader.CheckOrigin = func(r *http.Request) bool {

@@ -7,7 +7,7 @@ import (
 	"github.com/cihub/seelog"
 	"github.com/hednowley/sound/dal"
 	"github.com/hednowley/sound/dao"
-	"github.com/hednowley/sound/interfaces"
+	"github.com/hednowley/sound/ws"
 	"github.com/hednowley/sound/ws/dto"
 )
 
@@ -15,11 +15,11 @@ import (
 type Scanner struct {
 	providers []Provider
 	dal       *dal.DAL
-	hub       interfaces.Hub
+	hub       ws.IHub
 }
 
 // NewDAL constructs a new DAL.
-func NewScanner(providers []Provider, dal *dal.DAL, hub interfaces.Hub) *Scanner {
+func NewScanner(providers []Provider, dal *dal.DAL, hub ws.IHub) *Scanner {
 	return &Scanner{
 		providers: providers,
 		dal:       dal,
