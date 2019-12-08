@@ -4,11 +4,11 @@ import (
 	"encoding/json"
 
 	"github.com/hednowley/sound/dal"
-	"github.com/hednowley/sound/ws"
-	"github.com/hednowley/sound/ws/dto"
+	"github.com/hednowley/sound/socket"
+	"github.com/hednowley/sound/socket/dto"
 )
 
-func MakeGetPlaylistHandler(dal *dal.DAL) ws.WsHandler {
+func MakeGetArtistHandler(dal *dal.DAL) socket.Handler {
 	return func(request *dto.Request) interface{} {
 		var id uint
 
@@ -16,10 +16,10 @@ func MakeGetPlaylistHandler(dal *dal.DAL) ws.WsHandler {
 			return "bad id"
 		}
 
-		playlist, err := dal.GetPlaylist(id)
+		artist, err := dal.GetArtist(id)
 		if err != nil {
-			return "no playlist"
+			return "no artist"
 		}
-		return dto.NewPlaylist(playlist)
+		return dto.NewArtist(artist)
 	}
 }

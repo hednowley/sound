@@ -16,10 +16,10 @@ import (
 	"github.com/hednowley/sound/database"
 	"github.com/hednowley/sound/provider"
 	"github.com/hednowley/sound/services"
+	"github.com/hednowley/sound/socket"
+	"github.com/hednowley/sound/socket/handlers"
 	subsonic "github.com/hednowley/sound/subsonic/api"
 	subsonicRoutes "github.com/hednowley/sound/subsonic/routes"
-	"github.com/hednowley/sound/ws"
-	"github.com/hednowley/sound/ws/handlers"
 	"go.uber.org/fx"
 )
 
@@ -27,9 +27,9 @@ import (
 func registerRoutes(
 	factory *api.HandlerFactory,
 	authenticator *services.Authenticator,
-	ticketer *ws.Ticketer,
+	ticketer *socket.Ticketer,
 	dal *dal.DAL,
-	hub *ws.Hub,
+	hub *socket.Hub,
 	scanner *provider.Scanner,
 	routes subsonicRoutes.Routes) {
 
@@ -124,10 +124,10 @@ func main() {
 			database.NewDefault,
 			provider.NewProviders,
 			dal.NewDAL,
-			ws.NewHub,
+			socket.NewHub,
 			provider.NewScanner,
 			services.NewAuthenticator,
-			ws.NewTicketer,
+			socket.NewTicketer,
 			subsonic.NewHandlerFactory,
 			api.NewHandlerFactory,
 			subsonicRoutes.NewRoutes,

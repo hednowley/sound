@@ -3,7 +3,7 @@ package provider_test
 import (
 	"testing"
 
-	"github.com/hednowley/sound/ws"
+	"github.com/hednowley/sound/socket"
 
 	"github.com/hednowley/sound/config"
 	"github.com/hednowley/sound/dal"
@@ -34,7 +34,7 @@ func TestAddOnlyScan(t *testing.T) {
 	p := provider.NewMockProvider("mock", f)
 	m := database.NewMock()
 	dal := dal.NewDAL(&config.Config{}, m)
-	hub := ws.NewMockHub()
+	hub := socket.NewMockHub()
 	scanner := provider.NewScanner([]provider.Provider{p}, dal, hub)
 
 	// Scan without updating or deleting
@@ -100,7 +100,7 @@ func TestUpdateScan(t *testing.T) {
 	p := provider.NewMockProvider("mock", f)
 	m := database.NewMock()
 	dal := dal.NewDAL(&config.Config{}, m)
-	hub := ws.NewMockHub()
+	hub := socket.NewMockHub()
 	scanner := provider.NewScanner([]provider.Provider{p}, dal, hub)
 
 	// Scan without updating or deleting
@@ -173,7 +173,7 @@ func TestDeleteScan(t *testing.T) {
 	p := provider.NewMockProvider("mock", f)
 	m := database.NewMock()
 	dal := dal.NewDAL(&config.Config{}, m)
-	hub := ws.NewMockHub()
+	hub := socket.NewMockHub()
 	scanner := provider.NewScanner([]provider.Provider{p}, dal, hub)
 
 	// Scan without updating or deleting

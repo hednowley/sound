@@ -4,11 +4,11 @@ import (
 	"encoding/json"
 
 	"github.com/hednowley/sound/provider"
-	"github.com/hednowley/sound/ws"
-	"github.com/hednowley/sound/ws/dto"
+	"github.com/hednowley/sound/socket"
+	"github.com/hednowley/sound/socket/dto"
 )
 
-func MakeStartScanHandler(scanner *provider.Scanner) ws.WsHandler {
+func MakeStartScanHandler(scanner *provider.Scanner) socket.Handler {
 	return func(request *dto.Request) interface{} {
 		var update bool
 		var delete bool

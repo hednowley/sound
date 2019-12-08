@@ -1,18 +1,17 @@
-package ws
+package socket
 
 import (
 	"encoding/json"
 	"net/http"
 
 	"github.com/cihub/seelog"
-	"github.com/hednowley/sound/ws/dto"
+	"github.com/hednowley/sound/socket/dto"
 )
-
 
 // Hub manages a selection of clients who can send and receive messages.
 type IHub interface {
 	Notify(notification *dto.Notification)
-	SetHandler(method string, handler WsHandler)
+	SetHandler(method string, handler Handler)
 	AddClient(ticketer Ticketer, w http.ResponseWriter, r *http.Request)
 	Run()
 }
@@ -34,7 +33,7 @@ type Hub struct {
 	// Receives requests forwarded by clients
 	incoming chan *incoming
 
-	handlers map[string]WsHandler
+	handlers map[string]Handler
 }
 
 type incoming struct {
@@ -50,12 +49,12 @@ func NewHub() *Hub {
 		unregister: make(chan *Client),
 		incoming:   make(chan *incoming),
 		clients:    make(map[*Client]bool),
-		handlers:   make(map[string]WsHandler),
+		handlers:   make(map[string]Handler),
 	}
 }
 
 // SetHandler makes sure all messages with the given method are passed to the given handler.
-func (h *Hub) SetHandler(method string, handler WsHandler) {
+func (h *Hub) SetHandler(method string, handler Handler) {
 	h.handlers[method] = handler
 }
 

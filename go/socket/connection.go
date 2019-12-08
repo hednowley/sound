@@ -1,4 +1,4 @@
-package ws
+package socket
 
 import (
 	"encoding/json"
@@ -6,7 +6,7 @@ import (
 
 	"github.com/cihub/seelog"
 	"github.com/gorilla/websocket"
-	"github.com/hednowley/sound/ws/dto"
+	"github.com/hednowley/sound/socket/dto"
 )
 
 // Connection is a wrapper around a websocket connection.

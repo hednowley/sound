@@ -6,11 +6,11 @@ import (
 	"github.com/hednowley/sound/api/api"
 	"github.com/hednowley/sound/api/dto"
 	"github.com/hednowley/sound/config"
-	"github.com/hednowley/sound/ws"
+	"github.com/hednowley/sound/socket"
 )
 
 // NewTicketController makes a controller which returns a new Websocket ticket.
-func NewTicketController(ticketer *ws.Ticketer) *api.Controller {
+func NewTicketController(ticketer *socket.Ticketer) *api.Controller {
 
 	make := func() *api.ControllerContext {
 

@@ -1,9 +1,9 @@
-package ws
+package socket
 
 import (
 	"net/http"
 
-	"github.com/hednowley/sound/ws/dto"
+	"github.com/hednowley/sound/socket/dto"
 )
 
 type MockHub struct {
@@ -13,7 +13,7 @@ func NewMockHub() *MockHub {
 	return &MockHub{}
 }
 
-func (h *MockHub) SetHandler(method string, handler WsHandler) {
+func (h *MockHub) SetHandler(method string, handler Handler) {
 }
 
 // Run starts the hub.

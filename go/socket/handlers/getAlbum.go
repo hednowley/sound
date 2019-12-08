@@ -4,11 +4,11 @@ import (
 	"encoding/json"
 
 	"github.com/hednowley/sound/dal"
-	"github.com/hednowley/sound/ws"
-	"github.com/hednowley/sound/ws/dto"
+	"github.com/hednowley/sound/socket"
+	"github.com/hednowley/sound/socket/dto"
 )
 
-func MakeGetAlbumHandler(dal *dal.DAL) ws.WsHandler {
+func MakeGetAlbumHandler(dal *dal.DAL) socket.Handler {
 	return func(request *dto.Request) interface{} {
 		var id uint
 
