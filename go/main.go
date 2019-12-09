@@ -52,9 +52,7 @@ func registerRoutes(
 	r.HandleFunc("/api/ticket", factory.NewHandler(controller.NewTicketController(ticketer)))
 	r.HandleFunc("/api/stream", factory.NewBinaryHandler(controller.NewStreamController(dal)))
 	r.HandleFunc("/api/art", factory.NewBinaryHandler(controller.NewArtController(dal)))
-	r.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {
-		hub.AddClient(ticketer, w, r)
-	})
+	r.HandleFunc("/ws", hub.AddClient)
 
 	// Serve the front-end
 	r.PathPrefix("/").HandlerFunc(api.ServeSinglePageApp("static", "static/index.html"))

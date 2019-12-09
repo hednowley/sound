@@ -12,12 +12,16 @@ import (
 type IHub interface {
 	Notify(notification *dto.Notification)
 	SetHandler(method string, handler Handler)
-	AddClient(ticketer *Ticketer, w http.ResponseWriter, r *http.Request)
+
+	// Tries to set up a new client and register it with the hub.
+	AddClient(w http.ResponseWriter, r *http.Request)
 	Run()
 }
 
 // Hub maintains the set of active clients and broadcasts messages to the clients.
 type hub struct {
+	ticketer *Ticketer
+
 	// Registered clients.
 	clients map[*Client]bool
 
@@ -42,8 +46,9 @@ type incoming struct {
 }
 
 // NewHub creates a new hub.
-func NewHub() IHub {
+func NewHub(ticketer *Ticketer) IHub {
 	return &hub{
+		ticketer:   ticketer,
 		broadcast:  make(chan []byte),
 		register:   make(chan *Client),
 		unregister: make(chan *Client),
@@ -109,8 +114,8 @@ func (h *hub) Notify(notification *dto.Notification) {
 	h.broadcast <- b
 }
 
-// AddClient tries to set up a new client and register it with the hub.
-func (h *hub) AddClient(ticketer *Ticketer, w http.ResponseWriter, r *http.Request) {
+// AddClient is a web controller which creates new socket clients.
+func (h *hub) AddClient(w http.ResponseWriter, r *http.Request) {
 
 	// Allow all origins
 	upgrader.CheckOrigin = func(r *http.Request) bool {
@@ -148,7 +153,7 @@ func (h *hub) AddClient(ticketer *Ticketer, w http.ResponseWriter, r *http.Reque
 		return
 	}
 
-	user := ticketer.SubmitTicket(ticket)
+	user := h.ticketer.SubmitTicket(ticket)
 	if user == nil {
 		c.SendMessage(dto.NewErrorResponse("Bad ticket", request.ID))
 		conn.Close()
