@@ -5,7 +5,6 @@ import (
 	"io/ioutil"
 	"os"
 	"path"
-	"sort"
 	"time"
 
 	"github.com/cihub/seelog"
@@ -257,11 +256,6 @@ func (dal *DAL) GetPlaylist(id uint) (*dao.Playlist, error) {
 	if p == nil {
 		return nil, &dao.ErrNotFound{}
 	}
-
-	// Sort entries
-	s := NewPlaylistSorter(p)
-	sort.Sort(s)
-
 	return p, nil
 }
 
@@ -326,12 +320,7 @@ func (dal *DAL) GetGenres() []*dao.Genre {
 
 // GetPlaylists returns all playlists.
 func (dal *DAL) GetPlaylists() []*dao.Playlist {
-	playlists := dal.db.GetPlaylists()
-	for _, p := range playlists {
-		s := NewPlaylistSorter(p)
-		sort.Sort(s)
-	}
-	return playlists
+	return dal.db.GetPlaylists()
 }
 
 // Empty deletes all data.

@@ -299,7 +299,9 @@ func (db *Default) GetArtists(includeAlbums bool) []*dao.Artist {
 
 func (db *Default) GetPlaylists() []*dao.Playlist {
 	var playlists []*dao.Playlist
-	db.db.Preload("Entries").Find(&playlists)
+	db.db.Preload("Entries", func(db *gorm.DB) *gorm.DB {
+		return db.Order("playlist_entries.index ASC")
+	}).Find(&playlists)
 	return playlists
 }
 
