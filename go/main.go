@@ -33,7 +33,7 @@ func registerRoutes(
 
 	r := mux.NewRouter()
 
-	// Subsonic API routes
+	// Subsonic API endpoints
 	r.PathPrefix("/subsonic/").HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		path := strings.ToLower(strings.Split(r.URL.Path, ".")[0])
 
@@ -47,7 +47,7 @@ func registerRoutes(
 		w.WriteHeader(http.StatusNotFound)
 	})
 
-	// Endpoints for websocket negotiation
+	// API endpoints
 	r.HandleFunc("/api/authenticate", factory.NewHandler(controller.NewAuthenticateController(authenticator)))
 	r.HandleFunc("/api/ticket", factory.NewHandler(controller.NewTicketController(ticketer)))
 	r.HandleFunc("/api/stream", factory.NewBinaryHandler(controller.NewStreamController(dal)))

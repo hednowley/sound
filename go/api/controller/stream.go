@@ -11,6 +11,7 @@ import (
 	"github.com/hednowley/sound/util"
 )
 
+// NewStreamController creates a controller for streaming audio.
 func NewStreamController(dal *dal.DAL) *api.BinaryController {
 
 	run := func(w http.ResponseWriter, r *http.Request, _ *config.User) *api.Response {

@@ -15,6 +15,7 @@ import (
 	"github.com/hednowley/sound/util"
 )
 
+// NewArtController creates a controller for serving artwork images.
 func NewArtController(dal *dal.DAL) *api.BinaryController {
 
 	run := func(w http.ResponseWriter, r *http.Request, _ *config.User) *api.Response {

@@ -24,6 +24,7 @@ type Controller struct {
 	// Request token will be authenticated iff this is true
 	Secure bool
 
+	// Create a new context for an incoming request.
 	Make func() *ControllerContext
 }
 
