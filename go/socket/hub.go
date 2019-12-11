@@ -28,10 +28,10 @@ type hub struct {
 	// Receieves messages which should be sent out by all clients.
 	broadcast chan []byte
 
-	// Register requests from the clients.
+	// Receives new clients which want to be registered with this hub.
 	register chan *Client
 
-	// Unregister requests from clients.
+	// Unregisters clients from this hub.
 	unregister chan *Client
 
 	// Receives requests forwarded by clients
@@ -90,7 +90,16 @@ func (h *hub) Run() {
 	}
 }
 
+// runHandler takes a request from a client, runs the appropriate handler for
+// the request and then send the response back to the client.
 func (h *hub) runHandler(incoming *incoming) {
+
+	// Check that this client still registered with the hub.
+	registered, ok := h.clients[incoming.client]
+	if !registered || !ok {
+		return
+	}
+
 	handler, ok := h.handlers[incoming.request.Method]
 	if ok {
 		response := handler(incoming.request)
@@ -99,7 +108,14 @@ func (h *hub) runHandler(incoming *incoming) {
 		}
 
 		j, err := json.Marshal(dto.NewResponse(response, incoming.request.ID))
-		if err == nil {
+		if err != nil {
+			return
+		}
+
+		// Check that client is still registered to the hub.
+		// It couild have been deregistered since the handler was invoked.
+		registered, ok := h.clients[incoming.client]
+		if registered && ok {
 			incoming.client.send <- j
 		}
 	}
