@@ -1,0 +1,1 @@
+var SOUND_CONFIG = {};

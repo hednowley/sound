@@ -10,6 +10,7 @@ module Player.Actions exposing
     , replacePlaylist
     , resumeCurrent
     , setCurrentTime
+    , setRepeat
     , setShuffle
     , shufflePlaylist
     )
@@ -21,7 +22,8 @@ import Loadable exposing (Loadable(..))
 import Model exposing (Model)
 import Msg exposing (Msg)
 import Player.Msg exposing (PlayerMsg(..))
-import Player.Select exposing (getCurrentSongId, getCurrentSongState, getSongId)
+import Player.Repeat exposing (Repeat(..))
+import Player.Select exposing (getCurrentSongId, getCurrentSongState, getSongId, isPlaying)
 import Ports
 import Random
 import Random.Array exposing (shuffle)
@@ -261,3 +263,15 @@ onSongEnded model =
 
         Nothing ->
             ( model, Cmd.none )
+
+
+setRepeat : Repeat -> Update Model Msg
+setRepeat repeat model =
+    let
+        m =
+            model.player
+
+        set =
+            { m | repeat = repeat }
+    in
+    ( { model | player = set }, Cmd.none )

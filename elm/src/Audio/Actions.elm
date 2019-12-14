@@ -25,8 +25,11 @@ updateSongState songId state model =
     let
         (SongId s) =
             songId
+
+        audio =
+            model.audio
     in
-    { model | songCache = Dict.insert s state model.songCache }
+    { model | audio = { audio | songs = Dict.insert s state audio.songs } }
 
 
 onSongLoaded : SongId -> Update Model Msg
@@ -50,7 +53,7 @@ onSongLoaded songId model =
 
 onTimeChanged : SongId -> Float -> Model -> Model
 onTimeChanged songId time model =
-    case getSongState songId model of
+    case getSongState model songId of
         Just (Playing p) ->
             updateSongState songId (Playing { p | time = time }) model
 
@@ -60,7 +63,7 @@ onTimeChanged songId time model =
 
 playSong : SongId -> Update Model Msg
 playSong songId model =
-    case getSongState songId model of
+    case getSongState model songId of
         Just AudioState.Loading ->
             ( model, Cmd.none )
 

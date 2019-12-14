@@ -14,6 +14,7 @@ import Player.Actions
         , queueAndPlaySong
         , queueSong
         , resumeCurrent
+        , setRepeat
         , setShuffle
         )
 import Player.Msg exposing (PlayerMsg(..))
@@ -57,3 +58,6 @@ update msg model =
 
         Shuffled playlist ->
             ( finishShufflePlaylist playlist model, Cmd.none )
+
+        SetRepeat repeat ->
+            setRepeat repeat model

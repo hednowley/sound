@@ -1,6 +1,7 @@
 module Main exposing (main)
 
 import Audio.AudioMsg exposing (AudioMsg(..))
+import Audio.Model
 import Audio.Update
 import Browser
 import Browser.Navigation as Nav exposing (Key)
@@ -100,7 +101,7 @@ emptyModel key url config =
     , songs = Dict.empty
     , config = config
     , route = Nothing
-    , songCache = Dict.empty
+    , audio = Audio.Model.emptyModel
     , socket = SocketModelWrap Socket.Update.emptyModel
     , player = Player.Model.emptyModel
     }

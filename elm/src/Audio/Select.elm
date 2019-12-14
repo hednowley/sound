@@ -8,6 +8,6 @@ import Routing exposing (Route(..))
 import Song.Types exposing (SongId(..), getRawSongId)
 
 
-getSongState : SongId -> Model -> Maybe State
-getSongState songId model =
-    Dict.get (getRawSongId songId) model.songCache
+getSongState : Model -> SongId -> Maybe State
+getSongState model songId =
+    Dict.get (getRawSongId songId) model.audio.songs
