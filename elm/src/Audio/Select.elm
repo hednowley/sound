@@ -1,6 +1,6 @@
 module Audio.Select exposing (getSongState)
 
-import AudioState exposing (State(..))
+import Audio.State exposing (State(..))
 import Dict
 import Loadable exposing (Loadable(..))
 import Model exposing (Model)

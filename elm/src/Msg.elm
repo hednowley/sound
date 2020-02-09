@@ -1,6 +1,6 @@
 module Msg exposing (Msg(..))
 
-import Audio.AudioMsg exposing (AudioMsg)
+import Audio.Msg exposing (AudioMsg)
 import Browser
 import DTO.Authenticate
 import Http

@@ -6,9 +6,9 @@ module Audio.Actions exposing
     , updateSongState
     )
 
-import Audio exposing (makeLoadRequest)
+import Audio.Request exposing (makeLoadRequest)
 import Audio.Select exposing (getSongState)
-import AudioState exposing (State(..))
+import Audio.State exposing (State(..))
 import Dict
 import Loadable exposing (Loadable(..))
 import Model exposing (Model)
@@ -20,7 +20,7 @@ import Song.Types exposing (SongId(..), getRawSongId)
 import Types exposing (Update)
 
 
-updateSongState : SongId -> AudioState.State -> Model -> Model
+updateSongState : SongId -> Audio.State.State -> Model -> Model
 updateSongState songId state model =
     let
         (SongId s) =
@@ -38,7 +38,7 @@ onSongLoaded songId model =
         m =
             updateSongState
                 songId
-                (AudioState.Loaded { duration = Nothing })
+                (Audio.State.Loaded { duration = Nothing })
                 model
 
         playing =
@@ -64,13 +64,13 @@ onTimeChanged songId time model =
 playSong : SongId -> Update Model Msg
 playSong songId model =
     case getSongState model songId of
-        Just AudioState.Loading ->
+        Just Audio.State.Loading ->
             ( model, Cmd.none )
 
-        Just (AudioState.Loaded _) ->
+        Just (Audio.State.Loaded _) ->
             ( model, Ports.playAudio (getRawSongId songId) )
 
-        Just (AudioState.Playing _) ->
+        Just (Audio.State.Playing _) ->
             ( model, Ports.playAudio (getRawSongId songId) )
 
         _ ->
@@ -81,6 +81,6 @@ loadSong : SongId -> Update Model Msg
 loadSong songId model =
     let
         m =
-            updateSongState songId AudioState.Loading model
+            updateSongState songId Audio.State.Loading model
     in
     ( m, Ports.loadAudio <| makeLoadRequest songId )

@@ -2,7 +2,7 @@ module Player.Select exposing (getCurrentSongId, getCurrentSongState, getSongId,
 
 import Array
 import Audio.Select exposing (getSongState)
-import AudioState exposing (State(..))
+import Audio.State exposing (State(..))
 import Loadable exposing (Loadable(..))
 import Model exposing (Model)
 import Routing exposing (Route(..))

@@ -1,7 +1,7 @@
 module Player.Update exposing (update)
 
 import Album.Update exposing (playAlbum)
-import Audio.AudioMsg exposing (AudioMsg(..))
+import Audio.Msg exposing (AudioMsg(..))
 import Model exposing (Model)
 import Msg
 import Player.Actions

@@ -1,6 +1,6 @@
 port module Ports exposing (..)
 
-import Audio
+import Audio.Request
 import Cache exposing (Cache)
 import Json.Encode
 
@@ -12,7 +12,7 @@ import Json.Encode
 port setCache : Cache -> Cmd msg
 
 
-port loadAudio : Audio.LoadRequest -> Cmd msg
+port loadAudio : Audio.Request.LoadRequest -> Cmd msg
 
 
 port playAudio : Int -> Cmd msg

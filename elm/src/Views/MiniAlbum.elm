@@ -2,7 +2,7 @@ module Views.MiniAlbum exposing (view)
 
 import Album.Select exposing (getAlbumArt)
 import Album.Types exposing (getRawAlbumId)
-import Audio.AudioMsg exposing (AudioMsg(..))
+import Audio.Msg exposing (AudioMsg(..))
 import Entities.AlbumSummary exposing (AlbumSummary)
 import Html.Styled exposing (Html, a, button, div, img, text)
 import Html.Styled.Attributes exposing (class, href, src)

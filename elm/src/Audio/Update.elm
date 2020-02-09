@@ -1,8 +1,8 @@
 module Audio.Update exposing (update)
 
 import Audio.Actions exposing (onSongLoaded, onTimeChanged, updateSongState)
-import Audio.AudioMsg exposing (AudioMsg(..))
-import AudioState
+import Audio.Msg exposing (AudioMsg(..))
+import Audio.State
 import Model exposing (Model)
 import Msg exposing (Msg)
 import Player.Actions
@@ -29,7 +29,7 @@ update msg model =
         Playing { songId, time, duration } ->
             ( updateSongState
                 (SongId songId)
-                (AudioState.Playing { paused = False, time = time, duration = duration })
+                (Audio.State.Playing { paused = False, time = time, duration = duration })
                 model
             , Cmd.none
             )
@@ -37,7 +37,7 @@ update msg model =
         Paused { songId, time, duration } ->
             ( updateSongState
                 (SongId songId)
-                (AudioState.Playing { paused = True, time = time, duration = duration })
+                (Audio.State.Playing { paused = True, time = time, duration = duration })
                 model
             , Cmd.none
             )

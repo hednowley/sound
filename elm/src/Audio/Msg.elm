@@ -1,4 +1,4 @@
-module Audio.AudioMsg exposing (AudioMsg(..))
+module Audio.Msg exposing (AudioMsg(..))
 
 import Song.Types exposing (SongId)
 

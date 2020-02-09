@@ -1,6 +1,6 @@
 module Audio.Model exposing (Model, emptyModel)
 
-import AudioState exposing (State)
+import Audio.State exposing (State)
 import Dict exposing (Dict)
 
 

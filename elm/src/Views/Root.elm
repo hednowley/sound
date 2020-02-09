@@ -1,7 +1,7 @@
 module Views.Root exposing (view)
 
 import Array
-import Audio.AudioMsg exposing (AudioMsg(..))
+import Audio.Msg exposing (AudioMsg(..))
 import Css exposing (..)
 import Html.Styled exposing (..)
 import Html.Styled.Attributes exposing (class, css)

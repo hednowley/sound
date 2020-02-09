@@ -1,7 +1,7 @@
 module Views.Player exposing (view)
 
-import Audio.AudioMsg exposing (AudioMsg(..))
-import AudioState exposing (State(..))
+import Audio.Msg exposing (AudioMsg(..))
+import Audio.State exposing (State(..))
 import Html.Styled exposing (Html, button, div, text)
 import Html.Styled.Attributes exposing (class, style)
 import Html.Styled.Events exposing (onClick)
@@ -38,7 +38,7 @@ view model =
 backButton : State -> Html Msg
 backButton state =
     case state of
-        AudioState.Playing { time } ->
+        Audio.State.Playing { time } ->
             button [ onClick <| AudioMsg (SetTime <| time - 15) ] [ text "-15" ]
 
         _ ->
@@ -48,7 +48,7 @@ backButton state =
 playButton : State -> Html Msg
 playButton state =
     case state of
-        AudioState.Playing { paused } ->
+        Audio.State.Playing { paused } ->
             if paused then
                 button [ onClick <| PlayerMsg Resume ] [ text "Play" ]
 
@@ -62,7 +62,7 @@ playButton state =
 forwardButton : State -> Html Msg
 forwardButton state =
     case state of
-        AudioState.Playing { time } ->
+        Audio.State.Playing { time } ->
             button [ onClick <| AudioMsg (SetTime <| time + 15) ] [ text "+15" ]
 
         _ ->
@@ -72,7 +72,7 @@ forwardButton state =
 nextButton : State -> Html Msg
 nextButton state =
     case state of
-        AudioState.Playing _ ->
+        Audio.State.Playing _ ->
             button [ onClick <| PlayerMsg Next ] [ text ">|" ]
 
         _ ->
@@ -82,7 +82,7 @@ nextButton state =
 prevButton : State -> Html Msg
 prevButton state =
     case state of
-        AudioState.Playing _ ->
+        Audio.State.Playing _ ->
             button [ onClick <| PlayerMsg Prev ] [ text "|<" ]
 
         _ ->
@@ -118,7 +118,7 @@ slider : State -> Html Msg
 slider state =
     div [ class "player__slider--wrap" ]
         [ case state of
-            AudioState.Playing { time, duration } ->
+            Audio.State.Playing { time, duration } ->
                 case duration of
                     Just d ->
                         div [ class "player__slider--elapsed", style "width" (fromFloat (100 * time / d) ++ "%") ] []

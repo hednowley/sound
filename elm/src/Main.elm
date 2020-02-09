@@ -1,7 +1,7 @@
 module Main exposing (main)
 
-import Audio.AudioMsg exposing (AudioMsg(..))
 import Audio.Model
+import Audio.Msg exposing (AudioMsg(..))
 import Audio.Update
 import Browser
 import Browser.Navigation as Nav exposing (Key)
@@ -115,11 +115,11 @@ subscriptions _ =
         [ Ports.websocketOpened <| always (SocketMsg SocketOpened)
         , Ports.websocketClosed <| always (SocketMsg SocketClosed)
         , Ports.websocketIn <| SocketIn >> Msg.SocketMsg
-        , Ports.canPlayAudio <| SongId >> CanPlay >> Msg.AudioMsg
-        , Ports.audioEnded <| SongId >> Ended >> Msg.AudioMsg
-        , Ports.audioPlaying <| Audio.AudioMsg.Playing >> Msg.AudioMsg
-        , Ports.audioPaused <| Audio.AudioMsg.Paused >> Msg.AudioMsg
-        , Ports.audioTimeChanged <| Audio.AudioMsg.TimeChanged >> Msg.AudioMsg
+        , Ports.canPlayAudio <| SongId >> CanPlay >> AudioMsg
+        , Ports.audioEnded <| SongId >> Ended >> AudioMsg
+        , Ports.audioPlaying <| Audio.Msg.Playing >> AudioMsg
+        , Ports.audioPaused <| Audio.Msg.Paused >> AudioMsg
+        , Ports.audioTimeChanged <| Audio.Msg.TimeChanged >> AudioMsg
         , Ports.audioNextPressed <| always (Msg.PlayerMsg Next)
         , Ports.audioPrevPressed <| always (Msg.PlayerMsg Prev)
         ]

@@ -1,6 +1,6 @@
 module Playlist.Update exposing (playPlaylist)
 
-import Audio.AudioMsg exposing (AudioMsg(..))
+import Audio.Msg exposing (AudioMsg(..))
 import Entities.Playlist exposing (Playlist)
 import Loadable exposing (Loadable(..))
 import Model exposing (Model)

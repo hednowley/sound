@@ -1,4 +1,4 @@
-module AudioState exposing (State(..))
+module Audio.State exposing (State(..))
 
 
 type State

@@ -1,7 +1,6 @@
 module Model exposing (Model, SocketModelWrap(..), getSocketModel, setSocketModel)
 
 import Audio.Model
-import AudioState
 import Browser.Navigation exposing (Key)
 import Config exposing (Config)
 import Dict exposing (Dict)
