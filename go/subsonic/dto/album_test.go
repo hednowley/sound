@@ -16,7 +16,7 @@ func TestAlbum(t *testing.T) {
 	album := GenerateAlbum(1, genre, artist, art)
 	GenerateSongs(11, genre, album, art)
 
-	DTO := NewAlbum(album, false)
+	DTO := NewAlbum(album)
 
 	xml := `
 	<album id="1" name="album1" artist="artist1" artistId="1" coverArt="1.jpg" songCount="11" duration="1" created="2001-08-15T00:00:00Z" year="1901" genre="genre1"></album>
@@ -51,7 +51,7 @@ func TestAlbumWithoutArt(t *testing.T) {
 	album := GenerateAlbum(1, genre, artist, nil)
 	GenerateSongs(11, genre, album, art)
 
-	DTO := NewAlbum(album, false)
+	DTO := NewAlbum(album)
 
 	xml := `
 	<album id="1" name="album1" artist="artist1" artistId="1" songCount="11" duration="1" created="2001-08-15T00:00:00Z" year="1901" genre="genre1"></album>
@@ -85,7 +85,7 @@ func TestAlbumWithoutGenre(t *testing.T) {
 	album := GenerateAlbum(1, nil, artist, art)
 	GenerateSongs(11, genre, album, art)
 
-	DTO := NewAlbum(album, false)
+	DTO := NewAlbum(album)
 
 	xml := `
 	<album id="1" name="album1" artist="artist1" artistId="1" coverArt="1.jpg" songCount="11" duration="1" created="2001-08-15T00:00:00Z" year="1901"></album>
@@ -121,7 +121,7 @@ func TestAlbumWithoutYear(t *testing.T) {
 
 	album.Year = 0
 
-	DTO := NewAlbum(album, false)
+	DTO := NewAlbum(album)
 
 	xml := `
 	<album id="1" name="album1" artist="artist1" artistId="1" coverArt="1.jpg" songCount="11" duration="1" created="2001-08-15T00:00:00Z" genre="genre1"></album>
@@ -155,7 +155,7 @@ func TestAlbumWithSongs(t *testing.T) {
 	album := GenerateAlbum(1, genre, artist, art)
 	songs := GenerateSongs(11, genre, album, art)
 
-	DTO := NewAlbum(album, true)
+	DTO := NewAlbum(album)
 
 	songXML := ""
 	for _, s := range songs {

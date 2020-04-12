@@ -16,10 +16,13 @@ func MakeGetAlbumHandler(dal *dal.DAL) socket.Handler {
 			return "bad id"
 		}
 
-		album, err := dal.GetAlbum(id, false, false, true)
+		album, err := dal.GetAlbum(id)
 		if err != nil {
 			return "no album"
 		}
-		return dto.NewAlbum(album)
+
+		songs := dal.Db.GetAlbumSongs(id)
+
+		return dto.NewAlbum(album, songs)
 	}
 }

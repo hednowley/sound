@@ -6,14 +6,12 @@ import "time"
 type Song struct {
 	ID         uint   `gorm:"PRIMARY_KEY"`
 	Artist     string // Name of the artist of the song. Can differ from the album's artist.
-	Album      *Album
 	AlbumID    uint
 	Path       string
 	Title      string
 	Track      int
 	Disc       int
 	GenreID    uint
-	Genre      *Genre
 	Year       int
 	Art        string
 	Created    *time.Time

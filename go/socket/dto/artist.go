@@ -11,17 +11,17 @@ type Artist struct {
 	Albums []*AlbumSummary `json:"albums"`
 }
 
-func NewArtist(artist *dao.Artist) *Artist {
+func NewArtist(artist *dao.Artist, albums []dao.Album) *Artist {
 
-	albums := make([]*AlbumSummary, len(artist.Albums))
-	for index, album := range artist.Albums {
-		albums[index] = NewAlbumSummary(album)
+	albumsDto := make([]*AlbumSummary, len(albums))
+	for index, album := range albums {
+		albumsDto[index] = NewAlbumSummary(&album)
 	}
 
 	return &Artist{
 		ID:     artist.ID,
 		Name:   artist.Name,
-		Albums: albums,
+		Albums: albumsDto,
 		Art:    artist.Art,
 	}
 }

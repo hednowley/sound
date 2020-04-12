@@ -14,7 +14,7 @@ func TestArtist(t *testing.T) {
 	artist := GenerateArtist(1, art)
 	GenerateAlbums(6, nil, artist, nil)
 
-	DTO := NewArtist(artist, false)
+	DTO := NewArtist(artist)
 
 	xml := `
 	<artist id="1" name="artist1" coverArt="1.jpg" albumCount="6" duration="1"></artist>
@@ -41,7 +41,7 @@ func TestArtistWithoutArt(t *testing.T) {
 	artist := GenerateArtist(1, nil)
 	GenerateAlbums(6, nil, artist, nil)
 
-	DTO := NewArtist(artist, false)
+	DTO := NewArtist(artist)
 
 	xml := `
 	<artist id="1" name="artist1" albumCount="6" duration="1"></artist>
@@ -67,7 +67,7 @@ func TestArtistWithoutAlbums(t *testing.T) {
 	art := GenerateArt(1)
 	artist := GenerateArtist(1, art)
 
-	DTO := NewArtist(artist, false)
+	DTO := NewArtist(artist)
 
 	xml := `
 	<artist id="1" name="artist1" coverArt="1.jpg" albumCount="0" duration="1"></artist>
@@ -95,11 +95,11 @@ func TestArtistWithAlbums(t *testing.T) {
 	artist := GenerateArtist(1, art)
 	albums := GenerateAlbums(6, nil, artist, art)
 
-	DTO := NewArtist(artist, true)
+	DTO := NewArtistWithAlbums(artist, albums)
 
 	albumXML := ""
 	for _, a := range albums {
-		m, _ := xml.Marshal(NewAlbum(a, false))
+		m, _ := xml.Marshal(NewAlbum(a))
 		albumXML += string(m)
 	}
 
@@ -109,7 +109,7 @@ func TestArtistWithAlbums(t *testing.T) {
 
 	albumJSON := make([]string, len(albums))
 	for i, a := range albums {
-		m, _ := json.Marshal(NewAlbum(a, false))
+		m, _ := json.Marshal(NewAlbum(a))
 		albumJSON[i] = string(m)
 	}
 

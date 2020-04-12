@@ -29,6 +29,8 @@ func NewGetArtistHandler(dal *dal.DAL) api.Handler {
 			return api.NewErrorReponse(dto.Generic, err.Error())
 		}
 
-		return api.NewSuccessfulReponse(dto.NewArtist(artist, true))
+		albums := dal.Db.GetAlbumsByArtist(id)
+
+		return api.NewSuccessfulReponse(dto.NewArtistWithAlbums(artist, albums))
 	}
 }

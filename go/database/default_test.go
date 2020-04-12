@@ -17,7 +17,7 @@ func TestPutArtist(t *testing.T) {
 		Name: "artist_2X",
 	})
 
-	a := m.GetArtist(2, false, false)
+	a := m.GetArtist(2)
 	if a.Name != "artist_2X" {
 		t.Error("Not modified")
 	}
@@ -27,7 +27,7 @@ func TestPutArtist(t *testing.T) {
 		ID:   666,
 		Name: "heggarty",
 	})
-	a = m.GetArtist(666, false, false)
+	a = m.GetArtist(666)
 	if a.Name != "heggarty" {
 		t.Error("Not modified")
 	}
@@ -43,7 +43,7 @@ func TestPutArtist(t *testing.T) {
 		t.Error("Wrong ID")
 	}
 
-	a = m.GetArtist(10001, false, false)
+	a = m.GetArtist(10001)
 	if a.Name != "sdff" {
 		t.Error("Not modified")
 	}
@@ -87,7 +87,7 @@ func TestPutAlbumByAttributest(t *testing.T) {
 		t.Error()
 	}
 
-	a2 := m.GetArtist(10001, true, false)
+	a2 := m.GetArtist(10001)
 	if a2.Name != "sdffsd" || a2.Albums[0].ID != 10001 {
 		t.Error()
 	}
@@ -104,7 +104,7 @@ func TestPutAlbumByAttributest(t *testing.T) {
 		t.Error()
 	}
 
-	a2 = m.GetArtist(10002, true, false)
+	a2 = m.GetArtist(10002)
 	if a2.Name != "sduiru" || a2.Albums[0].ID != 10003 {
 		t.Error()
 	}

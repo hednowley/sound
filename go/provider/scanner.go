@@ -66,7 +66,6 @@ func (scanner *Scanner) startScan(provider Provider, update bool, delete bool) {
 	}
 
 	seelog.Infof("Started '%v' scan.", providerID)
-	synch := NewSynchroniser(scanner.dal, 10)
 
 	scanner.hub.Notify(dto.NewScanStatusNotification(provider.IsScanning(), provider.FileCount()))
 
@@ -97,13 +96,9 @@ func (scanner *Scanner) startScan(provider Provider, update bool, delete bool) {
 				}
 			} else {
 				seelog.Infof("Updating token '%v'", token)
-				synch.Notify(s.AlbumID) // Notify of potential change to old album
 			}
 
 			s = scanner.dal.PutSong(s, data)
-
-			// Notify of change to new album
-			synch.Notify(s.AlbumID)
 
 		} else {
 			seelog.Infof("Skipping token '%v'", token)
@@ -112,9 +107,6 @@ func (scanner *Scanner) startScan(provider Provider, update bool, delete bool) {
 	if err != nil {
 		seelog.Errorf("Error during '%v' scan: %v", providerID, err)
 	}
-
-	// Make any remaining updates
-	synch.Flush()
 
 	if delete {
 		seelog.Info("Deleting unscanned items")

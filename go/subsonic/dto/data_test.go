@@ -60,12 +60,10 @@ func GenerateSong(i int, genre *dao.Genre, album *dao.Album, art *dao.Art) *dao.
 	s := dao.Song{
 		ID:            uint(i),
 		Title:         fmt.Sprintf("title%v", i),
-		Artist:        album.Artist.Name,
+		Artist:        album.ArtistName,
 		Track:         i,
 		Disc:          i,
 		GenreID:       genreID,
-		Genre:         genre,
-		Album:         album,
 		AlbumID:       album.ID,
 		Art:           artPath,
 		Path:          fmt.Sprintf("D:\\music\\%v.mp3", i),
@@ -73,28 +71,23 @@ func GenerateSong(i int, genre *dao.Genre, album *dao.Album, art *dao.Art) *dao.
 		Year:          1900 + i,
 		Created:       &t,
 		GenreName:     genreName,
-		AlbumArtistID: album.Artist.ID,
+		AlbumArtistID: album.ArtistID,
 		AlbumName:     album.Name,
 	}
 
-	album.Songs = append(album.Songs, &s)
-	album.SongCount++
-	if genre != nil {
-		genre.Songs = append(genre.Songs, &s)
-	}
 	return &s
 }
 
 func GenerateSongs(count int, genre *dao.Genre, album *dao.Album, art *dao.Art) []*dao.Song {
 	songs := make([]*dao.Song, count)
-	for i := 1; i < count+1; i++ {
-		songs[i-1] = GenerateSong(i, genre, album, art)
+	for i := 0; i < count; i++ {
+		songs[i] = GenerateSong(i+1, genre, album, art)
 	}
 	return songs
 }
 
-func GenerateAlbum(i int, genre *dao.Genre, artist *dao.Artist, art *dao.Art) *dao.Album {
-	t := time.Date(2000+i, time.August, 15, 0, 0, 0, 0, time.UTC)
+func GenerateAlbum(albumId int, genre *dao.Genre, artist *dao.Artist, art *dao.Art) *dao.Album {
+	t := time.Date(2000+albumId, time.August, 15, 0, 0, 0, 0, time.UTC)
 
 	var artPath string
 	if art != nil {
@@ -109,18 +102,16 @@ func GenerateAlbum(i int, genre *dao.Genre, artist *dao.Artist, art *dao.Art) *d
 	}
 
 	a := dao.Album{
-		ID:         uint(i),
-		Name:       fmt.Sprintf("album%v", i),
-		Year:       1900 + i,
+		ID:         uint(albumId),
+		Name:       fmt.Sprintf("album%v", albumId),
+		Year:       1900 + albumId,
 		GenreID:    genreID,
-		Genre:      genre,
-		Artist:     artist,
 		ArtistID:   artist.ID,
 		Art:        artPath,
 		Created:    &t,
-		Duration:   i,
 		ArtistName: artist.Name,
 		GenreName:  genreName,
+		Duration:   albumId,
 	}
 
 	artist.Albums = append(artist.Albums, &a)

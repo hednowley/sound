@@ -14,7 +14,7 @@ import (
 // Note that a real database must exist at the connection string below.
 func NewMock() *Default {
 
-	conn := "dbname=sound_test sslmode=disable user=sound password=sound"
+	conn := "host=localhost port=5432 user=sound password=sound dbname=sound_test sslmode=disable"
 
 	// Initialise the database schema with gorm
 	database, err := NewDefault(&config.Config{Db: conn})

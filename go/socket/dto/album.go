@@ -12,18 +12,17 @@ type Album struct {
 	Artist   string         `json:"artist"`
 	ArtistID uint           `json:"artistId,string"`
 	Art      string         `json:"coverArt,omitempty"`
-	Duration int            `json:"duration"`
 	Created  *time.Time     `json:"created"`
 	Year     int            `json:"year,omitempty"`
 	Genre    string         `json:"genre,omitempty"`
 	Songs    []*SongSummary `json:"songs"`
 }
 
-func NewAlbum(album *dao.Album) *Album {
+func NewAlbum(album *dao.Album, songs []dao.Song) *Album {
 
-	songs := make([]*SongSummary, len(album.Songs))
-	for index, song := range album.Songs {
-		songs[index] = NewSongSummary(song)
+	songSummaries := make([]*SongSummary, len(songs))
+	for index, song := range songs {
+		songSummaries[index] = NewSongSummary(&song)
 	}
 
 	return &Album{
@@ -35,7 +34,6 @@ func NewAlbum(album *dao.Album) *Album {
 		Created:  album.Created,
 		Genre:    album.GenreName,
 		Year:     album.Year,
-		Duration: album.Duration,
-		Songs:    songs,
+		Songs:    songSummaries,
 	}
 }

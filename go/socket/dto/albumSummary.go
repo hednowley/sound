@@ -12,7 +12,6 @@ type AlbumSummary struct {
 	Artist   string     `json:"artist"`
 	ArtistID uint       `json:"artistId,string"`
 	Art      string     `json:"coverArt,omitempty"`
-	Duration int        `json:"duration"`
 	Created  *time.Time `json:"created"`
 	Year     int        `json:"year,omitempty"`
 	Genre    string     `json:"genre,omitempty"`
@@ -28,6 +27,5 @@ func NewAlbumSummary(album *dao.Album) *AlbumSummary {
 		Created:  album.Created,
 		Genre:    album.GenreName,
 		Year:     album.Year,
-		Duration: album.Duration,
 	}
 }

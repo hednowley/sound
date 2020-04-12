@@ -71,7 +71,7 @@ func TestAddOnlyScan(t *testing.T) {
 	}
 
 	// New album should have been added
-	album, err := dal.GetAlbum(10001, false, false, false)
+	album, err := dal.GetAlbum(10001)
 	if err != nil || album == nil || album.Name != "new_album" || album.ArtistID != 10001 {
 		t.Error()
 	}
@@ -114,7 +114,8 @@ func TestUpdateScan(t *testing.T) {
 
 	// New genre should have been added
 	genre, err := dal.GetGenre("Neurofunk")
-	if err != nil || genre == nil || s.GenreID != genre.ID || s.Album.GenreID != genre.ID {
+	album, err := dal.GetAlbum(s.AlbumID)
+	if err != nil || genre == nil || s.GenreID != genre.ID || album.GenreID != genre.ID {
 		t.Error()
 	}
 
@@ -143,7 +144,7 @@ func TestUpdateScan(t *testing.T) {
 	}
 
 	// New album should have been added
-	album, err := dal.GetAlbum(10001, false, false, false)
+	album, err = dal.GetAlbum(10001)
 	if err != nil || album == nil || album.Name != "new_album" || album.ArtistID != 10001 {
 		t.Error()
 	}

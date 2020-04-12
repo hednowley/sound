@@ -28,14 +28,14 @@ func newSearchResponse(artists []*dao.Artist, albums []*dao.Album, songs []*dao.
 	artistsDto := make([]*Artist, artistCount)
 
 	for i, a := range artists {
-		artistsDto[i] = NewArtist(a, false)
+		artistsDto[i] = NewArtist(a)
 	}
 
 	albumCount := len(albums)
 	albumsDto := make([]*Album, albumCount)
 
 	for i, a := range albums {
-		albumsDto[i] = NewAlbum(a, false)
+		albumsDto[i] = NewAlbum(a)
 	}
 
 	songCount := len(songs)

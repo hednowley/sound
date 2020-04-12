@@ -11,11 +11,11 @@ type AlbumList2 struct {
 	Albums  []*Album `xml:"album"  json:"album"`
 }
 
-func NewAlbumList2(albums []*dao.Album) *AlbumList2 {
+func NewAlbumList2(albums []dao.Album) *AlbumList2 {
 
 	dtoAlbums := make([]*Album, len(albums))
 	for index, a := range albums {
-		dtoAlbums[index] = NewAlbum(a, false)
+		dtoAlbums[index] = NewAlbum(&a)
 	}
 
 	return &AlbumList2{Albums: dtoAlbums}

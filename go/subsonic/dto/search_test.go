@@ -37,18 +37,18 @@ func TestSearch2(t *testing.T) {
 	innerXML := ""
 
 	for _, a := range artists {
-		m, _ := xml.Marshal(NewArtist(a, false))
+		m, _ := xml.Marshal(NewArtist(a))
 		innerXML += string(m)
 
-		m, _ = json.Marshal(NewArtist(a, false))
+		m, _ = json.Marshal(NewArtist(a))
 		artistsJSON = append(artistsJSON, string(m))
 	}
 
 	for _, a := range albums {
-		m, _ := xml.Marshal(NewAlbum(a, false))
+		m, _ := xml.Marshal(NewAlbum(a))
 		innerXML += string(m)
 
-		m, _ = json.Marshal(NewAlbum(a, false))
+		m, _ = json.Marshal(NewAlbum(a))
 		albumsJSON = append(albumsJSON, string(m))
 	}
 

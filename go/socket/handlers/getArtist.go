@@ -20,6 +20,9 @@ func MakeGetArtistHandler(dal *dal.DAL) socket.Handler {
 		if err != nil {
 			return "no artist"
 		}
-		return dto.NewArtist(artist)
+
+		albums := dal.Db.GetAlbumsByArtist(id)
+
+		return dto.NewArtist(artist, albums)
 	}
 }

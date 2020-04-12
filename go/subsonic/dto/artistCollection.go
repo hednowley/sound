@@ -36,7 +36,7 @@ func newArtistIndex(artists []*dao.Artist, letter rune) *artistIndex {
 
 	dtoArtists := make([]*Artist, len(artists))
 	for index, a := range artists {
-		dtoArtists[index] = NewArtist(a, false)
+		dtoArtists[index] = NewArtist(a)
 	}
 
 	return &artistIndex{
