@@ -8,7 +8,7 @@ import (
 type Album struct {
 	ID       uint `gorm:"PRIMARY_KEY"`
 	Artist   *Artist
-	ArtistID uint    `gorm:"index:albums_name_idx"`
+	ArtistID uint    `gorm:"index:albums_artist_id_idx"`
 	Name     string  `gorm:"index:albums_name_idx"`
 	Songs    []*Song `gorm:"foreignkey:AlbumID"`
 
