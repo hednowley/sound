@@ -4,7 +4,6 @@ import (
 	"encoding/xml"
 
 	"github.com/hednowley/sound/dao"
-	"github.com/hednowley/sound/util"
 )
 
 type SongsByGenre struct {
@@ -12,21 +11,14 @@ type SongsByGenre struct {
 	Songs   []*Song  `xml:"song" json:"song"`
 }
 
-func NewSongsByGenre(genre *dao.Genre, count uint, offset uint) *SongsByGenre {
+func NewSongsByGenre(songs []dao.Song) *SongsByGenre {
 
-	l := len(genre.Songs)
-	o := int(offset)
-	c := int(count)
+	songDTOs := make([]*Song, len(songs))
 
-	o = util.Max(util.Min(l, o), 0)
-	c = util.Min(c, l-o)
-
-	songs := make([]*Song, c)
-
-	for i, s := range genre.Songs[o : o+c] {
-		songs[i] = NewSong(s)
+	for i, s := range songs {
+		songDTOs[i] = NewSong(&s)
 	}
 	return &SongsByGenre{
-		Songs: songs,
+		Songs: songDTOs,
 	}
 }

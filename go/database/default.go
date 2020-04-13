@@ -3,6 +3,7 @@ package database
 import (
 	"context"
 	"fmt"
+	"strings"
 	"time"
 
 	"github.com/hednowley/sound/config"
@@ -52,119 +53,428 @@ func (db *Default) Close() {
 	db.Close()
 }
 
-// PutArtist updates the artist record with the same ID,
-// or creates one if no such record exists.
-func (db *Default) PutArtist(artist *dao.Artist) {
-
-	db.db.Save(&artist)
-}
-
 // PutArtistByName returns the ID of the artist record with the same name,
 // or creates a new one and returns its ID if there is no such artist.
-func (db *Default) putArtistByName(name string) *dao.Artist {
-	var artist dao.Artist
-	db.db.Where("name ILIKE ?", name).Limit(1).Find(&artist)
-	if artist.ID != 0 {
-		return &artist
+func (db *Default) putArtistByName(name string) (uint, error) {
+
+	var id uint
+
+	err := db.conn.QueryRow(context.Background(),
+		`
+		SELECT 
+			id
+		FROM
+			artists
+		WHERE
+			name ILIKE $1
+		LIMIT
+			1
+	`, name).Scan(&id)
+
+	if err == nil {
+		return id, nil
 	}
 
-	artist.Name = name
-	db.db.Create(&artist)
-	return &artist
-}
+	err = db.conn.QueryRow(context.Background(),
+		`
+		INSERT INTO
+			artists (name)
+		VALUES
+			($1)
+		RETURNING
+			id
+	`, name).Scan(&id)
 
-// PutAlbum updates the album record with the same ID,
-// or creates a new one and returns its ID if there is no such album.
-func (db *Default) PutAlbum(album *dao.Album) {
-	db.db.Save(&album)
+	return id, err
 }
 
 // PutAlbumByAttributes returns the ID of the album record with the same name and artist,
 // or creates a new one and returns its ID if there is no such album.
-func (db *Default) PutAlbumByAttributes(name string, artist string, disambiguator string) *dao.Album {
+func (db *Default) PutAlbumByAttributes(name string, artist string, disambiguator string) (uint, error) {
 
-	album := dao.Album{
-		Name:          name,
-		ArtistID:      db.putArtistByName(artist).ID,
-		Disambiguator: disambiguator,
+	artistID, err := db.putArtistByName(artist)
+	if err != nil {
+		return 0, err
 	}
 
-	if db.db.Where(&album).First(&album).RecordNotFound() {
-		now := time.Now()
-		album.Created = &now
-		db.db.Create(&album)
+	var albumID uint
+
+	err = db.conn.QueryRow(context.Background(),
+		`
+		SELECT
+			id
+		FROM
+			albums
+		WHERE
+			name ILIKE $1 AND
+			artist_id = $2 AND
+			disambiguator = $3
+		LIMIT
+			1
+	`, name, artistID, disambiguator).Scan(&albumID)
+
+	if err == nil {
+		return albumID, nil
 	}
 
-	return &album
+	err = db.conn.QueryRow(context.Background(),
+		`
+		INSERT INTO
+			albums (artist_id, name, disambiguator, created)
+		VALUES
+			($1, $2, $3, $4)
+		RETURNING
+			id
+	`, artistID, name, disambiguator, time.Now()).Scan(&albumID)
+
+	return albumID, err
 }
 
 // PutGenreByName returns the ID of the genre record with the same name,
 // or creates a new one and returns its ID if there is no such genre.
-func (db *Default) PutGenreByName(name string) *dao.Genre {
-	var genre dao.Genre
-	db.db.FirstOrCreate(&genre, dao.Genre{Name: name})
-	return &genre
+func (db *Default) PutGenreByName(name string) (uint, error) {
+
+	var genreID uint
+
+	err := db.conn.QueryRow(context.Background(),
+		`
+		SELECT
+			id
+		FROM
+			genres
+		WHERE
+			name ILIKE $1
+		LIMIT
+			1
+	`, name).Scan(&genreID)
+
+	if err == nil {
+		return genreID, nil
+	}
+
+	err = db.conn.QueryRow(context.Background(),
+		`
+		INSERT INTO
+			genres (name)
+		VALUES
+			($1)
+		RETURNING
+			id
+	`, name).Scan(&genreID)
+
+	return genreID, err
 }
 
-// PutSong updates the song record with the same ID
-// or creates a new one if there is no such song.
-func (db *Default) PutSong(song *dao.Song) {
-	db.db.Save(&song)
+func (db *Default) InsertSong(
+	artist string,
+	albumID uint,
+	path string,
+	title string,
+	track int,
+	disc int,
+	genreID uint,
+	year int,
+	art string,
+	size int64,
+	bitrate int,
+	duration int,
+	token string,
+	providerID string,
+) (uint, error) {
+
+	var songID uint
+
+	err := db.conn.QueryRow(context.Background(),
+		`
+		INSERT INTO
+			songs
+		(
+			artist,
+			album_id,
+			path,
+			title,
+			track,
+			disc,
+			genre_id,
+			year,
+			art,
+			size,
+			bitrate,
+			duration,
+			token,
+			provider_id,
+			created
+		)
+		VALUES
+			($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)
+		RETURNING
+			id
+	`,
+		artist,
+		albumID,
+		path,
+		title,
+		track,
+		disc,
+		genreID,
+		year,
+		art,
+		size,
+		bitrate,
+		duration,
+		token,
+		providerID,
+		time.Now(),
+	).Scan(&songID)
+
+	return songID, err
 }
 
-// PutArt updates the art record with the same ID,
-// or creates a new one and returns its ID if there is no such art.
-func (db *Default) PutArt(art *dao.Art) {
-	db.db.Save(&art)
+func (db *Default) InsertArt(path string, hash string) (*dao.Art, error) {
+
+	var art dao.Art
+
+	err := db.conn.QueryRow(context.Background(),
+		`
+		INSERT INTO
+			arts (path, hash)
+		VALUES
+			($1, $2)
+		RETURNING
+			id, path, hash
+	`, path, hash).Scan(&art.ID, &art.Path, &art.Hash)
+
+	return &art, err
 }
 
 func (db *Default) GetArtFromHash(hash string) *dao.Art {
 	var a dao.Art
-	if db.db.Where(dao.Art{Hash: hash}).First(&a).RecordNotFound() {
+
+	err := db.conn.QueryRow(context.Background(),
+		`
+		SELECT 
+			id,
+			hash,
+			path
+		FROM
+			arts
+		WHERE
+			hash = $1
+	`, hash,
+	).Scan(
+		&a.ID,
+		&a.Hash,
+		&a.Path,
+	)
+
+	if err != nil {
 		return nil
 	}
+
 	return &a
 }
 
-// GetSongFromToken returns a pointer to the song with the given path and provider,
+// GetSongIdFromToken returns a pointer to the song with the given path and provider,
 // or nil if one doesn't exist. Joined entities are not loaded.
-func (db *Default) GetSongFromToken(token string, providerID string) *dao.Song {
-	var f dao.Song
-	if db.db.
-		Where(&dao.Song{
-			Token:      token,
-			ProviderID: providerID,
-		}).First(&f).RecordNotFound() {
+func (db *Default) GetSongIdFromToken(token string, providerID string) *uint {
+	var songId uint
+
+	err := db.conn.QueryRow(context.Background(),
+		`
+		SELECT 
+			id
+		FROM
+			songs
+		WHERE
+			provider_id = $1  AND token = $2
+`, providerID, token,
+	).Scan(&songId)
+
+	if err != nil {
 		return nil
 	}
-	return &f
+
+	return &songId
 }
 
-func (db *Default) ReplacePlaylistEntries(playlist *dao.Playlist, entries []*dao.PlaylistEntry) {
-	db.db.Delete(&dao.PlaylistEntry{}, "playlist_id = ?", playlist.ID)
-	for _, e := range entries {
-		e.PlaylistID = playlist.ID
-		db.db.Save(e)
+func (db *Default) ReplacePlaylistEntries(playlistID uint, songIDs []uint) error {
+
+	tx, err := db.conn.Begin(context.Background())
+	if err != nil {
+		return err
 	}
+
+	defer tx.Rollback(context.Background())
+
+	_, err = tx.Exec(context.Background(), `
+		DELETE FROM
+			playlist_entries
+		WHERE
+			playlist_id = $1
+	`, playlistID)
+
+	if err != nil {
+		return err
+	}
+
+	rows := make([][]interface{}, len(songIDs))
+	for index, songID := range songIDs {
+		rows[index] = []interface{}{playlistID, songID, index}
+	}
+
+	_, err = tx.CopyFrom(
+		context.Background(),
+		[]string{"playlist_entries"},
+		[]string{"playlist_id", "song_id", "index"},
+		pgx.CopyFromRows(rows),
+	)
+
+	if err != nil {
+		return err
+	}
+
+	tx.Commit(context.Background())
+
+	return nil
 }
 
 // Getters
 
-func (db *Default) GetPlaylist(id uint, entries bool, songs bool) *dao.Playlist {
+func (db *Default) GetPlaylist(playlistID uint) (*dao.Playlist, error) {
 	var p dao.Playlist
-	d := db.db
-	if entries {
-		d = d.Preload("Entries")
+
+	err := db.conn.QueryRow(context.Background(),
+		`
+		SELECT 
+			playlists.id,
+			playlists.name,
+			playlists.comment,
+			playlists.created,
+			playlists.changed,
+			COUNT(playlist_entries.id)
+		FROM
+			playlists
+		LEFT JOIN
+			playlist_entries
+		ON
+			playlist_entries.playlist_id = playlists.id
+		GROUP BY
+			playlists.id
+		WHERE
+			id = $1
+	`, playlistID).Scan(
+		&p.ID,
+		&p.Name,
+		&p.Comment,
+		&p.Created,
+		&p.Changed,
+		&p.EntryCount)
+
+	return &p, err
+}
+
+func (db *Default) GetPlaylistSongIds(playlistID uint) ([]uint, error) {
+
+	rows, _ := db.conn.Query(context.Background(),
+		`
+		SELECT 
+			song_id
+		FROM
+			playlists_entries
+		WHERE
+			playlist_id = $1
+		ORDER BY
+			playlist_entries.index ASC
+	`, playlistID)
+
+	songIDs := []uint{}
+	for rows.Next() {
+		var songID uint
+		err := rows.Scan(&songID)
+		if err != nil {
+		}
+		songIDs = append(songIDs, songID)
 	}
-	if songs {
-		d = d.Preload("Entries.Song")
+
+	return songIDs, nil
+}
+
+func (db *Default) GetPlaylistSongs(playlistID uint) ([]dao.Song, error) {
+
+	rows, _ := db.conn.Query(context.Background(),
+		`
+		SELECT 
+			songs.id,
+			songs.artist,
+			songs.album_id,
+			songs.path,
+			songs.title,
+			songs.track,
+			songs.disc,
+			songs.genre_id,
+			songs.year,
+			songs.art,
+			songs.created,
+			songs.size,
+			songs.bitrate,
+			songs.duration,
+			songs.token,
+			songs.provider_id,
+			songs.starred,
+			albums.name,
+			albums.artist_id,
+			genres.name
+		FROM
+			playlist_entries
+		LEFT JOIN 
+			songs
+		ON
+			song.id = playlist_entries.song_id
+		LEFT JOIN 
+			albums
+		ON
+			albums.id = songs.album_id
+		LEFT JOIN 
+			genres
+		ON
+			genres.id = songs.genre_id
+		WHERE
+			playlist_entries.playlist_id = $1 
+		ORDER BY
+			playlist_entries.index ASC
+	`, playlistID)
+
+	songs := []dao.Song{}
+	for rows.Next() {
+		var s dao.Song
+		err := rows.Scan(
+			&s.ID,
+			&s.Artist,
+			&s.AlbumID,
+			&s.Path,
+			&s.Title,
+			&s.Track,
+			&s.Disc,
+			&s.GenreID,
+			&s.Year,
+			&s.Art,
+			&s.Created,
+			&s.Size,
+			&s.Bitrate,
+			&s.Duration,
+			&s.Token,
+			&s.ProviderID,
+			&s.Starred,
+			&s.AlbumName,
+			&s.AlbumArtistID,
+			&s.GenreName,
+		)
+		if err != nil {
+		}
+		songs = append(songs, s)
 	}
-	if d.Where(dao.Playlist{ID: id}).
-		First(&p).
-		RecordNotFound() {
-		return nil
-	}
-	return &p
+
+	return songs, nil
 }
 
 func (db *Default) GetAlbum(albumID uint) *dao.Album {
@@ -187,7 +497,6 @@ func (db *Default) GetAlbum(albumID uint) *dao.Album {
 			genres.name,
 			COUNT(songs.id),
 			SUM(songs.duration)
-
 		FROM
 			albums
 		LEFT JOIN 
@@ -267,6 +576,8 @@ func (db *Default) GetAlbumSongs(albumID uint) []dao.Song {
 			genres.id = songs.genre_id
 		WHERE
 			album_id = $1 
+		ORDER BY
+			songs.track ASC
 	`,
 		albumID)
 
@@ -303,30 +614,110 @@ func (db *Default) GetAlbumSongs(albumID uint) []dao.Song {
 	return songs
 }
 
-func (db *Default) GetArt(id uint) *dao.Art {
-	var f dao.Art
-	if db.db.
-		Where(dao.Art{ID: id}).
-		First(&f).
-		RecordNotFound() {
+func (db *Default) GetArt(artId uint) *dao.Art {
+	var a dao.Art
+
+	err := db.conn.QueryRow(context.Background(),
+		`
+		SELECT 
+			id,
+			hash,
+			path
+		FROM
+			arts
+		WHERE
+			id = $1
+	`, artId,
+	).Scan(
+		&a.ID,
+		&a.Hash,
+		&a.Path,
+	)
+
+	if err != nil {
 		return nil
 	}
-	return &f
+
+	return &a
 }
 
-func (db *Default) GetGenre(name string) *dao.Genre {
-	var g dao.Genre
-	if db.db.
-		Preload("Songs").
-		Preload("Songs.Genre").
-		Preload("Songs.Album").
-		Preload("Songs.Album.Artist").
-		Where(dao.Genre{Name: name}).
-		First(&g).
-		RecordNotFound() {
-		return nil
+func (db *Default) GetSongsByGenre(genreName string, offset uint, limit uint) []dao.Song {
+
+	rows, _ := db.conn.Query(context.Background(),
+		`
+		SELECT 
+			songs.id,
+			songs.artist,
+			songs.album_id,
+			songs.path,
+			songs.title,
+			songs.track,
+			songs.disc,
+			songs.genre_id,
+			songs.year,
+			songs.art,
+			songs.created,
+			songs.size,
+			songs.bitrate,
+			songs.duration,
+			songs.token,
+			songs.provider_id,
+			songs.starred,
+			albums.name,
+			albums.artist_id,
+			genres.name
+		FROM
+			songs
+		LEFT JOIN
+			genres
+		ON
+			genres.id = songs.genre_id
+		LEFT JOIN
+			albums
+		ON
+			albums.id = songs.album_id
+		WHERE
+			genres.name = $1
+		ORDER BY
+			songs.title ASC
+		OFFSET
+			$2
+		LIMIT
+			$3
+	`,
+		genreName, offset, limit)
+
+	songs := []dao.Song{}
+	for rows.Next() {
+		var s dao.Song
+		err := rows.Scan(
+			&s.ID,
+			&s.Artist,
+			&s.AlbumID,
+			&s.Path,
+			&s.Title,
+			&s.Track,
+			&s.Disc,
+			&s.GenreID,
+			&s.Year,
+			&s.Art,
+			&s.Created,
+			&s.Size,
+			&s.Bitrate,
+			&s.Duration,
+			&s.Token,
+			&s.ProviderID,
+			&s.Starred,
+			&s.AlbumName,
+			&s.AlbumArtistID,
+			&s.GenreName,
+		)
+		if err != nil {
+		}
+		songs = append(songs, s)
 	}
-	return &g
+
+	return songs
 }
 
 func (db *Default) GetArtist(artistId uint) *dao.Artist {
@@ -341,7 +732,6 @@ func (db *Default) GetArtist(artistId uint) *dao.Artist {
 			artists.starred,
 			COUNT(albums.id),
 			SUM(songs.duration)
-
 		FROM
 			artists
 		LEFT JOIN 
@@ -373,34 +763,135 @@ func (db *Default) GetArtist(artistId uint) *dao.Artist {
 	return &a
 }
 
-func (db *Default) GetSong(id uint, genre bool, album bool, artist bool) *dao.Song {
+func (db *Default) GetSong(songId uint) *dao.Song {
 	var s dao.Song
-	d := db.db
-	if genre {
-		d = d.Preload("Genre")
-	}
-	if album {
-		d = d.Preload("Album")
-	}
-	if artist {
-		d = d.Preload("Album.Artist")
-	}
-	if d.Where(dao.Song{ID: id}).
-		First(&s).
-		RecordNotFound() {
+
+	err := db.conn.QueryRow(context.Background(),
+		`
+		SELECT 
+			songs.id,
+			songs.artist,
+			songs.album_id,
+			songs.path,
+			songs.title,
+			songs.track,
+			songs.disc,
+			songs.genre_id,
+			songs.year,
+			songs.art,
+			songs.created,
+			songs.size,
+			songs.bitrate,
+			songs.duration,
+			songs.token,
+			songs.provider_id,
+			songs.starred,
+			albums.name,
+			albums.artist_id,
+			genres.name
+		FROM
+			songs
+		LEFT JOIN 
+			albums
+		ON
+			albums.id = songs.album_id
+		LEFT JOIN 
+			genres
+		ON
+			genres.id = songs.genre_id
+		WHERE
+			songs.id = $1 
+`, songId,
+	).Scan(
+		&s.ID,
+		&s.Artist,
+		&s.AlbumID,
+		&s.Path,
+		&s.Title,
+		&s.Track,
+		&s.Disc,
+		&s.GenreID,
+		&s.Year,
+		&s.Art,
+		&s.Created,
+		&s.Size,
+		&s.Bitrate,
+		&s.Duration,
+		&s.Token,
+		&s.ProviderID,
+		&s.Starred,
+		&s.AlbumName,
+		&s.AlbumArtistID,
+		&s.GenreName,
+	)
+
+	if err != nil {
 		return nil
 	}
+
 	return &s
+}
+
+func (db *Default) GetSongPath(songId uint) *string {
+	var path string
+
+	err := db.conn.QueryRow(context.Background(),
+		`
+		SELECT 
+			path
+		FROM
+			songs
+		WHERE
+			id = $1 
+`, songId).Scan(&path)
+
+	if err != nil {
+		return nil
+	}
+
+	return &path
 }
 
 // Collection getters
 
-func (db *Default) GetGenres() []*dao.Genre {
-	var genres []*dao.Genre
-	db.db.
-		Preload("Songs").
-		Preload("Albums").
-		Find(&genres)
+func (db *Default) GetGenres() []dao.Genre {
+
+	rows, _ := db.conn.Query(context.Background(),
+		`
+		SELECT 
+			genres.id,
+			genres.name,
+			COUNT(songs.id),
+			COUNT(albums.id)
+		FROM
+			genres
+		LEFT JOIN
+			songs
+		ON
+			songs.genre_id = genres.id
+		LEFT JOIN
+			albums
+		ON
+			albums.genre_id = genres.id
+		GROUP BY
+			genres.id, songs.id, albums.id
+		ORDER BY
+			genres.name ASC`)
+
+	genres := []dao.Genre{}
+	for rows.Next() {
+		var g dao.Genre
+		err := rows.Scan(
+			&g.ID,
+			&g.Name,
+			&g.SongCount,
+			&g.AlbumCount,
+		)
+		if err != nil {
+		}
+		genres = append(genres, g)
+	}
+
 	return genres
 }
 
@@ -414,11 +905,11 @@ func (db *Default) GetAlbums(listType dao.AlbumList2Type, size uint, offset uint
 	case dao.Newest:
 		order = "ORDER BY albums.created DESC"
 	case dao.Frequent:
-
+		order = ""
 	case dao.Recent:
-
+		order = ""
 	case dao.Starred:
-
+		order = ""
 	case dao.AlphabeticalByName:
 		order = "ORDER BY albums.name ASC"
 	case dao.AlphabeticalByArtist:
@@ -444,7 +935,7 @@ func (db *Default) GetAlbums(listType dao.AlbumList2Type, size uint, offset uint
 			genres.name,
 			COUNT(songs.id),
 			SUM(songs.duration)
-			FROM
+		FROM
 			albums
 		LEFT JOIN 
 			artists
@@ -526,6 +1017,8 @@ func (db *Default) GetAlbumsByArtist(artistId uint) []dao.Album {
 			album.artist_id = $1
 		GROUP BY
 			albums.id, genres.id
+		ORDER BY
+			year ASC
 	`, artistId)
 
 	albums := []dao.Album{}
@@ -554,43 +1047,145 @@ func (db *Default) GetAlbumsByArtist(artistId uint) []dao.Album {
 	return albums
 }
 
-func (db *Default) GetArtists(includeAlbums bool) []*dao.Artist {
-	var artists []*dao.Artist
-	query := db.db
+func (db *Default) GetArtists() []dao.Artist {
 
-	if includeAlbums {
-		query = query.Preload("Albums")
+	rows, _ := db.conn.Query(context.Background(),
+		`
+		SELECT 
+			artists.id,
+			artists.name,
+			artists.art,
+			artists.starred,
+			COUNT(albums.id),
+			SUM(songs.duration)
+		FROM
+			artists
+		LEFT JOIN 
+			albums
+		ON
+			albums.artist_id = artists.id
+		LEFT JOIN 
+			songs
+		ON
+			songs.album_id = albums.id
+		GROUP BY
+			albums.id, artists.id, genres.id
+	`)
+
+	artists := []dao.Artist{}
+	for rows.Next() {
+		var a dao.Artist
+		err := rows.Scan(
+			&a.ID,
+			&a.Name,
+			&a.Art,
+			&a.Starred,
+			&a.AlbumCount,
+			&a.Duration,
+		)
+		if err != nil {
+		}
+		artists = append(artists, a)
 	}
 
-	query.Find(&artists)
 	return artists
 }
 
-func (db *Default) GetPlaylists() []*dao.Playlist {
-	var playlists []*dao.Playlist
-	db.db.Preload("Entries", func(db *gorm.DB) *gorm.DB {
-		return db.Order("playlist_entries.index ASC")
-	}).Find(&playlists)
+func (db *Default) GetPlaylists() []dao.Playlist {
+
+	rows, _ := db.conn.Query(context.Background(),
+		`
+		SELECT 
+			playlists.id,
+			playlists.name,
+			playlists.comment,
+			playlists.created,
+			playlists.changed,
+			COUNT(playlist_entries.id)
+		FROM
+			playlists
+		LEFT JOIN
+			playlist_entries
+		ON
+			playlist_entries.playlist_id = playlists.id
+		GROUP BY
+			playlists.id
+`)
+
+	playlists := []dao.Playlist{}
+	for rows.Next() {
+		var p dao.Playlist
+		err := rows.Scan(
+			&p.ID,
+			&p.Name,
+			&p.Comment,
+			&p.Created,
+			&p.Changed,
+			&p.EntryCount,
+		)
+		if err != nil {
+		}
+		playlists = append(playlists, p)
+	}
+
 	return playlists
 }
 
 // Putters
 
-func (db *Default) AddPlaylist(playlist *dao.Playlist) uint {
-	db.db.Create(&playlist)
-	return playlist.ID
+func (db *Default) InsertPlaylist(name string, comment string) (uint, error) {
+
+	var playlistID uint
+
+	err := db.conn.QueryRow(context.Background(),
+		`
+		INSERT INTO
+			playlists (name, comment, created, changed)
+		VALUES
+			($1, $2, $3, $3)
+		RETURNING
+			id
+	`, name, comment, time.Now()).Scan(&playlistID)
+
+	return playlistID, err
 }
 
-func (db *Default) UpdatePlaylist(playlist *dao.Playlist) {
-	db.db.Save(&playlist)
+func (db *Default) UpdatePlaylist(playlistID uint, name string, comment string) (*dao.Playlist, error) {
+
+	var playlist dao.Playlist
+
+	err := db.conn.QueryRow(context.Background(),
+		`
+		UPDATE
+			playlists
+		SET
+			name = $2,
+			comment = $3,
+		WHERE
+			id = $1
+		RETURNING
+			id,
+			name,
+			comment,
+			created,
+			changed
+	`, playlistID, name, comment, time.Now()).Scan(
+		&playlist.ID,
+		&playlist.Name,
+		&playlist.Comment,
+		&playlist.Created,
+		&playlist.Changed,
+	)
+
+	return &playlist, err
 }
 
 // Deleters
 
 func (db *Default) DeletePlaylist(id uint) error {
-	p := db.GetPlaylist(id, false, false)
-	if p == nil {
-		return &dao.ErrNotFound{}
+	p, err := db.GetPlaylist(id)
+	if err != nil {
+		return err
 	}
 
 	db.db.Delete(&p)
@@ -614,49 +1209,304 @@ func (db *Default) DeleteMissing(tokens []string, providerID string) {
 	//db.db.Joins("JOIN albums ON albums.artist_id = artists.id").Group("artists.id").Having("count(albums.id) = 1").Delete(dao.Artist{})
 }
 
-func (db *Default) SearchAlbums(query string, count uint, offset uint) []*dao.Album {
-	var albums []*dao.Album
-	db.db.Where("name ILIKE ?", fmt.Sprintf("%%%s%%", query)).Limit(count).Offset(offset).Find(&albums)
+func (db *Default) SearchAlbums(query string, count uint, offset uint) []dao.Album {
+
+	rows, _ := db.conn.Query(context.Background(),
+		`
+		SELECT 
+			albums.id,
+			albums.artist_id,
+			albums.name,
+			albums.created,
+			albums.art,
+			albums.genre_id,
+			albums.year,
+			albums.disambiguator,
+			albums.starred,
+			artists.name,
+			genres.name,
+			COUNT(songs.id),
+			SUM(songs.duration)
+		FROM
+			albums
+		LEFT JOIN 
+			artists
+		ON
+			artists.id = albums.artist_id
+		LEFT JOIN 
+			genres
+		ON
+			genres.id = albums.genre_id
+		LEFT JOIN 
+			songs
+		ON
+			songs.album_id = albums.id
+		WHERE
+			albums.name ILIKE %$1%
+		GROUP BY
+			albums.id, artists.id, genres.id
+		ORDER BY
+			albums.name ASC
+		LIMIT
+			$2
+		OFFSET
+			$3
+	
+	`, query, count, offset)
+
+	albums := []dao.Album{}
+	for rows.Next() {
+		var a dao.Album
+		err := rows.Scan(
+			&a.ID,
+			&a.ArtistID,
+			&a.Name,
+			&a.Created,
+			&a.Art,
+			&a.GenreID,
+			&a.Year,
+			&a.Disambiguator,
+			&a.Starred,
+			&a.ArtistName,
+			&a.GenreName,
+			&a.SongCount,
+			&a.Duration,
+		)
+		if err != nil {
+		}
+		albums = append(albums, a)
+	}
+
 	return albums
 }
 
-func (db *Default) SearchArtists(query string, count uint, offset uint) []*dao.Artist {
-	var artists []*dao.Artist
-	db.db.Where("name ILIKE ?", fmt.Sprintf("%%%s%%", query)).Limit(count).Offset(offset).Find(&artists)
+func (db *Default) SearchArtists(query string, count uint, offset uint) []dao.Artist {
+
+	rows, _ := db.conn.Query(context.Background(),
+		`
+		SELECT 
+			artists.id,
+			artists.name,
+			artists.art,
+			artists.starred,
+			COUNT(albums.id),
+			SUM(songs.duration)
+		FROM
+			artists
+		LEFT JOIN 
+			albums
+		ON
+			albums.artist_id = artists.id
+		LEFT JOIN 
+			songs
+		ON
+			songs.album_id = albums.id
+		GROUP BY
+			albums.id, artists.id, genres.id
+		WHERE
+			artists.name ILIKE %$1%
+		ORDER BY
+			artists.name ASC
+		LIMIT
+			$2
+		OFFSET
+			$3
+		
+	`, query, count, offset)
+
+	artists := []dao.Artist{}
+	for rows.Next() {
+		var a dao.Artist
+		err := rows.Scan(
+			&a.ID,
+			&a.Name,
+			&a.Art,
+			&a.Starred,
+			&a.AlbumCount,
+			&a.Duration,
+		)
+		if err != nil {
+		}
+		artists = append(artists, a)
+	}
+
 	return artists
 }
 
-func (db *Default) SearchSongs(query string, count uint, offset uint) []*dao.Song {
-	var songs []*dao.Song
-	db.db.Preload("Genre").
-		Preload("Album").
-		Preload("Album.Artist").
-		Where("title ILIKE ?", fmt.Sprintf("%%%s%%", query)).
-		Limit(count).
-		Offset(offset).
-		Find(&songs)
+func (db *Default) SearchSongs(query string, count uint, offset uint) []dao.Song {
+	rows, _ := db.conn.Query(context.Background(),
+		`
+		SELECT 
+			songs.id,
+			songs.artist,
+			songs.album_id,
+			songs.path,
+			songs.title,
+			songs.track,
+			songs.disc,
+			songs.genre_id,
+			songs.year,
+			songs.art,
+			songs.created,
+			songs.size,
+			songs.bitrate,
+			songs.duration,
+			songs.token,
+			songs.provider_id,
+			songs.starred,
+			albums.name,
+			albums.artist_id,
+			genres.name
+		FROM
+			songs
+		LEFT JOIN
+			genres
+		ON
+			genres.id = songs.genre_id
+		LEFT JOIN
+			albums
+		ON
+			albums.id = songs.album_id
+		WHERE
+			songs.title ILIKE %$1%
+		ORDER BY
+			songs.title ASC
+		LIMIT
+			$2
+		OFFSET
+			$3
+	`,
+		query, count, offset)
+
+	songs := []dao.Song{}
+	for rows.Next() {
+		var s dao.Song
+		err := rows.Scan(
+			&s.ID,
+			&s.Artist,
+			&s.AlbumID,
+			&s.Path,
+			&s.Title,
+			&s.Track,
+			&s.Disc,
+			&s.GenreID,
+			&s.Year,
+			&s.Art,
+			&s.Created,
+			&s.Size,
+			&s.Bitrate,
+			&s.Duration,
+			&s.Token,
+			&s.ProviderID,
+			&s.Starred,
+			&s.AlbumName,
+			&s.AlbumArtistID,
+			&s.GenreName,
+		)
+		if err != nil {
+		}
+		songs = append(songs, s)
+	}
+
 	return songs
 }
 
-func (db *Default) GetRandomSongs(size uint, from uint, to uint, genre string) []*dao.Song {
-	var songs []*dao.Song
-	query := db.db.Preload("Genre").
-		Preload("Album").
-		Preload("Album.Artist")
+func (db *Default) GetRandomSongs(size uint, from uint, to uint, genre string) []dao.Song {
+
+	values := []interface{}{size}
+	wheres := []string{}
+	next := len(values) + 1
 
 	if from != 0 {
-		query = query.Where("Year >= ?", from)
+		wheres = append(wheres, fmt.Sprintf("Year >= $%v", next))
+		values = append(values, from)
+		next++
 	}
 
 	if to != 0 {
-		query = query.Where("Year <= ?", to)
+		wheres = append(wheres, fmt.Sprintf("Year <= $%v", next))
+		values = append(values, to)
+		next++
 	}
 
 	if len(genre) > 0 {
-		query = query.Joins("JOIN genres ON songs.genre_id = genres.id").Where("genres.name ILIKE ?", genre)
+		wheres = append(wheres, fmt.Sprintf("genres.name ILIKE $%v", next))
+		values = append(values, genre)
 	}
 
-	query.Order(gorm.Expr("random()")).Limit(size).Find(&songs)
+	where := strings.Join(wheres, " AND ")
+
+	rows, _ := db.conn.Query(context.Background(),
+		fmt.Sprintf(`
+		SELECT 
+			songs.id,
+			songs.artist,
+			songs.album_id,
+			songs.path,
+			songs.title,
+			songs.track,
+			songs.disc,
+			songs.genre_id,
+			songs.year,
+			songs.art,
+			songs.created,
+			songs.size,
+			songs.bitrate,
+			songs.duration,
+			songs.token,
+			songs.provider_id,
+			songs.starred,
+			albums.name,
+			albums.artist_id,
+			genres.name
+		FROM
+			songs
+		LEFT JOIN
+			genres
+		ON
+			genres.id = songs.genre_id
+		LEFT JOIN
+			albums
+		ON
+			albums.id = songs.album_id
+		WHERE
+			%v
+		ORDER BY
+			RANDOM()
+		LIMIT
+			$1
+	`, where), values...)
+
+	songs := []dao.Song{}
+	for rows.Next() {
+		var s dao.Song
+		err := rows.Scan(
+			&s.ID,
+			&s.Artist,
+			&s.AlbumID,
+			&s.Path,
+			&s.Title,
+			&s.Track,
+			&s.Disc,
+			&s.GenreID,
+			&s.Year,
+			&s.Art,
+			&s.Created,
+			&s.Size,
+			&s.Bitrate,
+			&s.Duration,
+			&s.Token,
+			&s.ProviderID,
+			&s.Starred,
+			&s.AlbumName,
+			&s.AlbumArtistID,
+			&s.GenreName,
+		)
+		if err != nil {
+		}
+		songs = append(songs, s)
+	}
+
 	return songs
 }
 

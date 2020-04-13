@@ -11,12 +11,12 @@ type RandomSongs struct {
 	Songs   []*Song  `xml:"song" json:"song"`
 }
 
-func NewRandomSongs(songs []*dao.Song) *RandomSongs {
+func NewRandomSongs(songs []dao.Song) *RandomSongs {
 
 	dto := make([]*Song, len(songs))
 
 	for i, s := range songs {
-		dto[i] = NewSong(s)
+		dto[i] = NewSong(&s)
 	}
 	return &RandomSongs{
 		Songs: dto,

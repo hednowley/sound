@@ -10,7 +10,8 @@ type Playlist struct {
 	Name    string
 	Comment string
 	Public  bool
-	Entries []*PlaylistEntry `gorm:"foreignkey:PlaylistID"`
 	Created *time.Time
 	Changed *time.Time
+
+	EntryCount int
 }

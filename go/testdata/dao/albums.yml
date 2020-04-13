@@ -6,6 +6,7 @@
   song_count: 1
   artist_name: "artist_1"
   genre_name: "genre_1"
+  disambiguator: ""
 
 - id: 2
   artist_id: 1
@@ -15,3 +16,4 @@
   song_count: 5
   artist_name: "artist_1"
   genre_name: "genre_1"
+  disambiguator: ""

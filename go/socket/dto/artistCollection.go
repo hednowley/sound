@@ -18,11 +18,11 @@ func NewArtistSummary(artist *dao.Artist) *ArtistSummary {
 	}
 }
 
-func NewArtistCollection(artists []*dao.Artist) *ArtistCollection {
+func NewArtistCollection(artists []dao.Artist) *ArtistCollection {
 
 	dtoArtists := make([]*ArtistSummary, len(artists))
 	for index, a := range artists {
-		dtoArtists[index] = NewArtistSummary(a)
+		dtoArtists[index] = NewArtistSummary(&a)
 	}
 
 	return &ArtistCollection{

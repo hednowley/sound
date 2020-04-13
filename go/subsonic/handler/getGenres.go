@@ -11,7 +11,7 @@ import (
 // NewGetGenresHandler does http://www.subsonic.org/pages/api.jsp#getGenres
 func NewGetGenresHandler(dal *dal.DAL) api.Handler {
 	return func(params url.Values) *api.Response {
-		genres := dal.GetGenres()
+		genres := dal.Db.GetGenres()
 		return api.NewSuccessfulReponse(dto.NewGenres(genres))
 	}
 }

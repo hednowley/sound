@@ -11,7 +11,7 @@ import (
 
 func NewGetArtistsHandler(dal *dal.DAL, conf *config.Config) api.Handler {
 	return func(params url.Values) *api.Response {
-		artists := dal.GetArtists(false)
+		artists := dal.Db.GetArtists()
 		return api.NewSuccessfulReponse(dto.NewArtistCollection(artists, conf))
 	}
 }

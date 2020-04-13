@@ -12,7 +12,7 @@ import (
 // NewGetIndexesHandler does http://www.subsonic.org/pages/api.jsp#getIndexes
 func NewGetIndexesHandler(dal *dal.DAL, conf *config.Config) api.Handler {
 	return func(params url.Values) *api.Response {
-		artists := dal.GetArtists(false)
+		artists := dal.Db.GetArtists()
 		return api.NewSuccessfulReponse(dto.NewIndexCollection(artists, conf))
 	}
 }

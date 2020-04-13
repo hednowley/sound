@@ -2,11 +2,9 @@ package provider
 
 import (
 	"sync"
-	"time"
 
 	"github.com/cihub/seelog"
 	"github.com/hednowley/sound/dal"
-	"github.com/hednowley/sound/dao"
 	"github.com/hednowley/sound/socket"
 	"github.com/hednowley/sound/socket/dto"
 )
@@ -78,27 +76,21 @@ func (scanner *Scanner) startScan(provider Provider, update bool, delete bool) {
 			tokens = append(tokens, token)
 		}
 
-		s := scanner.dal.GetSongFromToken(token, providerID)
-		if s == nil || update {
+		existing := scanner.dal.Db.GetSongIdFromToken(token, providerID)
+		if existing == nil || update {
 			data, err2 := provider.GetInfo(token)
 			if err2 != nil {
 				seelog.Errorf("Cannot read music info for '%v': %v", token, err2)
 				return
 			}
 
-			if s == nil {
+			if existing == nil {
 				seelog.Infof("Adding token '%v'", token)
-				now := time.Now()
-				s = &dao.Song{
-					Created:    &now,
-					ProviderID: providerID,
-					Token:      token,
-				}
 			} else {
 				seelog.Infof("Updating token '%v'", token)
 			}
 
-			s = scanner.dal.PutSong(s, data)
+			scanner.dal.PutSong(data, token, providerID)
 
 		} else {
 			seelog.Infof("Skipping token '%v'", token)

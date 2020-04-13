@@ -16,10 +16,16 @@ func MakeGetPlaylistHandler(dal *dal.DAL) socket.Handler {
 			return "bad id"
 		}
 
-		playlist, err := dal.GetPlaylist(id)
+		playlist, err := dal.Db.GetPlaylist(id)
 		if err != nil {
 			return "no playlist"
 		}
-		return dto.NewPlaylist(playlist)
+
+		songs, err := dal.Db.GetPlaylistSongs(id)
+		if err != nil {
+			return "no playlist"
+		}
+
+		return dto.NewPlaylist(playlist, songs)
 	}
 }

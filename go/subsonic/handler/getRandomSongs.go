@@ -25,7 +25,7 @@ func NewGetRandomSongsHandler(dal *dal.DAL) api.Handler {
 		toParam := params.Get("toYear")
 		to := util.ParseUint(toParam, 0)
 
-		songs := dal.GetRandomSongs(size, from, to, genre)
+		songs := dal.Db.GetRandomSongs(size, from, to, genre)
 		return api.NewSuccessfulReponse(dto.NewRandomSongs(songs))
 	}
 }

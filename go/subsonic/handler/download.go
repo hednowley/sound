@@ -22,12 +22,12 @@ func NewDownloadHandler(dal *dal.DAL) api.BinaryHandler {
 			return api.NewErrorReponse(dto.Generic, fmt.Sprintf("Song not found: %v", idParam))
 		}
 
-		file, err := dal.GetSong(id, false, false, false)
-		if err != nil {
-			return api.NewErrorReponse(dto.Generic, err.Error())
+		path := dal.Db.GetSongPath(id)
+		if path != nil {
+			return api.NewErrorReponse(dto.Generic, "song not found")
 		}
 
-		http.ServeFile(*w, r, file.Path)
+		http.ServeFile(*w, r, *path)
 		return nil
 	}
 }

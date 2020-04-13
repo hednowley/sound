@@ -37,7 +37,7 @@ func NewGetMusicDirectoryHandler(dal *dal.DAL) api.Handler {
 			return api.NewSuccessfulReponse(dto.NewAlbumDirectory(album, songs))
 
 		case dto.SongDirectoryType:
-			song, err := dal.GetSong(id.ID, false, false, false)
+			song, err := dal.GetSong(id.ID)
 			if err != nil {
 				return api.NewErrorReponse(dto.Generic, err.Error())
 			}

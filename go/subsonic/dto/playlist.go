@@ -44,7 +44,7 @@ func newPlaylistEntry(song *dao.Song) *PlaylistEntry {
 func newPlaylistCore(playlist *dao.Playlist) *PlaylistCore {
 	return &PlaylistCore{
 		ID:        playlist.ID,
-		SongCount: len(playlist.Entries),
+		SongCount: playlist.EntryCount,
 		Name:      playlist.Name,
 		Public:    playlist.Public,
 		Changed:   *playlist.Changed,
@@ -54,13 +54,13 @@ func newPlaylistCore(playlist *dao.Playlist) *PlaylistCore {
 	}
 }
 
-func NewPlaylist(playlist *dao.Playlist) *Playlist {
+func NewPlaylist(playlist *dao.Playlist, playlistSongs []dao.Song) *Playlist {
 
-	count := len(playlist.Entries)
+	count := len(playlistSongs)
 	songs := make([]*PlaylistEntry, count)
 
-	for i, e := range playlist.Entries {
-		songs[i] = newPlaylistEntry(e.Song)
+	for i, s := range playlistSongs {
+		songs[i] = newPlaylistEntry(&s)
 	}
 
 	return &Playlist{

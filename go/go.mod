@@ -6,6 +6,7 @@ require (
 	github.com/cihub/seelog v0.0.0-20170130134532-f561c5e57575
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/dhowden/tag v0.0.0-20191122115059-7e5c04feccd8
+	github.com/google/uuid v1.1.1
 	github.com/gorilla/mux v1.6.2
 	github.com/gorilla/websocket v1.4.1
 	github.com/jackc/pgx/v4 v4.6.0

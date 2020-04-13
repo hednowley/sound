@@ -10,11 +10,11 @@ type Playlist struct {
 	Songs []*SongSummary `json:"songs"`
 }
 
-func NewPlaylist(playlist *dao.Playlist) *Playlist {
+func NewPlaylist(playlist *dao.Playlist, playlistSongs []dao.Song) *Playlist {
 
-	songs := make([]*SongSummary, len(playlist.Entries))
-	for index, entry := range playlist.Entries {
-		songs[index] = NewSongSummary(entry.Song)
+	songs := make([]*SongSummary, len(playlistSongs))
+	for index, song := range playlistSongs {
+		songs[index] = NewSongSummary(&song)
 	}
 
 	return &Playlist{

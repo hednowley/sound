@@ -8,7 +8,7 @@ import (
 
 func MakeGetPlaylistsHandler(dal *dal.DAL) socket.Handler {
 	return func(request *dto.Request) interface{} {
-		playlists := dal.GetPlaylists()
+		playlists := dal.Db.GetPlaylists()
 		return dto.NewPlaylistCollection(playlists)
 	}
 }
