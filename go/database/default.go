@@ -333,9 +333,9 @@ func (db *Default) ReplacePlaylistEntries(playlistID uint, songIDs []uint) error
 		return err
 	}
 
-	tx.Commit(context.Background())
+	err = tx.Commit(context.Background())
 
-	return nil
+	return err
 }
 
 // Getters
@@ -1182,31 +1182,125 @@ func (db *Default) UpdatePlaylist(playlistID uint, name string, comment string) 
 
 // Deleters
 
-func (db *Default) DeletePlaylist(id uint) error {
-	p, err := db.GetPlaylist(id)
+func (db *Default) DeletePlaylist(playlistID uint) error {
+
+	tx, err := db.conn.Begin(context.Background())
 	if err != nil {
 		return err
 	}
 
-	db.db.Delete(&p)
-	return nil
+	defer tx.Rollback(context.Background())
+
+	_, err = tx.Exec(
+		context.Background(),
+		`
+			DELETE FROM
+				playlists
+			WHERE
+				id = $1
+		`,
+		playlistID,
+	)
+	if err != nil {
+		return err
+	}
+
+	_, err = tx.Exec(
+		context.Background(),
+		`
+			DELETE FROM
+				playlist_entries
+			WHERE
+				playlist_id = $1
+		`,
+		playlistID,
+	)
+	if err != nil {
+		return err
+	}
+
+	err = tx.Commit(context.Background())
+
+	return err
+
 }
 
-func (db *Default) Empty() {
-	db.db.Delete(dao.PlaylistEntry{})
-	db.db.Delete(dao.Playlist{})
-	db.db.Delete(dao.Song{})
-	db.db.Delete(dao.Album{})
-	db.db.Delete(dao.Artist{})
-	db.db.Delete(dao.Genre{})
-	db.db.Delete(dao.Art{})
-}
+func (db *Default) DeleteMissing(tokens []string, providerID string) error {
 
-func (db *Default) DeleteMissing(tokens []string, providerID string) {
-	db.db.Where("provider_id = ?", providerID).Not("token IN (?)", tokens).Delete(dao.Song{})
-	db.db.Exec("DELETE FROM albums WHERE id in (SELECT albums.id FROM albums LEFT JOIN songs ON songs.album_id = albums.id GROUP BY albums.id HAVING count(songs.id) = 0)")
-	db.db.Exec("DELETE FROM artists WHERE id in (SELECT artists.id FROM artists LEFT JOIN albums ON albums.artist_id = artists.id GROUP BY artists.id HAVING count(albums.id) = 0)")
-	//db.db.Joins("JOIN albums ON albums.artist_id = artists.id").Group("artists.id").Having("count(albums.id) = 1").Delete(dao.Artist{})
+	tx, err := db.conn.Begin(context.Background())
+	if err != nil {
+		return err
+	}
+
+	defer tx.Rollback(context.Background())
+
+	_, err = tx.Exec(
+		context.Background(),
+		`
+			DELETE FROM
+				songs
+			WHERE
+				provider_id = $1 AND
+				token NOT IN ($2)
+		`,
+		providerID,
+		tokens,
+	)
+	if err != nil {
+		return err
+	}
+
+	_, err = tx.Exec(
+		context.Background(),
+		`
+		DELETE FROM
+			albums
+		WHERE id in (
+			SELECT
+				albums.id
+			FROM
+				albums
+			LEFT JOIN
+				songs
+			ON
+				songs.album_id = albums.id
+			GROUP BY
+				albums.id
+			HAVING
+				COUNT(songs.id) = 0
+		)
+		`)
+	if err != nil {
+		return err
+	}
+
+	_, err = tx.Exec(
+		context.Background(),
+		`
+		DELETE FROM
+			artists
+		WHERE id IN (
+			SELECT
+				artists.id
+			FROM
+				artists
+			LEFT JOIN
+				albums
+			ON
+				albums.artist_id = artists.id
+			GROUP BY
+				artists.id
+			HAVING
+				COUNT(albums.id) = 0
+		)
+		`)
+	if err != nil {
+		return err
+	}
+
+	err = tx.Commit(context.Background())
+
+	return err
 }
 
 func (db *Default) SearchAlbums(query string, count uint, offset uint) []dao.Album {
@@ -1508,16 +1602,4 @@ func (db *Default) GetRandomSongs(size uint, from uint, to uint, genre string) [
 	}
 
 	return songs
-}
-
-func (db *Default) StarSong(songID uint, star bool) error {
-	return db.db.Model(dao.Song{ID: songID}).Updates(dao.Song{Starred: star}).Error
-}
-
-func (db *Default) StarAlbum(albumID uint, star bool) error {
-	return db.db.Model(dao.Album{ID: albumID}).Updates(dao.Album{Starred: star}).Error
-}
-
-func (db *Default) StarArtist(artistID uint, star bool) error {
-	return db.db.Model(dao.Artist{ID: artistID}).Updates(dao.Artist{Starred: star}).Error
 }

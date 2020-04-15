@@ -222,11 +222,6 @@ func (dal *DAL) GetAlbums(listType dao.AlbumList2Type, size uint, offset uint) [
 	return dal.Db.GetAlbums(listType, size, offset)
 }
 
-// Empty deletes all data.
-func (d *DAL) Empty() {
-	d.Db.Empty()
-}
-
 func (d *DAL) DeleteMissing(tokens []string, providerID string) {
 	d.Db.DeleteMissing(tokens, providerID)
 }
@@ -243,13 +238,13 @@ func (dal *DAL) GetArtPath(id string) (string, error) {
 }
 
 func (dal *DAL) StarSong(songID uint, star bool) error {
-	return dal.Db.StarSong(songID, star)
+	return nil
 }
 
 func (dal *DAL) StarAlbum(albumID uint, star bool) error {
-	return dal.Db.StarAlbum(albumID, star)
+	return nil
 }
 
 func (dal *DAL) StarArtist(artistID uint, star bool) error {
-	return dal.Db.StarArtist(artistID, star)
+	return nil
 }
