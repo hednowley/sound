@@ -30,19 +30,19 @@ func NewDAL(config *config.Config, database *database.Default) *DAL {
 	}
 }
 
-// PutSong updates the stored song with the given path and provider ID and returns its ID.
-// If there is no such song then a new one is created and its ID is returned.
-// The associated album, artist, artwork and genre are created too if necessary.
-func (dal *DAL) PutSong(fileInfo *entities.FileInfo, token string, providerID string) error {
+func (dal *DAL) PutSong(fileInfo *entities.FileInfo, token string, providerID string, songId *uint) error {
 
 	genreID, err := dal.Db.PutGenreByName(fileInfo.Genre)
 	if err != nil {
 		return err
 	}
 
-	art, err := dal.PutArt(fileInfo.CoverArt)
-	if err != nil {
-		return err
+	var art *dao.Art
+	if fileInfo.CoverArt != nil {
+		art, err = dal.PutArt(fileInfo.CoverArt)
+		if err != nil {
+			return err
+		}
 	}
 
 	albumID, err := dal.Db.PutAlbumByAttributes(
@@ -51,12 +51,34 @@ func (dal *DAL) PutSong(fileInfo *entities.FileInfo, token string, providerID st
 		return err
 	}
 
-	var artPath string
+	var artPath *string
 	if art != nil {
-		artPath = art.Path
+		artPath = &art.Path
 	}
 
-	_, err = dal.Db.InsertSong(
+	if songId == nil {
+		_, err = dal.Db.InsertSong(
+			fileInfo.Artist,
+			albumID,
+			fileInfo.Path,
+			fileInfo.Title,
+			fileInfo.Track,
+			fileInfo.Disc,
+			genreID,
+			fileInfo.Year,
+			artPath,
+			fileInfo.Size,
+			fileInfo.Bitrate,
+			fileInfo.Duration,
+			token,
+			providerID,
+		)
+
+		return err
+	}
+
+	return dal.Db.UpdateSong(
+		*songId,
 		fileInfo.Artist,
 		albumID,
 		fileInfo.Path,
@@ -71,9 +93,8 @@ func (dal *DAL) PutSong(fileInfo *entities.FileInfo, token string, providerID st
 		fileInfo.Duration,
 		token,
 		providerID,
+		false,
 	)
-
-	return err
 }
 
 func (dal *DAL) PutArt(art *entities.CoverArtData) (*dao.Art, error) {
@@ -96,13 +117,13 @@ func (dal *DAL) PutArt(art *entities.CoverArtData) (*dao.Art, error) {
 	return dal.Db.InsertArt(filePath, hash)
 }
 
-func (dal *DAL) PutPlaylist(id uint, name string, songIDs []uint) (uint, error) {
+func (dal *DAL) PutPlaylist(id uint, name string, songIDs []uint, public bool) (uint, error) {
 
 	now := time.Now()
 	var playlistID uint
 
 	if id == 0 {
-		inserted, err := dal.Db.InsertPlaylist(name, "")
+		inserted, err := dal.Db.InsertPlaylist(name, "", public)
 		if err != nil {
 			return 0, err
 		}
@@ -139,30 +160,6 @@ func (dal *DAL) PutPlaylist(id uint, name string, songIDs []uint) (uint, error) 
 	}
 
 	return playlistID, nil
-}
-
-func (dal *DAL) GetSong(id uint) (*dao.Song, error) {
-	s := dal.Db.GetSong(id)
-	if s == nil {
-		return nil, &dao.ErrNotFound{}
-	}
-	return s, nil
-}
-
-func (dal *DAL) GetAlbum(id uint) (*dao.Album, error) {
-	s := dal.Db.GetAlbum(id)
-	if s == nil {
-		return nil, &dao.ErrNotFound{}
-	}
-	return s, nil
-}
-
-func (dal *DAL) GetArtist(id uint) (*dao.Artist, error) {
-	a := dal.Db.GetArtist(id)
-	if a == nil {
-		return nil, &dao.ErrNotFound{}
-	}
-	return a, nil
 }
 
 func (dal *DAL) UpdatePlaylist(
@@ -212,18 +209,6 @@ func (dal *DAL) UpdatePlaylist(
 	dal.Db.ReplacePlaylistEntries(playlistID, songIDs)
 	dal.Db.UpdatePlaylist(playlistID, nameUpdate, commentUpdate)
 	return nil
-}
-
-func (dal *DAL) DeletePlaylist(id uint) error {
-	return dal.Db.DeletePlaylist(id)
-}
-
-func (dal *DAL) GetAlbums(listType dao.AlbumList2Type, size uint, offset uint) []dao.Album {
-	return dal.Db.GetAlbums(listType, size, offset)
-}
-
-func (d *DAL) DeleteMissing(tokens []string, providerID string) {
-	d.Db.DeleteMissing(tokens, providerID)
 }
 
 // GetArtPath checks that an artwork file exists for the given ID and returns

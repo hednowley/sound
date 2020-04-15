@@ -24,7 +24,7 @@ func NewStreamController(dal *dal.DAL) *api.BinaryController {
 			return api.NewErrorReponse("No ID!")
 		}
 
-		file, err := dal.GetSong(id)
+		file, err := dal.Db.GetSong(id)
 		if err != nil {
 			return api.NewErrorReponse(err.Error())
 		}

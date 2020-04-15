@@ -22,7 +22,16 @@ func Max(a int, b int) int {
 }
 
 // Contains checks whether a slice of uints contains the given value.
-func Contains(slice []uint, value uint) bool {
+func ContainsUint(slice []uint, value uint) bool {
+	for _, v := range slice {
+		if v == value {
+			return true
+		}
+	}
+	return false
+}
+
+func ContainsString(slice []string, value string) bool {
 	for _, v := range slice {
 		if v == value {
 			return true

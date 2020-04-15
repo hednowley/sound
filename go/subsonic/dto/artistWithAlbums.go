@@ -29,7 +29,7 @@ func NewArtistWithAlbums(artist *dao.Artist, albums []dao.Album) *ArtistWithAlbu
 		Name:       artist.Name,
 		AlbumCount: artist.AlbumCount,
 		Albums:     albumDTOs,
-		Art:        artist.Art,
+		Art:        artist.GetArt(),
 		Duration:   artist.Duration,
 	}
 }

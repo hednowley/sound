@@ -6,20 +6,42 @@ import (
 
 // Album is an album.
 type Album struct {
-	ID       uint   `gorm:"PRIMARY_KEY"`
-	ArtistID uint   `gorm:"index:albums_artist_id_idx"`
-	Name     string `gorm:"index:albums_name_idx"`
+	ID       uint
+	ArtistID uint
+	Name     string
 
 	Created       *time.Time
-	Art           string
-	GenreID       uint
-	Year          int
+	Arts          []string
+	Genres        []string
+	Years         []int
 	Duration      int
 	Disambiguator string // Two albums are only considered the same if their Name, Artist and Disambiguator are the same.
 	Starred       bool
 
-	// Precalculated fields which are stored for performance
 	SongCount  uint
 	ArtistName string
-	GenreName  string
+}
+
+func (a *Album) GetArt() string {
+	if len(a.Arts) > 0 {
+		return a.Arts[0]
+	}
+
+	return ""
+}
+
+func (a *Album) GetGenre() string {
+	if len(a.Genres) > 0 {
+		return a.Genres[0]
+	}
+
+	return ""
+}
+
+func (a *Album) GetYear() int {
+	if len(a.Years) > 0 {
+		return a.Years[0]
+	}
+
+	return 0
 }

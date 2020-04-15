@@ -22,7 +22,7 @@ func NewDeletePlaylistHandler(dal *dal.DAL) api.Handler {
 			return api.NewErrorReponse(dto.MissingParameter, "Required param (id) is missing")
 		}
 
-		err := dal.DeletePlaylist(id)
+		err := dal.Db.DeletePlaylist(id)
 		if err != nil {
 			if _, ok := err.(*dao.ErrNotFound); ok {
 				message := fmt.Sprintf("Playlist not found: %v", idParam)

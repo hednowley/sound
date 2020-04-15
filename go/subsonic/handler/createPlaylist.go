@@ -34,7 +34,7 @@ func NewCreatePlaylistHandler(dal *dal.DAL) api.Handler {
 			}
 		}
 
-		id, err := dal.PutPlaylist(id, name, songIdsNum)
+		id, err := dal.PutPlaylist(id, name, songIdsNum, true)
 		if err != nil {
 			_, ok := err.(*dao.ErrNotFound)
 			if ok {

@@ -30,10 +30,10 @@ func NewAlbum(album *dao.Album, songs []dao.Song) *Album {
 		ID:       album.ID,
 		ArtistID: album.ArtistID,
 		Artist:   album.ArtistName,
-		Art:      album.Art,
+		Art:      album.GetArt(),
 		Created:  album.Created,
-		Genre:    album.GenreName,
-		Year:     album.Year,
+		Genre:    album.GetGenre(),
+		Year:     album.GetYear(),
 		Songs:    songSummaries,
 	}
 }

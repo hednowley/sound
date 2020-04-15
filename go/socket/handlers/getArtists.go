@@ -8,7 +8,10 @@ import (
 
 func MakeGetArtistsHandler(dal *dal.DAL) socket.Handler {
 	return func(request *dto.Request) interface{} {
-		artists := dal.Db.GetArtists()
+		artists, err := dal.Db.GetArtists()
+		if err != nil {
+			return dto.NewErrorResponse("error", 0)
+		}
 		return dto.NewArtistCollection(artists)
 	}
 }

@@ -69,19 +69,23 @@ func (scanner *Scanner) startScan(provider Provider, update bool, delete bool) {
 
 	tokens := []string{}
 
-	err := provider.Iterate(func(token string) {
+	err := provider.Iterate(func(token string) error {
 		scanner.hub.Notify(dto.NewScanStatusNotification(provider.IsScanning(), provider.FileCount()))
 
 		if delete {
 			tokens = append(tokens, token)
 		}
 
-		existing := scanner.dal.Db.GetSongIdFromToken(token, providerID)
+		existing, getSongErr := scanner.dal.Db.GetSongIdFromToken(token, providerID)
+		if getSongErr != nil {
+			return getSongErr
+		}
+
 		if existing == nil || update {
 			data, err2 := provider.GetInfo(token)
 			if err2 != nil {
 				seelog.Errorf("Cannot read music info for '%v': %v", token, err2)
-				return
+				return nil
 			}
 
 			if existing == nil {
@@ -90,11 +94,16 @@ func (scanner *Scanner) startScan(provider Provider, update bool, delete bool) {
 				seelog.Infof("Updating token '%v'", token)
 			}
 
-			scanner.dal.PutSong(data, token, providerID)
+			putErr := scanner.dal.PutSong(data, token, providerID, existing)
+			if putErr != nil {
+				return putErr
+			}
 
 		} else {
 			seelog.Infof("Skipping token '%v'", token)
 		}
+
+		return nil
 	})
 	if err != nil {
 		seelog.Errorf("Error during '%v' scan: %v", providerID, err)
@@ -102,12 +111,11 @@ func (scanner *Scanner) startScan(provider Provider, update bool, delete bool) {
 
 	if delete {
 		seelog.Info("Deleting unscanned items")
-		scanner.dal.DeleteMissing(tokens, providerID)
+		err = scanner.dal.Db.DeleteMissing(tokens, providerID)
 
-		// Find unscanned songs from same provider
-
-		// Find albums etc with no songs
-
+		if err != nil {
+			seelog.Errorf("Error during '%v' scan: %v", providerID, err)
+		}
 	}
 
 	seelog.Infof("Finished '%v' scan.", providerID)

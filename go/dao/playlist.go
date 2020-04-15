@@ -6,7 +6,7 @@ import (
 
 // Playlist is a playlist.
 type Playlist struct {
-	ID      uint `gorm:"PRIMARY_KEY"`
+	ID      uint
 	Name    string
 	Comment string
 	Public  bool

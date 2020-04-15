@@ -29,19 +29,21 @@ func TestScanner(t *testing.T) {
 	}
 
 	path := filepath.Join("..", "testdata", "music")
-	services.IterateFiles(path, e, func(path string, info *os.FileInfo) {
+	services.IterateFiles(path, e, func(path string, info *os.FileInfo) error {
 		for k, v := range files {
 			if strings.HasSuffix(path, k) {
 				if *v {
 					errors = append(errors, fmt.Sprintf("Double scan: %v", k))
-					return
+					return nil
 				}
 				*files[k] = true
-				return
+				return nil
 			}
 		}
 
 		errors = append(errors, fmt.Sprintf("Unexpected scan: %v", path))
+
+		return nil
 	})
 
 	if len(errors) > 0 {
@@ -55,5 +57,4 @@ func TestScanner(t *testing.T) {
 			t.Error(fmt.Sprintf("Unscanned file: %v", k))
 		}
 	}
-
 }

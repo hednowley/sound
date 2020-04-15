@@ -8,6 +8,7 @@ import (
 )
 
 type albumBody struct {
+	ID        uint       `xml:"id,attr" json:"id,string"`
 	Name      string     `xml:"name,attr" json:"name"`
 	Artist    string     `xml:"artist,attr" json:"artist"`
 	ArtistID  uint       `xml:"artistId,attr" json:"artistId,string"`
@@ -22,14 +23,15 @@ type albumBody struct {
 func newAlbumBody(album *dao.Album) *albumBody {
 
 	return &albumBody{
+		ID:        album.ID,
 		Name:      album.Name,
 		ArtistID:  album.ArtistID,
 		SongCount: album.SongCount,
 		Artist:    album.ArtistName,
-		Art:       album.Art,
+		Art:       album.GetArt(),
 		Created:   album.Created,
-		Genre:     album.GenreName,
-		Year:      album.Year,
+		Genre:     album.GetGenre(),
+		Year:      album.GetYear(),
 		Duration:  album.Duration,
 	}
 
@@ -37,14 +39,12 @@ func newAlbumBody(album *dao.Album) *albumBody {
 
 type Album struct {
 	XMLName xml.Name `xml:"album" json:"-"`
-	ID      uint     `xml:"id,attr" json:"id,string"`
 	*albumBody
 }
 
 func NewAlbum(album *dao.Album) *Album {
 	return &Album{
 		XMLName:   xml.Name{},
-		ID:        album.ID,
 		albumBody: newAlbumBody(album),
 	}
 }

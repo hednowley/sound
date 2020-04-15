@@ -27,11 +27,11 @@ func TestGetMissingAlbum(t *testing.T) {
 	}
 
 	if r.Code != int(dto.NotFound) {
-		t.Error("Wrong error code")
+		t.Errorf("Wrong error code (%v)", r.Code)
 	}
 
 	if r.Message != "Album not found." {
-		t.Error("Wrong error message")
+		t.Errorf("Wrong error message (%v)", r.Message)
 	}
 }
 

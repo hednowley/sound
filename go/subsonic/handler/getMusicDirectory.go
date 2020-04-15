@@ -20,27 +20,37 @@ func NewGetMusicDirectoryHandler(dal *dal.DAL) api.Handler {
 
 		switch id.Type {
 		case dto.ArtistDirectoryType:
-			artist, err := dal.GetArtist(id.ID)
+			artist, err := dal.Db.GetArtist(id.ID)
 			if err != nil {
 				return api.NewErrorReponse(dto.Generic, err.Error())
 			}
-			albums := dal.Db.GetAlbumsByArtist(id.ID)
+
+			albums, err := dal.Db.GetAlbumsByArtist(id.ID)
+			if err != nil {
+				return api.NewErrorReponse(dto.Generic, err.Error())
+			}
+
 			return api.NewSuccessfulReponse(dto.NewArtistDirectory(artist, albums))
 
 		case dto.AlbumDirectoryType:
-			album, err := dal.GetAlbum(id.ID)
+			album, err := dal.Db.GetAlbum(id.ID)
 			if err != nil {
 				return api.NewErrorReponse(dto.Generic, err.Error())
 			}
-			songs := dal.Db.GetAlbumSongs(id.ID)
+
+			songs, err := dal.Db.GetAlbumSongs(id.ID)
+			if err != nil {
+				return api.NewErrorReponse(dto.Generic, err.Error())
+			}
 
 			return api.NewSuccessfulReponse(dto.NewAlbumDirectory(album, songs))
 
 		case dto.SongDirectoryType:
-			song, err := dal.GetSong(id.ID)
+			song, err := dal.Db.GetSong(id.ID)
 			if err != nil {
 				return api.NewErrorReponse(dto.Generic, err.Error())
 			}
+
 			return api.NewSuccessfulReponse(dto.NewSongDirectory(song))
 		}
 

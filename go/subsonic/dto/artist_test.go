@@ -99,7 +99,7 @@ func TestArtistWithAlbums(t *testing.T) {
 
 	albumXML := ""
 	for _, a := range albums {
-		m, _ := xml.Marshal(NewAlbum(a))
+		m, _ := xml.Marshal(NewAlbum(&a))
 		albumXML += string(m)
 	}
 
@@ -109,7 +109,7 @@ func TestArtistWithAlbums(t *testing.T) {
 
 	albumJSON := make([]string, len(albums))
 	for i, a := range albums {
-		m, _ := json.Marshal(NewAlbum(a))
+		m, _ := json.Marshal(NewAlbum(&a))
 		albumJSON[i] = string(m)
 	}
 

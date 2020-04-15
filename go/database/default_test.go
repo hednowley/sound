@@ -35,19 +35,31 @@ func TestPutAlbumByAttributest(t *testing.T) {
 
 	// Put existing album
 	albumID, err := m.PutAlbumByAttributes("album_2", "artist_1", "")
-	if err != nil || albumID != 2 {
+	if err != nil {
+		t.Error(err)
+		return
+	}
+	if albumID != 2 {
 		t.Error()
 		return
 	}
 
 	// Put album with existing name but new artist
 	albumID, err = m.PutAlbumByAttributes("album_2", "sdffsd", "")
-	if err != nil || albumID != 10001 {
+	if err != nil {
+		t.Error(err)
+		return
+	}
+	if albumID != 10001 {
 		t.Error()
 		return
 	}
 
-	a := m.GetAlbum(albumID)
+	a, err := m.GetAlbum(albumID)
+	if err != nil {
+		t.Error(err)
+		return
+	}
 	if a == nil || a.ArtistID != 10001 {
 		t.Error()
 		return
@@ -59,7 +71,11 @@ func TestPutAlbumByAttributest(t *testing.T) {
 		t.Error()
 		return
 	}
-	a = m.GetAlbum(albumID)
+	a, err = m.GetAlbum(albumID)
+	if err != nil {
+		t.Error(err)
+		return
+	}
 	if a == nil || a.ArtistID != 2 {
 		t.Error()
 		return
@@ -71,7 +87,11 @@ func TestPutAlbumByAttributest(t *testing.T) {
 		t.Error()
 		return
 	}
-	a = m.GetAlbum(albumID)
+	a, err = m.GetAlbum(albumID)
+	if err != nil {
+		t.Error(err)
+		return
+	}
 	if a == nil || a.ArtistID != 10002 {
 		t.Error()
 		return
@@ -104,8 +124,12 @@ func TestPutAlbumByAttributest(t *testing.T) {
 		t.Error()
 		return
 	}
-
-	if a.ArtistID != 1 {
+	a, err = m.GetAlbum(albumID)
+	if err != nil {
+		t.Error(err)
+		return
+	}
+	if a == nil || a.ArtistID != 1 {
 		t.Error()
 		return
 	}

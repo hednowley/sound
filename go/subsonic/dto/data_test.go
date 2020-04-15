@@ -18,10 +18,10 @@ func GenerateGenre(id int) *dao.Genre {
 	}
 }
 
-func GenerateGenres(count int) []*dao.Genre {
-	g := make([]*dao.Genre, count)
+func GenerateGenres(count int) []dao.Genre {
+	g := make([]dao.Genre, count)
 	for i := 1; i < count+1; i++ {
-		g[i-1] = GenerateGenre(i)
+		g[i-1] = *GenerateGenre(i)
 	}
 	return g
 }
@@ -34,10 +34,10 @@ func GenerateArt(id int) *dao.Art {
 	}
 }
 
-func GenerateArts(count int) []*dao.Art {
-	arts := make([]*dao.Art, count)
+func GenerateArts(count int) []dao.Art {
+	arts := make([]dao.Art, count)
 	for i := 1; i < count+1; i++ {
-		arts[i-1] = GenerateArt(i)
+		arts[i-1] = *GenerateArt(i)
 	}
 	return arts
 }
@@ -50,10 +50,8 @@ func GenerateSong(i int, genre *dao.Genre, album *dao.Album, art *dao.Art) *dao.
 		artPath = art.Path
 	}
 
-	var genreID uint
 	var genreName string
 	if genre != nil {
-		genreID = genre.ID
 		genreName = genre.Name
 	}
 
@@ -63,7 +61,6 @@ func GenerateSong(i int, genre *dao.Genre, album *dao.Album, art *dao.Art) *dao.
 		Artist:        album.ArtistName,
 		Track:         i,
 		Disc:          i,
-		GenreID:       genreID,
 		AlbumID:       album.ID,
 		Art:           artPath,
 		Path:          fmt.Sprintf("D:\\music\\%v.mp3", i),
@@ -78,10 +75,10 @@ func GenerateSong(i int, genre *dao.Genre, album *dao.Album, art *dao.Art) *dao.
 	return &s
 }
 
-func GenerateSongs(count int, genre *dao.Genre, album *dao.Album, art *dao.Art) []*dao.Song {
-	songs := make([]*dao.Song, count)
+func GenerateSongs(count int, genre *dao.Genre, album *dao.Album, art *dao.Art) []dao.Song {
+	songs := make([]dao.Song, count)
 	for i := 0; i < count; i++ {
-		songs[i] = GenerateSong(i+1, genre, album, art)
+		songs[i] = *GenerateSong(i+1, genre, album, art)
 	}
 	return songs
 }
@@ -89,73 +86,48 @@ func GenerateSongs(count int, genre *dao.Genre, album *dao.Album, art *dao.Art) 
 func GenerateAlbum(albumId int, genre *dao.Genre, artist *dao.Artist, art *dao.Art) *dao.Album {
 	t := time.Date(2000+albumId, time.August, 15, 0, 0, 0, 0, time.UTC)
 
-	var artPath string
-	if art != nil {
-		artPath = art.Path
-	}
-
-	var genreID uint
-	var genreName string
-	if genre != nil {
-		genreID = genre.ID
-		genreName = genre.Name
-	}
-
 	a := dao.Album{
 		ID:         uint(albumId),
 		Name:       fmt.Sprintf("album%v", albumId),
-		Year:       1900 + albumId,
-		GenreID:    genreID,
 		ArtistID:   artist.ID,
-		Art:        artPath,
 		Created:    &t,
 		ArtistName: artist.Name,
-		GenreName:  genreName,
 		Duration:   albumId,
 	}
 
-	artist.Albums = append(artist.Albums, &a)
 	artist.AlbumCount++
-	if genre != nil {
-		genre.Albums = append(genre.Albums, &a)
-	}
+
 	return &a
 }
 
-func GenerateAlbums(count int, genre *dao.Genre, artist *dao.Artist, art *dao.Art) []*dao.Album {
-	albums := make([]*dao.Album, count)
+func GenerateAlbums(count int, genre *dao.Genre, artist *dao.Artist, art *dao.Art) []dao.Album {
+	albums := make([]dao.Album, count)
 	for i := 1; i < count+1; i++ {
-		albums[i-1] = GenerateAlbum(i, genre, artist, art)
+		albums[i-1] = *GenerateAlbum(i, genre, artist, art)
 	}
 	return albums
 }
 
 func GenerateArtist(i int, art *dao.Art) *dao.Artist {
 
-	var artPath string
-	if art != nil {
-		artPath = art.Path
-	}
-
 	a := dao.Artist{
 		ID:       uint(i),
 		Name:     fmt.Sprintf("artist%v", i),
-		Art:      artPath,
 		Duration: i,
 	}
 
 	return &a
 }
 
-func GenerateArtists(count int, art *dao.Art) []*dao.Artist {
-	artists := make([]*dao.Artist, count)
+func GenerateArtists(count int, art *dao.Art) []dao.Artist {
+	artists := make([]dao.Artist, count)
 	for i := 1; i < count+1; i++ {
-		artists[i-1] = GenerateArtist(i, art)
+		artists[i-1] = *GenerateArtist(i, art)
 	}
 	return artists
 }
 
-func GeneratePlaylist(i int, public bool, songs ...*dao.Song) *dao.Playlist {
+func GeneratePlaylist(i int, public bool) *dao.Playlist {
 
 	t1 := time.Date(2000+i, time.August, 10, 0, 30, 0, 9, time.UTC)
 	t2 := time.Date(2001+i, time.January, 15, 5, 1, 0, 1, time.UTC)
@@ -169,28 +141,14 @@ func GeneratePlaylist(i int, public bool, songs ...*dao.Song) *dao.Playlist {
 		Created: &t2,
 	}
 
-	entries := make([]*dao.PlaylistEntry, len(songs))
-
-	for i, s := range songs {
-		entries[i] = &dao.PlaylistEntry{
-			ID:         uint(i + 1),
-			Index:      i,
-			PlaylistID: p.ID,
-			SongID:     s.ID,
-			Song:       s,
-		}
-	}
-
-	p.Entries = entries
 	return &p
 }
 
-func GeneratePlaylists(public bool, songCollections ...[]*dao.Song) []*dao.Playlist {
+func GeneratePlaylists(public bool, count int) []*dao.Playlist {
 
-	count := len(songCollections)
 	playlists := make([]*dao.Playlist, count)
 	for i := 1; i < count+1; i++ {
-		playlists[i-1] = GeneratePlaylist(i, public, songCollections[i-1]...)
+		playlists[i-1] = GeneratePlaylist(i, public)
 	}
 
 	return playlists

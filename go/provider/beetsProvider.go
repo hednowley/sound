@@ -57,7 +57,7 @@ func (p *BeetsProvider) ID() string {
 }
 
 // Iterate through all files in the collection, calling the provided callback synchronously on each.
-func (p *BeetsProvider) Iterate(callback func(token string)) error {
+func (p *BeetsProvider) Iterate(callback func(token string) error) error {
 	p.isScanning = true
 	p.fileCount = 0
 
@@ -69,6 +69,7 @@ func (p *BeetsProvider) Iterate(callback func(token string)) error {
 	}
 
 	var id int
+	var callbackErr error
 
 	for rows.Next() {
 		err = rows.Scan(&id)
@@ -80,11 +81,14 @@ func (p *BeetsProvider) Iterate(callback func(token string)) error {
 		p.fileCount = p.fileCount + 1
 
 		// Use the id as a unique token
-		callback(strconv.Itoa(id))
+		callbackErr = callback(strconv.Itoa(id))
+		if callbackErr != nil {
+			break
+		}
 	}
 
 	p.isScanning = false
-	return nil
+	return callbackErr
 }
 
 // GetInfo returns information about the file with the given token.

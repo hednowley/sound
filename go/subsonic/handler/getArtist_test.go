@@ -55,7 +55,7 @@ func TestGetGoodArtist(t *testing.T) {
 		t.Error("Wrong ID")
 	}
 
-	if len(r.Albums) != 2 {
+	if r.AlbumCount != 2 {
 		t.Error("Missing albums")
 	}
 }

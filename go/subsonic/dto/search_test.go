@@ -15,19 +15,19 @@ func TestSearch2(t *testing.T) {
 	genres := GenerateGenres(3)
 	arts := GenerateArts(3)
 
-	artist1 := GenerateArtist(1, arts[0])
-	artist2 := GenerateArtist(2, arts[1])
-	artists := []*dao.Artist{artist1, artist2}
+	artist1 := GenerateArtist(1, &arts[0])
+	artist2 := GenerateArtist(2, &arts[1])
+	artists := []dao.Artist{*artist1, *artist2}
 
-	album1 := GenerateAlbum(1, genres[0], artist1, arts[0])
-	album2 := GenerateAlbum(2, genres[0], artist2, arts[0])
-	album3 := GenerateAlbum(3, genres[0], artist2, arts[0])
-	albums := []*dao.Album{album1, album2, album3}
+	album1 := GenerateAlbum(1, &genres[0], artist1, &arts[0])
+	album2 := GenerateAlbum(2, &genres[0], artist2, &arts[0])
+	album3 := GenerateAlbum(3, &genres[0], artist2, &arts[0])
+	albums := []dao.Album{*album1, *album2, *album3}
 
-	song1 := GenerateSong(1, genres[0], album1, arts[0])
-	song2 := GenerateSong(5, genres[1], album2, arts[1])
-	song3 := GenerateSong(10, genres[2], album3, arts[2])
-	songs := []*dao.Song{song1, song2, song3}
+	song1 := GenerateSong(1, &genres[0], album1, &arts[0])
+	song2 := GenerateSong(5, &genres[1], album2, &arts[1])
+	song3 := GenerateSong(10, &genres[2], album3, &arts[2])
+	songs := []dao.Song{*song1, *song2, *song3}
 
 	DTO := NewSearch2Response(artists, albums, songs)
 
@@ -37,26 +37,26 @@ func TestSearch2(t *testing.T) {
 	innerXML := ""
 
 	for _, a := range artists {
-		m, _ := xml.Marshal(NewArtist(a))
+		m, _ := xml.Marshal(NewArtist(&a))
 		innerXML += string(m)
 
-		m, _ = json.Marshal(NewArtist(a))
+		m, _ = json.Marshal(NewArtist(&a))
 		artistsJSON = append(artistsJSON, string(m))
 	}
 
 	for _, a := range albums {
-		m, _ := xml.Marshal(NewAlbum(a))
+		m, _ := xml.Marshal(NewAlbum(&a))
 		innerXML += string(m)
 
-		m, _ = json.Marshal(NewAlbum(a))
+		m, _ = json.Marshal(NewAlbum(&a))
 		albumsJSON = append(albumsJSON, string(m))
 	}
 
 	for _, s := range songs {
-		m, _ := xml.Marshal(NewSong(s))
+		m, _ := xml.Marshal(NewSong(&s))
 		innerXML += string(m)
 
-		m, _ = json.Marshal(NewSong(s))
+		m, _ = json.Marshal(NewSong(&s))
 		songsJSON = append(songsJSON, string(m))
 	}
 

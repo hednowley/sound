@@ -21,7 +21,7 @@ func NewGetAlbumHandler(dal *dal.DAL) api.Handler {
 			return api.NewErrorReponse(dto.MissingParameter, "Required param (id) is missing")
 		}
 
-		album, err := dal.GetAlbum(id)
+		album, err := dal.Db.GetAlbum(id)
 		if err != nil {
 			if _, ok := err.(*dao.ErrNotFound); ok {
 				return api.NewErrorReponse(dto.NotFound, "Album not found.")

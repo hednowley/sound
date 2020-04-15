@@ -9,13 +9,13 @@ func TestGenres(t *testing.T) {
 	genres := GenerateGenres(4)
 	art := GenerateArt(1)
 	artist := GenerateArtist(1, art)
-	albums1 := GenerateAlbums(5, genres[0], artist, art)
-	GenerateAlbums(3, genres[1], artist, art)
-	GenerateAlbums(1, genres[2], artist, art)
+	albums1 := GenerateAlbums(5, &genres[0], artist, art)
+	GenerateAlbums(3, &genres[1], artist, art)
+	GenerateAlbums(1, &genres[2], artist, art)
 
-	GenerateSongs(1, genres[0], albums1[0], art)
-	GenerateSongs(2, genres[1], albums1[0], art)
-	GenerateSongs(3, genres[2], albums1[0], art)
+	GenerateSongs(1, &genres[0], &albums1[0], art)
+	GenerateSongs(2, &genres[1], &albums1[0], art)
+	GenerateSongs(3, &genres[2], &albums1[0], art)
 
 	DTO := NewGenres(genres)
 

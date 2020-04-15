@@ -12,18 +12,18 @@ func TestPutPlaylist(t *testing.T) {
 	m := database.NewMock()
 	dal := dal.NewDAL(&config.Config{}, m)
 
-	id, err := dal.PutPlaylist(0, "playlist2", []uint{1, 2, 10})
-	if err != nil || id != 10001 {
-		t.Error()
+	id, err := dal.PutPlaylist(0, "playlist2", []uint{1, 2, 10}, true)
+	if err != nil {
+		t.Error(err)
+	} else if id != 10001 {
+		t.Error("Bad ID returned by PutPlaylist")
 	}
 
 	p, err := dal.Db.GetPlaylist(1)
 	if err != nil {
-		t.Error()
-	}
-
-	if p.EntryCount != 4 {
-		t.Error()
+		t.Error(err)
+	} else if p.EntryCount != 4 {
+		t.Error("Wrong entry count")
 	}
 }
 
@@ -32,23 +32,31 @@ func TestSearchArtist(t *testing.T) {
 
 	dal := dal.NewDAL(&config.Config{}, m)
 
-	artists := dal.SearchArtists("EethOVE", 10, 0)
-	if len(artists) != 1 {
+	artists, err := dal.Db.SearchArtists("EethOVE", 10, 0)
+	if err != nil {
+		t.Error(err)
+	} else if len(artists) != 1 {
 		t.Error("Could not find beethoven")
 	}
 
-	artists = dal.SearchArtists("mc hammer", 10, 0)
-	if len(artists) != 0 {
+	artists, err = dal.Db.SearchArtists("mc hammer", 10, 0)
+	if err != nil {
+		t.Error(err)
+	} else if len(artists) != 0 {
 		t.Error("Search returned false positive")
 	}
 
-	artists = dal.SearchArtists("artist", 2, 0)
-	if len(artists) != 2 {
-		t.Error("Search is not limiting result count")
+	artists, err = dal.Db.SearchArtists("artist", 2, 0)
+	if err != nil {
+		t.Error(err)
+	} else if len(artists) != 2 {
+		t.Errorf("Search is not limiting result count (returned %d)", len(artists))
 	}
 
-	artists = dal.SearchArtists("artist", 2, 2)
-	if len(artists) != 1 {
+	artists, err = dal.Db.SearchArtists("artist", 2, 2)
+	if err != nil {
+		t.Error(err)
+	} else if len(artists) != 1 {
 		t.Error("Search offset is not working")
 	}
 }

@@ -1,6 +1,8 @@
 package dto
 
 import (
+	"encoding/xml"
+
 	"github.com/hednowley/sound/dao"
 )
 
@@ -24,6 +26,7 @@ func newAlbumWithSongsBody(album *dao.Album, songs []dao.Song) *albumWithSongsBo
 }
 
 type AlbumWithSongs struct {
+	XMLName xml.Name `xml:"album" json:"-"`
 	*albumBody
 	*albumWithSongsBody
 }

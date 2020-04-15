@@ -4,10 +4,10 @@ import (
 	"database/sql"
 	"log"
 	"path/filepath"
-	"runtime"
 
+	"github.com/go-testfixtures/testfixtures/v3"
 	"github.com/hednowley/sound/config"
-	testfixtures "gopkg.in/testfixtures.v2"
+	"github.com/hednowley/sound/projectpath"
 )
 
 // NewMock makes a new database seeded from test data.
@@ -16,7 +16,6 @@ func NewMock() *Default {
 
 	conn := "host=localhost port=5432 user=sound password=sound dbname=sound_test sslmode=disable"
 
-	// Initialise the database schema with gorm
 	database, err := NewDefault(&config.Config{Db: conn})
 	if err != nil {
 		log.Fatal(err)
@@ -28,13 +27,15 @@ func NewMock() *Default {
 		log.Fatal(err)
 	}
 
-	// Get test data path (found relative to this file)
-	_, filename, _, _ := runtime.Caller(0)
-	dir := filepath.Dir(filename)
-	dataPath := filepath.Join(dir, "..", "testdata", "dao")
+	dataDir := filepath.Join(projectpath.Root, "testdata", "dao")
 
 	// Insert test data
-	fixtures, err := testfixtures.NewFolder(db, &testfixtures.PostgreSQL{}, dataPath)
+	fixtures, err := testfixtures.New(
+		testfixtures.Database(db),
+		testfixtures.Dialect("postgres"),
+		testfixtures.Directory(dataDir),
+		testfixtures.ResetSequencesTo(10000),
+	)
 	if err != nil {
 		log.Fatal(err)
 	}

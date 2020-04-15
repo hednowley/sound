@@ -1,11 +1,15 @@
 - id: 1
   name: "artist_1"
+  starred: false
 
 - id: 2
   name: "artist_2"
+  starred: false
 
 - id: 4
   name: "artist_4"
+  starred: false
 
 - id: 5
   name: "beethoven"
+  starred: false

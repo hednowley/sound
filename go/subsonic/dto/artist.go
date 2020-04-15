@@ -21,7 +21,7 @@ func NewArtist(artist *dao.Artist) *Artist {
 		ID:         artist.ID,
 		Name:       artist.Name,
 		AlbumCount: artist.AlbumCount,
-		Art:        artist.Art,
+		Art:        artist.GetArt(),
 		Duration:   artist.Duration,
 	}
 }
