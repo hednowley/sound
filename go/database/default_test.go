@@ -126,12 +126,3 @@ func TestPutGenreByName(t *testing.T) {
 		t.Error("Wrong ID")
 	}
 }
-
-func TestDelete(t *testing.T) {
-	m := database.NewMock()
-	m.Empty()
-
-	if len(m.GetArtists()) > 0 {
-		t.Error()
-	}
-}

@@ -2,48 +2,55 @@ package database
 
 import (
 	"context"
+	"database/sql"
 	"fmt"
 	"strings"
 	"time"
 
 	"github.com/hednowley/sound/config"
 	"github.com/hednowley/sound/dao"
-	"github.com/jinzhu/gorm"
-
-	// Postgres driver for GORM
-	_ "github.com/jinzhu/gorm/dialects/postgres"
 
 	"github.com/jackc/pgx/v4"
+
+	"github.com/golang-migrate/migrate/v4"
+	"github.com/golang-migrate/migrate/v4/database/postgres"
+	_ "github.com/golang-migrate/migrate/v4/source/file"
+	_ "github.com/lib/pq"
 )
 
 // Default provides access to the default application database.
 type Default struct {
-	db   *gorm.DB
 	conn *pgx.Conn
 }
 
 // NewDefault constructs a new default database.
 func NewDefault(config *config.Config) (*Default, error) {
-	db, err := gorm.Open("postgres", config.Db)
-	db = db.Set("gorm:association_autoupdate", false).
-		Set("gorm:association_autocreate", false)
+
+	db, err := sql.Open("postgres", config.Db)
+	if err != nil {
+		return nil, err
+	}
+
+	driver, err := postgres.WithInstance(db, &postgres.Config{})
+	if err != nil {
+		return nil, err
+	}
+
+	m, err := migrate.NewWithDatabaseInstance(
+		"file://../migrations",
+		"postgres", driver)
+	if err != nil {
+		return nil, err
+	}
+
+	m.Steps(2)
 
 	conn, err := pgx.Connect(context.Background(), config.Db)
 	if err != nil {
 		return nil, err
 	}
 
-	database := Default{db: db, conn: conn}
-
-	//db.LogMode(true)
-
-	db.AutoMigrate(dao.Song{})
-	db.AutoMigrate(dao.Artist{})
-	db.AutoMigrate(dao.Album{})
-	db.AutoMigrate(dao.Art{})
-	db.AutoMigrate(dao.Genre{})
-	db.AutoMigrate(dao.Playlist{})
-	db.AutoMigrate(dao.PlaylistEntry{})
+	database := Default{conn: conn}
 
 	return &database, err
 }
