@@ -434,13 +434,19 @@ func (db *Default) GetPlaylist(playlistID uint) (*dao.Playlist, error) {
 			playlists.comment,
 			playlists.created,
 			playlists.changed,
-			COUNT(playlist_entries.id)
+			playlists.public,
+			COUNT(playlist_entries.id),
+			COALESCE(SUM(songs.duration), 0)
 		FROM
 			playlists
 		LEFT JOIN
 			playlist_entries
 		ON
 			playlist_entries.playlist_id = playlists.id
+		LEFT JOIN
+			songs
+		ON
+			songs.id = playlist_entries.song_id
 		WHERE
 			playlists.id = $1
 		GROUP BY
@@ -452,7 +458,13 @@ func (db *Default) GetPlaylist(playlistID uint) (*dao.Playlist, error) {
 		&p.Comment,
 		&p.Created,
 		&p.Changed,
-		&p.EntryCount)
+		&p.Public,
+		&p.EntryCount,
+		&p.Duration)
+
+	if err == pgx.ErrNoRows {
+		return nil, &dao.ErrNotFound{}
+	}
 
 	return &p, err
 }
@@ -515,7 +527,7 @@ func (db *Default) GetPlaylistSongs(playlistID uint) ([]dao.Song, error) {
 		LEFT JOIN 
 			songs
 		ON
-			song.id = playlist_entries.song_id
+			songs.id = playlist_entries.song_id
 		LEFT JOIN 
 			albums
 		ON
@@ -765,7 +777,7 @@ func (db *Default) GetSongsByGenre(genreName string, offset uint, limit uint) ([
 		ON
 			albums.id = songs.album_id
 		WHERE
-			genres.name = $1
+			genres.name ILIKE $1
 		ORDER BY
 			songs.title ASC
 		OFFSET
@@ -820,7 +832,7 @@ func (db *Default) GetArtist(artistId uint) (*dao.Artist, error) {
 			artists.id,
 			artists.name,
 			artists.starred,
-			COUNT(albums.id),
+			COUNT(DISTINCT albums.id),
 			COALESCE(SUM(songs.duration), 0),
 			array_agg(DISTINCT songs.art) FILTER (WHERE songs.art IS NOT NULL)
 		FROM
@@ -950,8 +962,8 @@ func (db *Default) GetGenres() ([]dao.Genre, error) {
 		SELECT 
 			genres.id,
 			genres.name,
-			COUNT(songs.id),
-			COUNT(albums.id)
+			COUNT(DISTINCT songs.id),
+			COUNT(DISTINCT albums.id)
 		FROM
 			genres
 		LEFT JOIN
@@ -961,9 +973,9 @@ func (db *Default) GetGenres() ([]dao.Genre, error) {
 		LEFT JOIN
 			albums
 		ON
-			albums.genre_id = genres.id
+			albums.id = songs.album_id
 		GROUP BY
-			genres.id, songs.id, albums.id
+			genres.id
 		ORDER BY
 			genres.name ASC`)
 	if err != nil {
@@ -1102,19 +1114,21 @@ func (db *Default) GetAlbumsByArtist(artistId uint) ([]dao.Album, error) {
 		FROM
 			albums
 		LEFT JOIN 
-			genres
+			artists
 		ON
-			genres.id = albums.genre_id
+			artists.id = albums.artist_id
 		LEFT JOIN 
 			songs
 		ON
 			songs.album_id = albums.id
+		LEFT JOIN 
+			genres
+		ON
+			genres.id = songs.genre_id
 		WHERE
-			album.artist_id = $1
+			albums.artist_id = $1
 		GROUP BY
-			albums.id, genres.id
-		ORDER BY
-			year ASC
+			albums.id, artists.id
 	`, artistId)
 	if err != nil {
 		return nil, err
@@ -1154,7 +1168,7 @@ func (db *Default) GetArtists() ([]dao.Artist, error) {
 			artists.id,
 			artists.name,
 			artists.starred,
-			COUNT(albums.id),
+			COUNT(DISTINCT albums.id),
 			COALESCE(SUM(songs.duration), 0),
 			array_agg(DISTINCT songs.art) FILTER (WHERE songs.art IS NOT NULL)
 		FROM
@@ -1205,6 +1219,7 @@ func (db *Default) GetPlaylists() ([]dao.Playlist, error) {
 			playlists.comment,
 			playlists.created,
 			playlists.changed,
+			playlists.public,
 			COUNT(playlist_entries.id)
 		FROM
 			playlists
@@ -1227,6 +1242,7 @@ func (db *Default) GetPlaylists() ([]dao.Playlist, error) {
 			&p.Comment,
 			&p.Created,
 			&p.Changed,
+			&p.Public,
 			&p.EntryCount,
 		)
 		if err != nil {
@@ -1268,6 +1284,7 @@ func (db *Default) UpdatePlaylist(playlistID uint, name string, comment string) 
 		SET
 			name = $2,
 			comment = $3,
+			changed = $4
 		WHERE
 			id = $1
 		RETURNING
@@ -1302,6 +1319,20 @@ func (db *Default) DeletePlaylist(playlistID uint) error {
 		context.Background(),
 		`
 			DELETE FROM
+				playlist_entries
+			WHERE
+				playlist_id = $1
+		`,
+		playlistID,
+	)
+	if err != nil {
+		return err
+	}
+
+	ct, err := tx.Exec(
+		context.Background(),
+		`
+			DELETE FROM
 				playlists
 			WHERE
 				id = $1
@@ -1311,19 +1342,8 @@ func (db *Default) DeletePlaylist(playlistID uint) error {
 	if err != nil {
 		return err
 	}
-
-	_, err = tx.Exec(
-		context.Background(),
-		`
-			DELETE FROM
-				playlist_entries
-			WHERE
-				playlist_id = $1
-		`,
-		playlistID,
-	)
-	if err != nil {
-		return err
+	if ct.RowsAffected() == 0 {
+		return &dao.ErrNotFound{}
 	}
 
 	err = tx.Commit(context.Background())
@@ -1463,17 +1483,17 @@ func (db *Default) SearchAlbums(query string, count uint, offset uint) ([]dao.Al
 		ON
 			artists.id = albums.artist_id
 		LEFT JOIN 
-			genres
-		ON
-			genres.id = albums.genre_id
-		LEFT JOIN 
 			songs
 		ON
 			songs.album_id = albums.id
+		LEFT JOIN 
+			genres
+		ON
+			genres.id = songs.genre_id
 		WHERE
 			albums.name ILIKE $1
 		GROUP BY
-			albums.id, artists.id, genres.id
+			albums.id, artists.id
 		ORDER BY
 			albums.name ASC
 		LIMIT
@@ -1520,7 +1540,7 @@ func (db *Default) SearchArtists(query string, limit uint, offset uint) ([]dao.A
 			artists.id,
 			artists.name,
 			artists.starred,
-			COUNT(albums.id),
+			COUNT(DISTINCT albums.id),
 			COALESCE(SUM(songs.duration), 0),
 			array_agg(DISTINCT songs.art) FILTER (WHERE songs.art IS NOT NULL)
 		FROM
@@ -1653,29 +1673,28 @@ func (db *Default) GetRandomSongs(size uint, from uint, to uint, genre string) (
 
 	values := []interface{}{size}
 	wheres := []string{}
-	next := len(values) + 1
 
 	if from != 0 {
-		wheres = append(wheres, fmt.Sprintf("Year >= $%v", next))
 		values = append(values, from)
-		next++
+		wheres = append(wheres, fmt.Sprintf("Year >= $%v", len(values)))
 	}
 
 	if to != 0 {
-		wheres = append(wheres, fmt.Sprintf("Year <= $%v", next))
 		values = append(values, to)
-		next++
+		wheres = append(wheres, fmt.Sprintf("Year <= $%v", len(values)))
 	}
 
 	if len(genre) > 0 {
-		wheres = append(wheres, fmt.Sprintf("genres.name ILIKE $%v", next))
 		values = append(values, genre)
+		wheres = append(wheres, fmt.Sprintf("genres.name ILIKE $%v", len(values)))
 	}
 
-	where := strings.Join(wheres, " AND ")
+	var where string
+	if len(wheres) > 0 {
+		where = "WHERE " + strings.Join(wheres, " AND ")
+	}
 
-	rows, err := db.conn.Query(context.Background(),
-		fmt.Sprintf(`
+	query := fmt.Sprintf(`
 		SELECT 
 			songs.id,
 			songs.artist,
@@ -1706,13 +1725,17 @@ func (db *Default) GetRandomSongs(size uint, from uint, to uint, genre string) (
 			albums
 		ON
 			albums.id = songs.album_id
-		WHERE
-			%v
+		%v
 		ORDER BY
 			RANDOM()
 		LIMIT
-			$1
-	`, where), values...)
+			$1`,
+		where)
+
+	rows, err := db.conn.Query(
+		context.Background(),
+		query,
+		values...)
 	if err != nil {
 		return nil, err
 	}

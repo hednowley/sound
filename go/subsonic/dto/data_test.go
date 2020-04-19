@@ -114,6 +114,7 @@ func GenerateArtist(i int, art *dao.Art) *dao.Artist {
 		ID:       uint(i),
 		Name:     fmt.Sprintf("artist%v", i),
 		Duration: i,
+		Arts:     []string{art.Path},
 	}
 
 	return &a

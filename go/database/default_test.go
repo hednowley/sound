@@ -34,7 +34,7 @@ func TestPutAlbumByAttributest(t *testing.T) {
 	m := database.NewMock()
 
 	// Put existing album
-	albumID, err := m.PutAlbumByAttributes("album_2", "artist_1", "")
+	albumID, err := m.PutAlbumByAttributes("album_without_art", "artist_without_art", "")
 	if err != nil {
 		t.Error(err)
 		return
@@ -45,7 +45,7 @@ func TestPutAlbumByAttributest(t *testing.T) {
 	}
 
 	// Put album with existing name but new artist
-	albumID, err = m.PutAlbumByAttributes("album_2", "sdffsd", "")
+	albumID, err = m.PutAlbumByAttributes("album_without_art", "sdffsd", "")
 	if err != nil {
 		t.Error(err)
 		return

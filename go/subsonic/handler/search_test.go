@@ -48,7 +48,7 @@ func TestArtistSearch(t *testing.T) {
 		t.Error("Not a search response")
 	}
 
-	if len(r.Artists) != 3 {
+	if len(r.Artists) != 5 {
 		t.Error("Wrong artist count")
 	}
 }
@@ -58,7 +58,7 @@ func TestAlbumSearch(t *testing.T) {
 	dal := dal.NewMock()
 	handler := handler.NewSearchHandler(dal, handler.Search2)
 	params := url.Values{}
-	params.Add("query", "album_2")
+	params.Add("query", "album_1")
 
 	response := handler(params)
 	if !response.IsSuccess {

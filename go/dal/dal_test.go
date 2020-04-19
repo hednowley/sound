@@ -56,7 +56,7 @@ func TestSearchArtist(t *testing.T) {
 	artists, err = dal.Db.SearchArtists("artist", 2, 2)
 	if err != nil {
 		t.Error(err)
-	} else if len(artists) != 1 {
+	} else if len(artists) != 2 {
 		t.Error("Search offset is not working")
 	}
 }

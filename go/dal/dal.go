@@ -133,9 +133,6 @@ func (dal *DAL) PutPlaylist(id uint, name string, songIDs []uint, public bool) (
 		if err != nil {
 			return 0, err
 		}
-		if playlist == nil {
-			return 0, &dao.ErrNotFound{}
-		}
 
 		playlist.Changed = &now
 

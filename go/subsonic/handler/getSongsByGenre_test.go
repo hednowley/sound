@@ -44,7 +44,7 @@ func TestGetSongsOfMissingGenre(t *testing.T) {
 func TestGetSongsByGenre(t *testing.T) {
 
 	h := NewGetSongsByGenreTestResource()
-	url.Values.Add(h.params, "genre", "genre_1")
+	url.Values.Add(h.params, "genre", "genrE_1")
 	response := h.handler(h.params)
 
 	if !response.IsSuccess {
@@ -56,7 +56,7 @@ func TestGetSongsByGenre(t *testing.T) {
 		t.Error("Wrong body")
 	}
 
-	if len(r.Songs) != 2 || r.Songs[0].ID != 1 || r.Songs[1].ID != 10 {
+	if len(r.Songs) != 3 {
 		t.Error("Wrong songs")
 	}
 }

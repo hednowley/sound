@@ -7,61 +7,59 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/hednowley/sound/dao"
+	"github.com/hednowley/sound/database"
 )
 
 func TestPlaylist(t *testing.T) {
 
-	genres := GenerateGenres(3)
-	arts := GenerateArts(3)
+	db := database.NewMock()
 
-	artist1 := GenerateArtist(1, &arts[0])
-	artist2 := GenerateArtist(2, &arts[1])
+	playlist, err := db.GetPlaylist(1)
+	if err != nil {
+		t.Error(err)
+		return
+	}
 
-	album1 := GenerateAlbum(1, &genres[0], artist1, &arts[0])
-	album2 := GenerateAlbum(2, &genres[0], artist2, &arts[0])
-	album3 := GenerateAlbum(3, &genres[0], artist2, &arts[0])
+	songs, err := db.GetPlaylistSongs(1)
+	if err != nil {
+		t.Error(err)
+		return
+	}
 
-	song1 := GenerateSong(1, &genres[0], album1, &arts[0])
-	song2 := GenerateSong(5, &genres[1], album2, &arts[1])
-	song3 := GenerateSong(10, &genres[2], album3, &arts[2])
-
-	playlist := GeneratePlaylist(1, true)
-
-	DTO := NewPlaylist(playlist, []dao.Song{*song1, *song3, *song2})
+	DTO := NewPlaylist(playlist, songs)
 
 	entryXML := ""
-	for _, a := range []*dao.Song{song1, song3, song2} {
-		m, _ := xml.Marshal(newPlaylistEntry(a))
+	for _, s := range songs {
+		m, _ := xml.Marshal(newPlaylistEntry(&s))
 		entryXML += string(m)
 	}
 
 	xml := fmt.Sprintf(`
-	<playlist id="1" name="playlist1" comment="comment1" owner="ned" public="true" songCount="3" duration="0" created="2002-01-15T05:01:00.000000001Z" changed="2001-08-10T00:30:00.000000009Z">%v</playlist>
+	<playlist id="1" name="playlist_1" comment="comment_1" owner="ned" public="true" songCount="4" duration="480" created="2018-06-12T11:11:11+01:00" changed="2018-06-12T11:11:11+01:00">%v</playlist>
 	`, entryXML)
 
-	entryJSON := make([]string, 3)
-	for i, a := range []*dao.Song{song1, song3, song2} {
-		m, _ := json.Marshal(newPlaylistEntry(a))
-		entryJSON[i] = string(m)
+	entryJSON := []string{}
+	for _, s := range songs {
+		m, _ := json.Marshal(newPlaylistEntry(&s))
+		entryJSON = append(entryJSON, string(m))
 	}
 
 	json := fmt.Sprintf(`
 	{
 		"id":"1",
-		"name":"playlist1",
-		"comment":"comment1",
+		"name":"playlist_1",
+		"comment":"comment_1",
 		"owner":"ned",
 		"public":true,
-		"songCount":3,
-		"duration":0,
-		"created":"2002-01-15T05:01:00.000000001Z",
-		"changed":"2001-08-10T00:30:00.000000009Z",
+		"songCount":4,
+		"duration":480,
+		"created":"2018-06-12T11:11:11+01:00",
+		"changed":"2018-06-12T11:11:11+01:00",
 		"entry":[%v]
 	}
 	 `, strings.Join(entryJSON, ","))
 
-	err := CheckSerialisation(DTO, xml, json)
+	err = CheckSerialisation(DTO, xml, json)
 	if err != nil {
 		t.Error(err.Error())
 	}
@@ -69,57 +67,56 @@ func TestPlaylist(t *testing.T) {
 
 func TestPlaylistWithoutComment(t *testing.T) {
 
-	genres := GenerateGenres(3)
-	arts := GenerateArts(3)
+	db := database.NewMock()
 
-	artist1 := GenerateArtist(1, &arts[0])
-	artist2 := GenerateArtist(2, &arts[1])
+	playlist, err := db.GetPlaylist(1)
+	if err != nil {
+		t.Error(err)
+		return
+	}
 
-	album1 := GenerateAlbum(1, &genres[0], artist1, &arts[0])
-	album2 := GenerateAlbum(2, &genres[0], artist2, &arts[0])
-	album3 := GenerateAlbum(3, &genres[0], artist2, &arts[0])
-
-	song1 := GenerateSong(1, &genres[0], album1, &arts[0])
-	song2 := GenerateSong(5, &genres[1], album2, &arts[1])
-	song3 := GenerateSong(10, &genres[2], album3, &arts[2])
-
-	playlist := GeneratePlaylist(1, true)
 	playlist.Comment = ""
 
-	DTO := NewPlaylist(playlist, []dao.Song{*song1, *song3, *song2})
+	songs, err := db.GetPlaylistSongs(1)
+	if err != nil {
+		t.Error(err)
+		return
+	}
+
+	DTO := NewPlaylist(playlist, songs)
 
 	entryXML := ""
-	for _, a := range []*dao.Song{song1, song3, song2} {
-		m, _ := xml.Marshal(newPlaylistEntry(a))
+	for _, s := range songs {
+		m, _ := xml.Marshal(newPlaylistEntry(&s))
 		entryXML += string(m)
 	}
 
 	xml := fmt.Sprintf(`
-	<playlist id="1" name="playlist1" comment="" owner="ned" public="true" songCount="3" duration="0" created="2002-01-15T05:01:00.000000001Z" changed="2001-08-10T00:30:00.000000009Z">%v</playlist>
+	<playlist id="1" name="playlist_1" comment="" owner="ned" public="true" songCount="4" duration="480" created="2018-06-12T11:11:11+01:00" changed="2018-06-12T11:11:11+01:00">%v</playlist>
 	`, entryXML)
 
-	entryJSON := make([]string, 3)
-	for i, a := range []*dao.Song{song1, song3, song2} {
-		m, _ := json.Marshal(newPlaylistEntry(a))
-		entryJSON[i] = string(m)
+	entryJSON := []string{}
+	for _, s := range songs {
+		m, _ := json.Marshal(newPlaylistEntry(&s))
+		entryJSON = append(entryJSON, string(m))
 	}
 
 	json := fmt.Sprintf(`
 	{
 		"id":"1",
-		"name":"playlist1",
+		"name":"playlist_1",
 		"comment":"",
 		"owner":"ned",
 		"public":true,
-		"songCount":3,
-		"duration":0,
-		"created":"2002-01-15T05:01:00.000000001Z",
-		"changed":"2001-08-10T00:30:00.000000009Z",
+		"songCount":4,
+		"duration":480,
+		"created":"2018-06-12T11:11:11+01:00",
+		"changed":"2018-06-12T11:11:11+01:00",
 		"entry":[%v]
 	}
 	 `, strings.Join(entryJSON, ","))
 
-	err := CheckSerialisation(DTO, xml, json)
+	err = CheckSerialisation(DTO, xml, json)
 	if err != nil {
 		t.Error(err.Error())
 	}

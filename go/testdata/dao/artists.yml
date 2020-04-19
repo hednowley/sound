@@ -13,3 +13,11 @@
 - id: 5
   name: "beethoven"
   starred: false
+
+- id: 6
+  name: "artist_without_art"
+  starred: false
+
+- id: 7
+  name: "artist_without_albums"
+  starred: false

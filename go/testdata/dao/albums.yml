@@ -6,7 +6,7 @@
   starred: false
 
 - id: 2
-  artist_id: 1
+  artist_id: 6
   name: "album_without_art"
   created: 2018-06-12 11:11:11
   disambiguator: ""

@@ -92,7 +92,8 @@ func TestUpdateScan(t *testing.T) {
 	f := []*entities.FileInfo{
 		// Existing song with different info
 		{
-			Album:       "album_2",
+			Album:       "album_1",
+			Artist:      "artist_1 ft. Pitbull",
 			AlbumArtist: "artist_1",
 			Path:        "path_2",
 			Title:       "Y.M.C.A.",  // Different

@@ -46,19 +46,19 @@ func TestAlbumWithoutArt(t *testing.T) {
 	DTO := NewAlbum(album)
 
 	xml := `
-	<album id="2" name="album_without_art" artist="artist_1" artistId="1" songCount="3" duration="360" created="2018-06-12T11:11:11+01:00" year="2000" genre="genre_1"></album>
+	<album id="2" name="album_without_art" artist="artist_without_art" artistId="6" songCount="3" duration="360" created="2018-06-12T11:11:11+01:00" year="1997" genre="genre_1"></album>
 	`
 
 	json := `
 	{
 		"id":"2",
 		"name":"album_without_art",
-		"artist":"artist_1",
-		"artistId":"1",
+		"artist":"artist_without_art",
+		"artistId":"6",
 		"songCount":3,
 		"duration":360,
 		"created":"2018-06-12T11:11:11+01:00",
-		"year":2000,
+		"year":1997,
 		"genre":"genre_1"
 	}
 	`
@@ -75,7 +75,7 @@ func TestAlbumWithoutGenre(t *testing.T) {
 	DTO := NewAlbum(album)
 
 	xml := `
-	<album id="3" name="album_without_genre" artist="artist_1" artistId="1" songCount="1" duration="120" created="2018-06-12T11:11:11+01:00" year="2000"></album>
+	<album id="3" name="album_without_genre" artist="artist_1" artistId="1" songCount="1" duration="120" created="2018-06-12T11:11:11+01:00" year="1964"></album>
 	`
 
 	json := `
@@ -87,7 +87,7 @@ func TestAlbumWithoutGenre(t *testing.T) {
 		"songCount":1,
 		"duration":120,
 		"created":"2018-06-12T11:11:11+01:00",
-		"year":2000
+		"year":1964
 	}
 	`
 
@@ -118,8 +118,10 @@ func TestAlbumWithoutYear(t *testing.T) {
 
 func TestAlbumWithSongs(t *testing.T) {
 
-	album, _ := database.NewMock().GetAlbum(1)
-	songs, _ := database.NewMock().GetAlbumSongs(1)
+	db := database.NewMock()
+
+	album, _ := db.GetAlbum(1)
+	songs, _ := db.GetAlbumSongs(1)
 
 	DTO := NewAlbumWithSongs(album, songs)
 

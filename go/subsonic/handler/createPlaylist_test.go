@@ -42,7 +42,7 @@ func TestCreatePlaylist(t *testing.T) {
 	}
 }
 
-func TestEmptyPlaylist(t *testing.T) {
+func TestCreatePlaylistWithBadSongs(t *testing.T) {
 
 	db := dal.NewMock()
 
@@ -54,21 +54,13 @@ func TestEmptyPlaylist(t *testing.T) {
 
 	response := handler(params)
 
-	if !response.IsSuccess {
-		t.Error("Should succeed")
+	if response.IsSuccess {
+		t.Error("Should fail")
 	}
 
-	r, ok := response.Body.(*dto.Playlist)
+	_, ok := response.Body.(dto.Error)
 	if !ok {
-		t.Error("Should return a playlist")
-	}
-
-	if r.Name != "playlist_1" {
-		t.Error("Wrong name")
-	}
-
-	if len(r.Songs) != 0 {
-		t.Error("Shouldn't have any songs")
+		t.Error("Should return an error")
 	}
 }
 
