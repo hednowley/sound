@@ -35,7 +35,7 @@ func TestPlaylist(t *testing.T) {
 	}
 
 	xml := fmt.Sprintf(`
-	<playlist id="1" name="playlist_1" comment="comment_1" owner="ned" public="true" songCount="4" duration="480" created="2018-06-12T11:11:11+01:00" changed="2018-06-12T11:11:11+01:00">%v</playlist>
+	<playlist id="1" name="playlist_1" comment="comment_1" owner="ned" public="true" songCount="4" duration="480" created="2018-06-12T10:11:11Z" changed="2018-06-12T10:11:11Z">%v</playlist>
 	`, entryXML)
 
 	entryJSON := []string{}
@@ -53,8 +53,8 @@ func TestPlaylist(t *testing.T) {
 		"public":true,
 		"songCount":4,
 		"duration":480,
-		"created":"2018-06-12T11:11:11+01:00",
-		"changed":"2018-06-12T11:11:11+01:00",
+		"created":"2018-06-12T10:11:11Z",
+		"changed":"2018-06-12T10:11:11Z",
 		"entry":[%v]
 	}
 	 `, strings.Join(entryJSON, ","))
@@ -92,7 +92,7 @@ func TestPlaylistWithoutComment(t *testing.T) {
 	}
 
 	xml := fmt.Sprintf(`
-	<playlist id="1" name="playlist_1" comment="" owner="ned" public="true" songCount="4" duration="480" created="2018-06-12T11:11:11+01:00" changed="2018-06-12T11:11:11+01:00">%v</playlist>
+	<playlist id="1" name="playlist_1" comment="" owner="ned" public="true" songCount="4" duration="480" created="2018-06-12T10:11:11Z" changed="2018-06-12T10:11:11Z">%v</playlist>
 	`, entryXML)
 
 	entryJSON := []string{}
@@ -110,8 +110,8 @@ func TestPlaylistWithoutComment(t *testing.T) {
 		"public":true,
 		"songCount":4,
 		"duration":480,
-		"created":"2018-06-12T11:11:11+01:00",
-		"changed":"2018-06-12T11:11:11+01:00",
+		"created":"2018-06-12T10:11:11Z",
+		"changed":"2018-06-12T10:11:11Z",
 		"entry":[%v]
 	}
 	 `, strings.Join(entryJSON, ","))
