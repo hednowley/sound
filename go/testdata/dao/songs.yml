@@ -3,7 +3,7 @@
   artist: "artist_1"
   path: "path_1"
   title: "title_1"
-  created: 2018-06-12 11:11:11
+  created: 2018-06-12T11:11:11Z
   genre_id: 1
   provider_id: "mock"
   token: "path_1"
@@ -21,7 +21,7 @@
   artist: "artist_1 ft. Pitbull"
   path: "path_2"
   title: "title_2"
-  created: 2018-06-12 11:11:11
+  created: 2018-06-12T11:11:11Z
   provider_id: "mock"
   token: "path_2"
   year: 2010
@@ -38,7 +38,7 @@
   album_id: 1
   path: "path_2"
   title: "title_2"
-  created: 2018-06-12 11:11:11
+  created: 2018-06-12T11:11:11Z
   provider_id: "mock2"
   token: "path_2"
   year: 0
@@ -56,7 +56,7 @@
   artist: "artist_1"
   path: "path_10"
   title: "title_2"
-  created: 2018-06-12 11:11:11
+  created: 2018-06-12T11:11:11Z
   genre_id: 1
   provider_id: "mock"
   token: "path_10"
@@ -73,7 +73,7 @@
   artist: "artist_1"
   path: "path_14"
   title: "title_2"
-  created: 2018-06-12 11:11:11
+  created: 2018-06-12T11:11:11Z
   genre_id: 2
   provider_id: "mock"
   token: "path_14"
@@ -90,7 +90,7 @@
   artist: "artist_1"
   path: "path_15"
   title: "title_2"
-  created: 2018-06-12 11:11:11
+  created: 2018-06-12T11:11:11Z
   provider_id: "mock"
   token: "path_15"
   year: 1997
@@ -106,7 +106,7 @@
   artist: "artist_1"
   path: "path_16"
   title: "song_without_genre"
-  created: 2018-06-12 11:11:11
+  created: 2018-06-12T11:11:11Z
   provider_id: "mock"
   token: "path_16"
   year: 1964
@@ -122,7 +122,7 @@
   artist: "artist_1"
   path: "path_17"
   title: "song_without_year"
-  created: 2018-06-12 11:11:11
+  created: 2018-06-12T11:11:11Z
   provider_id: "mock"
   token: "path_17"
   year: 0
