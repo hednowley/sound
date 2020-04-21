@@ -9,7 +9,10 @@ import (
 
 func MakeGetAlbumsHandler(dal *dal.DAL) socket.Handler {
 	return func(request *dto.Request) interface{} {
-		albums := dal.GetAlbums(dao.AlphabeticalByName, 9999999, 0)
+		albums, err := dal.Db.GetAlbums(dao.AlphabeticalByName, 9999999, 0)
+		if err != nil {
+			return dto.NewErrorResponse("error", 0)
+		}
 		return dto.NewAlbumCollection(albums)
 	}
 }

@@ -20,7 +20,7 @@ func TestRandomSongs(t *testing.T) {
 
 	innerXML := ""
 	for _, s := range songs {
-		m, _ := xml.Marshal(NewSong(s))
+		m, _ := xml.Marshal(NewSong(&s))
 		innerXML += string(m)
 	}
 
@@ -30,7 +30,7 @@ func TestRandomSongs(t *testing.T) {
 
 	innerJSON := make([]string, 5)
 	for i, s := range songs {
-		m, _ := json.Marshal(NewSong(s))
+		m, _ := json.Marshal(NewSong(&s))
 		innerJSON[i] = string(m)
 	}
 

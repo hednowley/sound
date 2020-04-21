@@ -29,17 +29,17 @@ func newAlbumDirectoryBody(album *dao.Album) *albumDirectoryBody {
 			IsDir:  true,
 			Parent: NewArtistID(album.ArtistID),
 		},
-		albumBody: newAlbumBody(album, false),
+		albumBody: newAlbumBody(album),
 	}
 }
 
-func NewAlbumDirectory(album *dao.Album) *AlbumDirectory {
-	songs := make([]*SongChildDirectory, len(album.Songs))
-	for index, song := range album.Songs {
-		songs[index] = NewSongChildDirectory(song)
+func NewAlbumDirectory(album *dao.Album, songs []dao.Song) *AlbumDirectory {
+	children := make([]*SongChildDirectory, len(songs))
+	for index, song := range songs {
+		children[index] = NewSongChildDirectory(&song)
 	}
 
-	return &AlbumDirectory{xml.Name{}, newAlbumDirectoryBody(album), songs}
+	return &AlbumDirectory{xml.Name{}, newAlbumDirectoryBody(album), children}
 }
 
 func NewAlbumChildDirectory(album *dao.Album) *AlbumChildDirectory {

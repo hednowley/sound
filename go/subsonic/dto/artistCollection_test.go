@@ -22,8 +22,8 @@ func TestArtistCollection(t *testing.T) {
 	artists[4].Name = "Bdfgfdg"
 	artists[5].Name = `"d"`
 
-	GenerateAlbums(3, nil, artists[2], nil)
-	GenerateAlbums(1, nil, artists[3], nil)
+	artists[2].AlbumCount = 3
+	artists[3].AlbumCount = 1
 
 	DTO := NewArtistCollection(artists, conf)
 

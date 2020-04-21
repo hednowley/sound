@@ -15,11 +15,11 @@ func hasExtension(name string, extensions []string) bool {
 	return false
 }
 
-func IterateFiles(root string, extensions []string, action func(path string, info *os.FileInfo)) (err error) {
+func IterateFiles(root string, extensions []string, action func(path string, info *os.FileInfo) error) (err error) {
 
 	err = filepath.Walk(root, func(path string, info os.FileInfo, err error) error {
 		if !info.IsDir() && hasExtension(info.Name(), extensions) {
-			action(path, &info)
+			return action(path, &info)
 		}
 		return nil
 	})

@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/cihub/seelog"
+	"github.com/google/uuid"
 	"github.com/hednowley/sound/config"
 	"github.com/hednowley/sound/dao"
 	"github.com/hednowley/sound/database"
@@ -17,331 +18,194 @@ import (
 
 // DAL (data access layer) allows querying and writing application data.
 type DAL struct {
-	db     *database.Default
+	Db     *database.Default
 	artDir string
 }
 
 // NewDAL constructs a new DAL.
 func NewDAL(config *config.Config, database *database.Default) *DAL {
 	return &DAL{
-		db:     database,
+		Db:     database,
 		artDir: config.ArtPath,
 	}
 }
 
-// PutSong updates the stored song with the given path and provider ID and returns its ID.
-// If there is no such song then a new one is created and its ID is returned.
-// The associated album, artist, artwork and genre are created too if necessary.
-func (dal *DAL) PutSong(song *dao.Song, data *entities.FileInfo) *dao.Song {
+func (dal *DAL) PutSong(fileInfo *entities.FileInfo, token string, providerID string, songId *uint) error {
 
-	genre := dal.db.PutGenreByName(data.Genre)
-	art := dal.PutArt(data.CoverArt)
-	album := dal.db.PutAlbumByAttributes(data.Album, data.AlbumArtist, data.Disambiguator)
-
-	song.Path = data.Path
-	song.Artist = data.Artist
-	song.AlbumID = album.ID
-	song.Title = data.Title
-	song.Track = data.Track
-	song.Disc = data.Disc
-	song.GenreID = genre.ID
-	song.Year = data.Year
-	song.Size = data.Size
-	song.Bitrate = data.Bitrate
-	song.Duration = data.Duration
-
-	song.AlbumName = album.Name
-	song.AlbumArtistID = album.ArtistID
-	song.GenreName = genre.Name
-
-	if art != nil {
-		song.Art = art.Path
+	genreID, err := dal.Db.PutGenreByName(fileInfo.Genre)
+	if err != nil {
+		return err
 	}
 
-	dal.db.PutSong(song)
-	return song
+	var art *dao.Art
+	if fileInfo.CoverArt != nil {
+		art, err = dal.PutArt(fileInfo.CoverArt)
+		if err != nil {
+			return err
+		}
+	}
+
+	albumID, err := dal.Db.PutAlbumByAttributes(
+		fileInfo.Album, fileInfo.AlbumArtist, fileInfo.Disambiguator)
+	if err != nil {
+		return err
+	}
+
+	var artPath *string
+	if art != nil {
+		artPath = &art.Path
+	}
+
+	if songId == nil {
+		_, err = dal.Db.InsertSong(
+			fileInfo.Artist,
+			albumID,
+			fileInfo.Path,
+			fileInfo.Title,
+			fileInfo.Track,
+			fileInfo.Disc,
+			genreID,
+			fileInfo.Year,
+			artPath,
+			fileInfo.Size,
+			fileInfo.Bitrate,
+			fileInfo.Duration,
+			token,
+			providerID,
+		)
+
+		return err
+	}
+
+	return dal.Db.UpdateSong(
+		*songId,
+		fileInfo.Artist,
+		albumID,
+		fileInfo.Path,
+		fileInfo.Title,
+		fileInfo.Track,
+		fileInfo.Disc,
+		genreID,
+		fileInfo.Year,
+		artPath,
+		fileInfo.Size,
+		fileInfo.Bitrate,
+		fileInfo.Duration,
+		token,
+		providerID,
+		false,
+	)
 }
 
-func (dal *DAL) PutArt(art *entities.CoverArtData) *dao.Art {
-
-	if art == nil {
-		return nil
-	}
-
+func (dal *DAL) PutArt(art *entities.CoverArtData) (*dao.Art, error) {
 	hash := hasher.GetHash(art.Raw)
-	a := dal.db.GetArtFromHash(hash)
+	a := dal.Db.GetArtFromHash(hash)
 	if a != nil {
 		// Artwork already exists
-		return a
+		return a, nil
 	}
 
-	// Save the hash to get a fresh ID
-	a = &dao.Art{
-		Hash: hash,
-	}
-	dal.db.PutArt(a)
+	filePath := fmt.Sprintf("%v.%v", uuid.New().String(), art.Extension)
 
-	a.Path = fmt.Sprintf("%v.%v", a.ID, art.Extension)
-
-	err := ioutil.WriteFile(path.Join(dal.artDir, "art", a.Path), art.Raw, 0644)
+	err := ioutil.WriteFile(path.Join(dal.artDir, "art", filePath), art.Raw, 0644)
 	if err != nil {
-		seelog.Errorf("Error saving artwork %v", a.Path)
-	}
-
-	// Save the record with the new path
-	dal.db.PutArt(a)
-	return a
-}
-
-// SynchroniseAlbum updates the given album's aggregate properties, e.g. duration.
-func (dal *DAL) SynchroniseAlbum(id uint) (*dao.Album, error) {
-
-	seelog.Infof("Synchronising album %v", id)
-
-	a, err := dal.GetAlbum(id, true, true, true)
-	if err != nil {
+		seelog.Errorf("Error saving artwork %v", filePath)
 		return nil, err
 	}
 
-	artSet := false
-	genreSet := false
-	yearSet := false
-	duration := 0
-	var count uint
-
-	for _, song := range a.Songs {
-
-		count++
-		duration = duration + song.Duration
-
-		if !artSet && song.Art != "" {
-			a.Art = song.Art
-			artSet = true
-		}
-		if !genreSet && song.GenreID != 0 {
-			a.GenreID = song.GenreID
-			genreSet = true
-		}
-		if !yearSet && song.Year != 0 {
-			a.Year = song.Year
-			yearSet = true
-		}
-	}
-
-	a.Duration = duration
-	a.SongCount = count
-	a.ArtistName = a.Artist.Name
-
-	if a.Genre != nil {
-		a.GenreName = a.Genre.Name
-	}
-
-	dal.db.PutAlbum(a)
-	return a, nil
+	// Save the record with the new path
+	return dal.Db.InsertArt(filePath, hash)
 }
 
-// SynchroniseAlbum updates the given artist's aggregate properties, e.g. album count.
-func (dal *DAL) SynchroniseArtist(id uint) error {
-
-	seelog.Infof("Synchronising artist %v", id)
-
-	a := dal.db.GetArtist(id, true, false)
-	if a == nil {
-		return &dao.ErrNotFound{}
-	}
-
-	artSet := false
-	duration := 0
-
-	for _, album := range a.Albums {
-		if !artSet && album.Art != "" {
-			a.Art = album.Art
-			artSet = true
-		}
-		duration = duration + album.Duration
-	}
-
-	a.Duration = duration
-	a.AlbumCount = uint(len(a.Albums))
-	dal.db.PutArtist(a)
-	return nil
-}
-
-func (dal *DAL) PutPlaylist(id uint, name string, songIDs []uint) (uint, error) {
+func (dal *DAL) PutPlaylist(id uint, name string, songIDs []uint, public bool) (uint, error) {
 
 	now := time.Now()
-	var p *dao.Playlist
+	var playlistID uint
 
 	if id == 0 {
-		p = &dao.Playlist{
-			Name:    name,
-			Created: &now,
-			Changed: &now,
+		inserted, err := dal.Db.InsertPlaylist(name, "", public)
+		if err != nil {
+			return 0, err
 		}
-		dal.db.AddPlaylist(p)
+		playlistID = inserted
 	} else {
-		p = dal.db.GetPlaylist(id, false, false)
-		if p == nil {
-			return 0, &dao.ErrNotFound{}
+		playlist, err := dal.Db.GetPlaylist(id)
+		if err != nil {
+			return 0, err
 		}
 
-		p.Changed = &now
+		playlist.Changed = &now
 
-		if name != "" {
-			p.Name = name
+		var nameUpdate string
+		if name == "" {
+			nameUpdate = playlist.Name
+		} else {
+			nameUpdate = name
 		}
 
-		dal.db.UpdatePlaylist(p)
-	}
-
-	entries := []*dao.PlaylistEntry{}
-	i := 0
-	for _, songID := range songIDs {
-
-		// We can't trust the song actually exists!
-		_, err := dal.GetSong(songID, false, false, false)
-		if err == nil {
-			e := &dao.PlaylistEntry{
-				PlaylistID: p.ID,
-				Index:      i,
-				SongID:     songID,
-			}
-			entries = append(entries, e)
-			i++
+		playlist, err = dal.Db.UpdatePlaylist(playlist.ID, nameUpdate, playlist.Comment)
+		if err != nil {
+			return 0, err
 		}
+
+		playlistID = playlist.ID
 	}
 
-	dal.db.ReplacePlaylistEntries(p, entries)
-	return p.ID, nil
-}
-
-func (dal *DAL) GetSong(id uint, genre bool, album bool, artist bool) (*dao.Song, error) {
-	s := dal.db.GetSong(id, genre, album, artist)
-	if s == nil {
-		return nil, &dao.ErrNotFound{}
+	err := dal.Db.ReplacePlaylistEntries(playlistID, songIDs)
+	if err != nil {
+		return 0, err
 	}
-	return s, nil
+
+	return playlistID, nil
 }
 
-func (dal *DAL) GetSongFromToken(token string, providerID string) *dao.Song {
-	return dal.db.GetSongFromToken(token, providerID)
-}
+func (dal *DAL) UpdatePlaylist(
+	playlistID uint,
+	name string,
+	comment string,
+	public *bool,
+	addedSongs []uint,
+	removedSongs []uint,
+) error {
 
-func (dal *DAL) GetAlbum(id uint, genre bool, artist bool, songs bool) (*dao.Album, error) {
-	s := dal.db.GetAlbum(id, genre, artist, songs)
-	if s == nil {
-		return nil, &dao.ErrNotFound{}
+	p, err := dal.Db.GetPlaylist(playlistID)
+	if err != nil {
+		return err
 	}
-	return s, nil
-}
-
-func (dal *DAL) GetArtist(id uint) (*dao.Artist, error) {
-	a := dal.db.GetArtist(id, true, true)
-	if a == nil {
-		return nil, &dao.ErrNotFound{}
-	}
-	return a, nil
-}
-
-func (dal *DAL) GetGenre(name string) (*dao.Genre, error) {
-	g := dal.db.GetGenre(name)
-	if g == nil {
-		return nil, &dao.ErrNotFound{}
-	}
-	return g, nil
-}
-
-func (dal *DAL) GetPlaylist(id uint) (*dao.Playlist, error) {
-	p := dal.db.GetPlaylist(id, true, true)
-	if p == nil {
-		return nil, &dao.ErrNotFound{}
-	}
-	return p, nil
-}
-
-func (dal *DAL) UpdatePlaylist(id uint, name string, comment string, public *bool, addedSongs []uint, removedSongs []uint) error {
-
-	p := dal.db.GetPlaylist(id, true, false)
 	if p == nil {
 		return &dao.ErrNotFound{}
 	}
 
+	songIDs, err := dal.Db.GetPlaylistSongIds(playlistID)
+	if err != nil {
+		return err
+	}
+
+	var nameUpdate string
 	if len(name) != 0 {
-		p.Name = name
+		nameUpdate = name
+	} else {
+		nameUpdate = p.Name
 	}
 
+	var commentUpdate string
 	if len(comment) != 0 {
-		p.Comment = comment
+		commentUpdate = comment
+	} else {
+		commentUpdate = p.Comment
 	}
-
-	if public != nil {
-		p.Public = *public
-	}
-
-	e := p.Entries
 
 	for _, index := range removedSongs {
-		e = append(e[:index], e[index+1:]...)
+		songIDs = append(songIDs[:index], songIDs[index+1:]...)
 	}
 
-	for _, song := range addedSongs {
-		entry := dao.PlaylistEntry{
-			PlaylistID: p.ID,
-			SongID:     song,
-		}
-		e = append(e, &entry)
+	for _, songID := range addedSongs {
+		songIDs = append(songIDs, songID)
 	}
 
-	// Reassign IDs
-	for i := range e {
-		e[i].Index = i
-	}
-
-	dal.db.ReplacePlaylistEntries(p, e)
-	dal.db.UpdatePlaylist(p)
+	dal.Db.ReplacePlaylistEntries(playlistID, songIDs)
+	dal.Db.UpdatePlaylist(playlistID, nameUpdate, commentUpdate)
 	return nil
-}
-
-func (dal *DAL) DeletePlaylist(id uint) error {
-	return dal.db.DeletePlaylist(id)
-}
-
-func (dal *DAL) GetAlbums(listType dao.AlbumList2Type, size uint, offset uint) []*dao.Album {
-	return dal.db.GetAlbums(listType, size, offset)
-}
-
-func (dal *DAL) GetArtists(includeAlbums bool) []*dao.Artist {
-	return dal.db.GetArtists(includeAlbums)
-}
-
-func (dal *DAL) GetGenres() []*dao.Genre {
-	return dal.db.GetGenres()
-}
-
-// GetPlaylists returns all playlists.
-func (dal *DAL) GetPlaylists() []*dao.Playlist {
-	return dal.db.GetPlaylists()
-}
-
-// Empty deletes all data.
-func (d *DAL) Empty() {
-	d.db.Empty()
-}
-
-func (d *DAL) DeleteMissing(tokens []string, providerID string) {
-	d.db.DeleteMissing(tokens, providerID)
-}
-
-func (d *DAL) SearchArtists(query string, count uint, offset uint) []*dao.Artist {
-	return d.db.SearchArtists(query, count, offset)
-}
-
-func (d *DAL) SearchSongs(query string, count uint, offset uint) []*dao.Song {
-	return d.db.SearchSongs(query, count, offset)
-}
-
-func (d *DAL) SearchAlbums(query string, count uint, offset uint) []*dao.Album {
-	return d.db.SearchAlbums(query, count, offset)
 }
 
 // GetArtPath checks that an artwork file exists for the given ID and returns
@@ -355,18 +219,14 @@ func (dal *DAL) GetArtPath(id string) (string, error) {
 	return p, nil
 }
 
-func (dal *DAL) GetRandomSongs(size uint, from uint, to uint, genre string) []*dao.Song {
-	return dal.db.GetRandomSongs(size, from, to, genre)
-}
-
 func (dal *DAL) StarSong(songID uint, star bool) error {
-	return dal.db.StarSong(songID, star)
+	return nil
 }
 
 func (dal *DAL) StarAlbum(albumID uint, star bool) error {
-	return dal.db.StarAlbum(albumID, star)
+	return nil
 }
 
 func (dal *DAL) StarArtist(artistID uint, star bool) error {
-	return dal.db.StarArtist(artistID, star)
+	return nil
 }

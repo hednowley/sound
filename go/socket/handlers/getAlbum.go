@@ -3,6 +3,7 @@ package handlers
 import (
 	"encoding/json"
 
+	"github.com/hednowley/sound/api/api"
 	"github.com/hednowley/sound/dal"
 	"github.com/hednowley/sound/socket"
 	"github.com/hednowley/sound/socket/dto"
@@ -16,10 +17,16 @@ func MakeGetAlbumHandler(dal *dal.DAL) socket.Handler {
 			return "bad id"
 		}
 
-		album, err := dal.GetAlbum(id, false, false, true)
+		album, err := dal.Db.GetAlbum(id)
 		if err != nil {
 			return "no album"
 		}
-		return dto.NewAlbum(album)
+
+		songs, err := dal.Db.GetAlbumSongs(id)
+		if err != nil {
+			return api.NewErrorReponse("Error")
+		}
+
+		return dto.NewAlbum(album, songs)
 	}
 }

@@ -32,11 +32,11 @@ type directoryIndex struct {
 	Directories []*ArtistDirectorySummary `xml:"artist" json:"artist"`
 }
 
-func newArtistIndex(artists []*dao.Artist, letter rune) *artistIndex {
+func newArtistIndex(artists []dao.Artist, letter rune) *artistIndex {
 
 	dtoArtists := make([]*Artist, len(artists))
 	for index, a := range artists {
-		dtoArtists[index] = NewArtist(a, false)
+		dtoArtists[index] = NewArtist(&a)
 	}
 
 	return &artistIndex{
@@ -45,11 +45,11 @@ func newArtistIndex(artists []*dao.Artist, letter rune) *artistIndex {
 	}
 }
 
-func newDirectoryIndex(artists []*dao.Artist, letter rune) *directoryIndex {
+func newDirectoryIndex(artists []dao.Artist, letter rune) *directoryIndex {
 
 	dirs := make([]*ArtistDirectorySummary, len(artists))
 	for index, a := range artists {
-		dirs[index] = NewArtistDirectorySummary(a)
+		dirs[index] = NewArtistDirectorySummary(&a)
 	}
 
 	return &directoryIndex{
@@ -60,9 +60,9 @@ func newDirectoryIndex(artists []*dao.Artist, letter rune) *directoryIndex {
 
 var letters = [...]rune{'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'}
 
-func makeRuneMap(artists []*dao.Artist, ignoredArticles []string) map[rune][]*dao.Artist {
+func makeRuneMap(artists []dao.Artist, ignoredArticles []string) map[rune][]dao.Artist {
 
-	indexes := map[rune][]*dao.Artist{
+	indexes := map[rune][]dao.Artist{
 		'A': {},
 		'B': {},
 		'C': {},
@@ -124,7 +124,7 @@ func makeRuneMap(artists []*dao.Artist, ignoredArticles []string) map[rune][]*da
 	return indexes
 }
 
-func NewArtistCollection(artists []*dao.Artist, conf *config.Config) *ArtistCollection {
+func NewArtistCollection(artists []dao.Artist, conf *config.Config) *ArtistCollection {
 
 	runes := makeRuneMap(artists, conf.IgnoredArticles)
 
@@ -140,7 +140,7 @@ func NewArtistCollection(artists []*dao.Artist, conf *config.Config) *ArtistColl
 	}
 }
 
-func NewIndexCollection(artists []*dao.Artist, conf *config.Config) *indexCollection {
+func NewIndexCollection(artists []dao.Artist, conf *config.Config) *indexCollection {
 
 	runes := makeRuneMap(artists, conf.IgnoredArticles)
 

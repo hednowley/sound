@@ -45,15 +45,15 @@ func TestMax(t *testing.T) {
 func TestContains(t *testing.T) {
 
 	s := []uint{}
-	if util.Contains(s, 0) {
+	if util.ContainsUint(s, 0) {
 		t.Error()
 	}
 
 	s = []uint{5, 80}
-	if util.Contains(s, 10) {
+	if util.ContainsUint(s, 10) {
 		t.Error()
 	}
-	if !util.Contains(s, 80) {
+	if !util.ContainsUint(s, 80) {
 		t.Error()
 	}
 }

@@ -12,7 +12,11 @@ import (
 func NewGetPlaylistsHandler(dal *dal.DAL) api.Handler {
 
 	return func(params url.Values) *api.Response {
-		playlists := dal.GetPlaylists()
+		playlists, err := dal.Db.GetPlaylists()
+		if err != nil {
+			return api.NewErrorReponse(dto.Generic, err.Error())
+		}
+
 		return api.NewSuccessfulReponse(dto.NewPlaylistCollection(playlists))
 	}
 }

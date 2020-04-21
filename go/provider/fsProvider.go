@@ -43,13 +43,13 @@ func (p *FsProvider) ID() string {
 }
 
 // Iterate through all files in the collection, calling the provided callback synchronously on each.
-func (p *FsProvider) Iterate(callback func(token string)) error {
+func (p *FsProvider) Iterate(callback func(token string) error) error {
 	p.isScanning = true
 	p.fileCount = 0
 
-	err := services.IterateFiles(p.path, p.extensions, func(path string, info *os.FileInfo) {
+	err := services.IterateFiles(p.path, p.extensions, func(path string, info *os.FileInfo) error {
 		// Use the path as a unique token
-		callback(path)
+		return callback(path)
 	})
 
 	if err != nil {

@@ -23,13 +23,13 @@ func NewPlaylistCollectionItem(playlist *dao.Playlist) *PlaylistCollectionItem {
 	}
 }
 
-func NewPlaylistCollection(playlists []*dao.Playlist) *PlaylistCollection {
+func NewPlaylistCollection(playlists []dao.Playlist) *PlaylistCollection {
 
 	count := len(playlists)
 	dtoCollection := make([]*PlaylistCollectionItem, count)
 
 	for i, p := range playlists {
-		dtoCollection[i] = NewPlaylistCollectionItem(p)
+		dtoCollection[i] = NewPlaylistCollectionItem(&p)
 	}
 
 	return &PlaylistCollection{

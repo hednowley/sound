@@ -3,26 +3,51 @@
   artist: "artist_1"
   path: "path_1"
   title: "title_1"
-  created: 2018-06-12 11:11:11
+  created: 2018-06-12T11:11:11Z
   genre_id: 1
   provider_id: "mock"
   token: "path_1"
   year: 2000
-  album_name: "album_1"
-  album_artist_id: 1
-  genre_name: "genre_1"
+  art: "art_1.png"
+  duration: 120
+  track: 1
+  disc: 0
+  size: 0
+  bitrate: 0
+  starred: false
 
 - id: 2
-  album_id: 2
-  artist: "artist_1"
+  album_id: 1
+  artist: "artist_1 ft. Pitbull"
   path: "path_2"
   title: "title_2"
-  created: 2018-06-12 11:11:11
+  created: 2018-06-12T11:11:11Z
   provider_id: "mock"
   token: "path_2"
   year: 2010
-  album_name: "album_2"
-  album_artist_id: 1
+  duration: 120
+  track: 1
+  disc: 0
+  size: 0
+  bitrate: 0
+  starred: false
+
+# Same as song #2 but with different provider
+- id: 22
+  artist: "artist_1 ft. Pitbull"
+  album_id: 1
+  path: "path_2"
+  title: "title_2"
+  created: 2018-06-12T11:11:11Z
+  provider_id: "mock2"
+  token: "path_2"
+  year: 0
+  duration: 120
+  track: 1
+  disc: 0
+  size: 0
+  bitrate: 0
+  starred: false
 
 # Gap for missing song #3
 
@@ -31,49 +56,80 @@
   artist: "artist_1"
   path: "path_10"
   title: "title_2"
-  created: 2018-06-12 11:11:11
+  created: 2018-06-12T11:11:11Z
   genre_id: 1
   provider_id: "mock"
   token: "path_10"
   year: 2008
-  album_name: "album_2"
-  album_artist_id: 1
-  genre_name: "genre_1"
+  duration: 120
+  track: 1
+  disc: 0
+  size: 0
+  bitrate: 0
+  starred: false
 
 - id: 14
   album_id: 2
   artist: "artist_1"
   path: "path_14"
   title: "title_2"
-  created: 2018-06-12 11:11:11
+  created: 2018-06-12T11:11:11Z
   genre_id: 2
   provider_id: "mock"
   token: "path_14"
   year: 0
-  album_name: "album_2"
-  album_artist_id: 1
-  genre_name: "genre_2"
+  duration: 120
+  track: 1
+  disc: 0
+  size: 0
+  bitrate: 0
+  starred: false
 
 - id: 15
   album_id: 2
   artist: "artist_1"
   path: "path_15"
   title: "title_2"
-  created: 2018-06-12 11:11:11
+  created: 2018-06-12T11:11:11Z
   provider_id: "mock"
   token: "path_15"
-  year: -100
-  album_name: "album_2"
-  album_artist_id: 1
+  year: 1997
+  duration: 120
+  track: 1
+  disc: 0
+  size: 0
+  bitrate: 0
+  starred: false
 
-# Same as song #2 but with different provider
-- id: 22
+- id: 16
+  album_id: 3
   artist: "artist_1"
-  album_id: 2
-  path: "path_2"
-  title: "title_2"
-  created: 2018-06-12 11:11:11
-  provider_id: "mock2"
-  token: "path_2"
-  album_name: "album_1"
-  album_artist_id: 1
+  path: "path_16"
+  title: "song_without_genre"
+  created: 2018-06-12T11:11:11Z
+  provider_id: "mock"
+  token: "path_16"
+  year: 1964
+  duration: 120
+  track: 1
+  disc: 0
+  size: 0
+  bitrate: 0
+  starred: false
+
+- id: 17
+  album_id: 4
+  artist: "artist_1"
+  path: "path_17"
+  title: "song_without_year"
+  created: 2018-06-12T11:11:11Z
+  provider_id: "mock"
+  token: "path_17"
+  year: 0
+  duration: 120
+  track: 1
+  disc: 0
+  size: 0
+  bitrate: 0
+  starred: false
+  genre_id: 1

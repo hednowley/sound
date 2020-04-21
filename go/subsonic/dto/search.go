@@ -22,27 +22,27 @@ type Search3Response struct {
 	*SearchCore
 }
 
-func newSearchResponse(artists []*dao.Artist, albums []*dao.Album, songs []*dao.Song) *SearchCore {
+func newSearchResponse(artists []dao.Artist, albums []dao.Album, songs []dao.Song) *SearchCore {
 
 	artistCount := len(artists)
 	artistsDto := make([]*Artist, artistCount)
 
 	for i, a := range artists {
-		artistsDto[i] = NewArtist(a, false)
+		artistsDto[i] = NewArtist(&a)
 	}
 
 	albumCount := len(albums)
 	albumsDto := make([]*Album, albumCount)
 
 	for i, a := range albums {
-		albumsDto[i] = NewAlbum(a, false)
+		albumsDto[i] = NewAlbum(&a)
 	}
 
 	songCount := len(songs)
 	songsDto := make([]*Song, songCount)
 
 	for i, a := range songs {
-		songsDto[i] = NewSong(a)
+		songsDto[i] = NewSong(&a)
 	}
 
 	return &SearchCore{
@@ -52,7 +52,7 @@ func newSearchResponse(artists []*dao.Artist, albums []*dao.Album, songs []*dao.
 	}
 }
 
-func NewSearch2Response(artists []*dao.Artist, albums []*dao.Album, songs []*dao.Song) *Search2Response {
+func NewSearch2Response(artists []dao.Artist, albums []dao.Album, songs []dao.Song) *Search2Response {
 	core := newSearchResponse(artists, albums, songs)
 	return &Search2Response{
 		xml.Name{},
@@ -60,7 +60,7 @@ func NewSearch2Response(artists []*dao.Artist, albums []*dao.Album, songs []*dao
 	}
 }
 
-func NewSearch3Response(artists []*dao.Artist, albums []*dao.Album, songs []*dao.Song) *Search3Response {
+func NewSearch3Response(artists []dao.Artist, albums []dao.Album, songs []dao.Song) *Search3Response {
 	core := newSearchResponse(artists, albums, songs)
 	return &Search3Response{
 		xml.Name{},

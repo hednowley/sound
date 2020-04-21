@@ -28,11 +28,11 @@ func NewArtistDirectorySummary(artist *dao.Artist) *ArtistDirectorySummary {
 	}
 }
 
-func NewArtistDirectory(artist *dao.Artist) *ArtistDirectory {
+func NewArtistDirectory(artist *dao.Artist, artistAlbums []dao.Album) *ArtistDirectory {
 
-	albums := make([]*AlbumChildDirectory, len(artist.Albums))
-	for i, a := range artist.Albums {
-		albums[i] = NewAlbumChildDirectory(a)
+	albums := make([]*AlbumChildDirectory, len(artistAlbums))
+	for i, a := range artistAlbums {
+		albums[i] = NewAlbumChildDirectory(&a)
 	}
 
 	return &ArtistDirectory{

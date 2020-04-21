@@ -2,11 +2,9 @@ package provider
 
 import (
 	"sync"
-	"time"
 
 	"github.com/cihub/seelog"
 	"github.com/hednowley/sound/dal"
-	"github.com/hednowley/sound/dao"
 	"github.com/hednowley/sound/socket"
 	"github.com/hednowley/sound/socket/dto"
 )
@@ -66,64 +64,58 @@ func (scanner *Scanner) startScan(provider Provider, update bool, delete bool) {
 	}
 
 	seelog.Infof("Started '%v' scan.", providerID)
-	synch := NewSynchroniser(scanner.dal, 10)
 
 	scanner.hub.Notify(dto.NewScanStatusNotification(provider.IsScanning(), provider.FileCount()))
 
 	tokens := []string{}
 
-	err := provider.Iterate(func(token string) {
+	err := provider.Iterate(func(token string) error {
 		scanner.hub.Notify(dto.NewScanStatusNotification(provider.IsScanning(), provider.FileCount()))
 
 		if delete {
 			tokens = append(tokens, token)
 		}
 
-		s := scanner.dal.GetSongFromToken(token, providerID)
-		if s == nil || update {
+		existing, getSongErr := scanner.dal.Db.GetSongIdFromToken(token, providerID)
+		if getSongErr != nil {
+			return getSongErr
+		}
+
+		if existing == nil || update {
 			data, err2 := provider.GetInfo(token)
 			if err2 != nil {
 				seelog.Errorf("Cannot read music info for '%v': %v", token, err2)
-				return
+				return nil
 			}
 
-			if s == nil {
+			if existing == nil {
 				seelog.Infof("Adding token '%v'", token)
-				now := time.Now()
-				s = &dao.Song{
-					Created:    &now,
-					ProviderID: providerID,
-					Token:      token,
-				}
 			} else {
 				seelog.Infof("Updating token '%v'", token)
-				synch.Notify(s.AlbumID) // Notify of potential change to old album
 			}
 
-			s = scanner.dal.PutSong(s, data)
-
-			// Notify of change to new album
-			synch.Notify(s.AlbumID)
+			putErr := scanner.dal.PutSong(data, token, providerID, existing)
+			if putErr != nil {
+				return putErr
+			}
 
 		} else {
 			seelog.Infof("Skipping token '%v'", token)
 		}
+
+		return nil
 	})
 	if err != nil {
 		seelog.Errorf("Error during '%v' scan: %v", providerID, err)
 	}
 
-	// Make any remaining updates
-	synch.Flush()
-
 	if delete {
 		seelog.Info("Deleting unscanned items")
-		scanner.dal.DeleteMissing(tokens, providerID)
+		err = scanner.dal.Db.DeleteMissing(tokens, providerID)
 
-		// Find unscanned songs from same provider
-
-		// Find albums etc with no songs
-
+		if err != nil {
+			seelog.Errorf("Error during '%v' scan: %v", providerID, err)
+		}
 	}
 
 	seelog.Infof("Finished '%v' scan.", providerID)

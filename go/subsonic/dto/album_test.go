@@ -6,34 +6,31 @@ import (
 	"fmt"
 	"strings"
 	"testing"
+
+	"github.com/hednowley/sound/database"
 )
 
 func TestAlbum(t *testing.T) {
 
-	genre := GenerateGenre(1)
-	art := GenerateArt(1)
-	artist := GenerateArtist(1, art)
-	album := GenerateAlbum(1, genre, artist, art)
-	GenerateSongs(11, genre, album, art)
-
-	DTO := NewAlbum(album, false)
+	album, _ := database.NewMock().GetAlbum(1)
+	DTO := NewAlbum(album)
 
 	xml := `
-	<album id="1" name="album1" artist="artist1" artistId="1" coverArt="1.jpg" songCount="11" duration="1" created="2001-08-15T00:00:00Z" year="1901" genre="genre1"></album>
+	<album id="1" name="album_1" artist="artist_1" artistId="1" coverArt="art_1.png" songCount="3" duration="360" created="2018-06-12T11:11:11Z" year="2000" genre="genre_1"></album>
 	`
 
 	json := `
 	{
 		"id":"1",
-		"name":"album1",
-		"artist":"artist1",
+		"name":"album_1",
+		"artist":"artist_1",
 		"artistId":"1",
-		"coverArt":"1.jpg",
-		"songCount":11,
-		"duration":1,
-		"created":"2001-08-15T00:00:00Z",
-		"year":1901,
-		"genre":"genre1"
+		"coverArt":"art_1.png",
+		"songCount":3,
+		"duration":360,
+		"created":"2018-06-12T11:11:11Z",
+		"year":2000,
+		"genre":"genre_1"
 	}
 	`
 
@@ -45,29 +42,24 @@ func TestAlbum(t *testing.T) {
 
 func TestAlbumWithoutArt(t *testing.T) {
 
-	genre := GenerateGenre(1)
-	art := GenerateArt(1)
-	artist := GenerateArtist(1, art)
-	album := GenerateAlbum(1, genre, artist, nil)
-	GenerateSongs(11, genre, album, art)
-
-	DTO := NewAlbum(album, false)
+	album, _ := database.NewMock().GetAlbum(2)
+	DTO := NewAlbum(album)
 
 	xml := `
-	<album id="1" name="album1" artist="artist1" artistId="1" songCount="11" duration="1" created="2001-08-15T00:00:00Z" year="1901" genre="genre1"></album>
+	<album id="2" name="album_without_art" artist="artist_without_art" artistId="6" songCount="3" duration="360" created="2018-06-12T11:11:11Z" year="1997" genre="genre_1"></album>
 	`
 
 	json := `
 	{
-		"id":"1",
-		"name":"album1",
-		"artist":"artist1",
-		"artistId":"1",
-		"songCount":11,
-		"duration":1,
-		"created":"2001-08-15T00:00:00Z",
-		"year":1901,
-		"genre":"genre1"
+		"id":"2",
+		"name":"album_without_art",
+		"artist":"artist_without_art",
+		"artistId":"6",
+		"songCount":3,
+		"duration":360,
+		"created":"2018-06-12T11:11:11Z",
+		"year":1997,
+		"genre":"genre_1"
 	}
 	`
 
@@ -79,29 +71,23 @@ func TestAlbumWithoutArt(t *testing.T) {
 
 func TestAlbumWithoutGenre(t *testing.T) {
 
-	genre := GenerateGenre(1)
-	art := GenerateArt(1)
-	artist := GenerateArtist(1, art)
-	album := GenerateAlbum(1, nil, artist, art)
-	GenerateSongs(11, genre, album, art)
-
-	DTO := NewAlbum(album, false)
+	album, _ := database.NewMock().GetAlbum(3)
+	DTO := NewAlbum(album)
 
 	xml := `
-	<album id="1" name="album1" artist="artist1" artistId="1" coverArt="1.jpg" songCount="11" duration="1" created="2001-08-15T00:00:00Z" year="1901"></album>
+	<album id="3" name="album_without_genre" artist="artist_1" artistId="1" songCount="1" duration="120" created="2018-06-12T11:11:11Z" year="1964"></album>
 	`
 
 	json := `
 	{
-		"id":"1",
-		"name":"album1",
-		"artist":"artist1",
+		"id":"3",
+		"name":"album_without_genre",
+		"artist":"artist_1",
 		"artistId":"1",
-		"coverArt":"1.jpg",
-		"songCount":11,
-		"duration":1,
-		"created":"2001-08-15T00:00:00Z",
-		"year":1901
+		"songCount":1,
+		"duration":120,
+		"created":"2018-06-12T11:11:11Z",
+		"year":1964
 	}
 	`
 
@@ -113,32 +99,15 @@ func TestAlbumWithoutGenre(t *testing.T) {
 
 func TestAlbumWithoutYear(t *testing.T) {
 
-	genre := GenerateGenre(1)
-	art := GenerateArt(1)
-	artist := GenerateArtist(1, art)
-	album := GenerateAlbum(1, genre, artist, art)
-	GenerateSongs(11, genre, album, art)
-
-	album.Year = 0
-
-	DTO := NewAlbum(album, false)
+	album, _ := database.NewMock().GetAlbum(4)
+	DTO := NewAlbum(album)
 
 	xml := `
-	<album id="1" name="album1" artist="artist1" artistId="1" coverArt="1.jpg" songCount="11" duration="1" created="2001-08-15T00:00:00Z" genre="genre1"></album>
+	<album id="4" name="album_without_year" artist="artist_1" artistId="1" songCount="1" duration="120" created="2018-06-12T11:11:11Z" genre="genre_1"></album>
 	`
 
 	json := `
-	{
-		"id":"1",
-		"name":"album1",
-		"artist":"artist1",
-		"artistId":"1",
-		"coverArt":"1.jpg",
-		"songCount":11,
-		"duration":1,
-		"created":"2001-08-15T00:00:00Z",
-		"genre":"genre1"
-	}
+	{"id":"4","name":"album_without_year","artist":"artist_1","artistId":"1","songCount":1,"duration":120,"created":"2018-06-12T11:11:11Z","genre":"genre_1"}
 	`
 
 	err := CheckSerialisation(DTO, xml, json)
@@ -149,28 +118,27 @@ func TestAlbumWithoutYear(t *testing.T) {
 
 func TestAlbumWithSongs(t *testing.T) {
 
-	genre := GenerateGenre(1)
-	art := GenerateArt(1)
-	artist := GenerateArtist(1, art)
-	album := GenerateAlbum(1, genre, artist, art)
-	songs := GenerateSongs(11, genre, album, art)
+	db := database.NewMock()
 
-	DTO := NewAlbum(album, true)
+	album, _ := db.GetAlbum(1)
+	songs, _ := db.GetAlbumSongs(1)
+
+	DTO := NewAlbumWithSongs(album, songs)
 
 	songXML := ""
 	for _, s := range songs {
-		sd := NewSong(s)
+		sd := NewSong(&s)
 		m, _ := xml.Marshal(sd)
 		songXML += string(m)
 	}
 
 	xml := fmt.Sprintf(`
-	<album id="1" name="album1" artist="artist1" artistId="1" coverArt="1.jpg" songCount="11" duration="1" created="2001-08-15T00:00:00Z" year="1901" genre="genre1">%v</album>
+	<album id="1" name="album_1" artist="artist_1" artistId="1" coverArt="art_1.png" songCount="3" duration="360" created="2018-06-12T11:11:11Z" year="2000" genre="genre_1">%v</album>
 	`, songXML)
 
 	songJSON := make([]string, len(songs))
 	for i, s := range songs {
-		sd := NewSong(s)
+		sd := NewSong(&s)
 		m, _ := json.Marshal(sd)
 		songJSON[i] = string(m)
 	}
@@ -178,15 +146,15 @@ func TestAlbumWithSongs(t *testing.T) {
 	json := fmt.Sprintf(`
 	{
 		"id":"1",
-		"name":"album1",
-		"artist":"artist1",
+		"name":"album_1",
+		"artist":"artist_1",
 		"artistId":"1",
-		"coverArt":"1.jpg",
-		"songCount":11,
-		"duration":1,
-		"created":"2001-08-15T00:00:00Z",
-		"year":1901,
-		"genre":"genre1",
+		"coverArt":"art_1.png",
+		"songCount":3,
+		"duration":360,
+		"created":"2018-06-12T11:11:11Z",
+		"year":2000,
+		"genre":"genre_1",
 		"song":[%v]
 	}
 	`, strings.Join(songJSON, ","))

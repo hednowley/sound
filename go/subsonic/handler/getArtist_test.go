@@ -46,7 +46,7 @@ func TestGetGoodArtist(t *testing.T) {
 		t.Error("Not a success")
 	}
 
-	r, ok := response.Body.(*dto.Artist)
+	r, ok := response.Body.(*dto.ArtistWithAlbums)
 	if !ok {
 		t.Error("Not an artist")
 	}
@@ -55,7 +55,7 @@ func TestGetGoodArtist(t *testing.T) {
 		t.Error("Wrong ID")
 	}
 
-	if len(r.Albums) != 2 {
+	if r.AlbumCount == 0 {
 		t.Error("Missing albums")
 	}
 }

@@ -21,11 +21,16 @@ func NewGetPlaylistHandler(dal *dal.DAL) api.Handler {
 			return api.NewErrorReponse(dto.Generic, message)
 		}
 
-		p, err := dal.GetPlaylist(id)
+		p, err := dal.Db.GetPlaylist(id)
 		if err != nil {
 			return api.NewErrorReponse(dto.Generic, err.Error())
 		}
 
-		return api.NewSuccessfulReponse(dto.NewPlaylist(p))
+		songs, err := dal.Db.GetPlaylistSongs(id)
+		if err != nil {
+			return api.NewErrorReponse(dto.Generic, err.Error())
+		}
+
+		return api.NewSuccessfulReponse(dto.NewPlaylist(p, songs))
 	}
 }

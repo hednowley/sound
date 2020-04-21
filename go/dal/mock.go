@@ -6,6 +6,6 @@ import (
 
 func NewMock() *DAL {
 	return &DAL{
-		db: database.NewMock(),
+		Db: database.NewMock(),
 	}
 }

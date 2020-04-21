@@ -36,6 +36,7 @@ func TestGetRandomSongs(t *testing.T) {
 
 	if len(songs.Songs) != 2 {
 		t.Error("Should have two songs")
+		return
 	}
 
 	s := songs.Songs[0]
@@ -60,7 +61,7 @@ func TestGetRandomGenreSongs(t *testing.T) {
 
 	songs := testResponse(response, t)
 
-	if len(songs.Songs) != 2 {
+	if len(songs.Songs) != 3 {
 		t.Error("Should have two songs")
 	}
 
@@ -79,8 +80,8 @@ func TestGetRandomSongsWithYears(t *testing.T) {
 
 	response := handler(params)
 	songs := testResponse(response, t)
-	if len(songs.Songs) != 6 {
-		t.Error()
+	if len(songs.Songs) != 8 {
+		t.Error("Nonsense years should return all songs")
 	}
 
 	params = url.Values{}

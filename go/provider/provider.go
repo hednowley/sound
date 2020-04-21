@@ -12,7 +12,7 @@ import (
 type Provider interface {
 	// Iterate through all files in the collection, calling the provided
 	// callback synchronously on each file's unique token.
-	Iterate(func(token string)) error
+	Iterate(func(token string) error) error
 
 	// Returns information about the file with the given token.
 	GetInfo(token string) (*entities.FileInfo, error)

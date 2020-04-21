@@ -22,15 +22,21 @@ func NewMockProvider(id string, files []*entities.FileInfo) *MockProvider {
 	}
 }
 
-func (p *MockProvider) Iterate(callback func(path string)) error {
+func (p *MockProvider) Iterate(callback func(path string) error) error {
 	p.isScanning = true
 	p.count = 0
+
+	var callbackErr error
 	for _, f := range p.files {
-		callback(f.Path)
+		callbackErr = callback(f.Path)
 		p.count = p.count + 1
+
+		if callbackErr != nil {
+			break
+		}
 	}
 	p.isScanning = false
-	return nil
+	return callbackErr
 }
 
 func (p *MockProvider) GetInfo(path string) (*entities.FileInfo, error) {

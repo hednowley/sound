@@ -1,11 +1,23 @@
 - id: 1
   name: "artist_1"
-  album_count: 1
+  starred: false
 
 - id: 2
   name: "artist_2"
-  album_count: 1
+  starred: false
 
 - id: 4
   name: "artist_4"
-  album_count: 0
+  starred: false
+
+- id: 5
+  name: "beethoven"
+  starred: false
+
+- id: 6
+  name: "artist_without_art"
+  starred: false
+
+- id: 7
+  name: "artist_without_albums"
+  starred: false

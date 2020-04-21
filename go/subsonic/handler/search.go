@@ -34,9 +34,20 @@ func NewSearchHandler(dal *dal.DAL, version SearchVersion) api.Handler {
 		albumOffset := util.ParseUint(params.Get("albumOffset"), 0)
 		songOffset := util.ParseUint(params.Get("songOffset"), 0)
 
-		artists := dal.SearchArtists(query, artistCount, artistOffset)
-		albums := dal.SearchAlbums(query, albumCount, albumOffset)
-		songs := dal.SearchSongs(query, songCount, songOffset)
+		artists, err := dal.Db.SearchArtists(query, artistCount, artistOffset)
+		if err != nil {
+			return api.NewErrorReponse(dto.Generic, err.Error())
+		}
+
+		albums, err := dal.Db.SearchAlbums(query, albumCount, albumOffset)
+		if err != nil {
+			return api.NewErrorReponse(dto.Generic, err.Error())
+		}
+
+		songs, err := dal.Db.SearchSongs(query, songCount, songOffset)
+		if err != nil {
+			return api.NewErrorReponse(dto.Generic, err.Error())
+		}
 
 		var response interface{}
 		if version == Search2 {

@@ -8,7 +8,7 @@ import (
 
 type Genres struct {
 	XMLName xml.Name `xml:"genres" json:"-"`
-	Genres  []*Genre `xml:"genre" json:"genre"`
+	Genres  []Genre  `xml:"genre" json:"genre"`
 }
 
 type Genre struct {
@@ -20,19 +20,19 @@ type Genre struct {
 
 func NewGenre(genre *dao.Genre) *Genre {
 	return &Genre{
-		SongCount:  len(genre.Songs),
-		AlbumCount: len(genre.Albums),
+		SongCount:  genre.SongCount,
+		AlbumCount: genre.AlbumCount,
 		Name:       genre.Name,
 	}
 }
 
-func NewGenres(genres []*dao.Genre) *Genres {
+func NewGenres(genres []dao.Genre) *Genres {
 
 	count := len(genres)
-	dtoGenres := make([]*Genre, count)
+	dtoGenres := make([]Genre, count)
 
 	for i, g := range genres {
-		dtoGenres[i] = NewGenre(g)
+		dtoGenres[i] = *NewGenre(&g)
 	}
 
 	return &Genres{
