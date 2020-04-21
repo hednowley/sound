@@ -25,7 +25,7 @@ matrix:
         - go get github.com/mattn/goveralls
 
       before_script:
-        - psql -c "create user sound suuperuser with password 'sound';" -U postgres
+        - psql -c "create user sound superuser with password 'sound';" -U postgres
         - psql -c "create database sound_test owner sound;" -U postgres
 
       script:
