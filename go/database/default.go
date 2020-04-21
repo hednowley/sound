@@ -4,13 +4,11 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
-	"path/filepath"
 	"strings"
 	"time"
 
 	"github.com/hednowley/sound/config"
 	"github.com/hednowley/sound/dao"
-	"github.com/hednowley/sound/projectpath"
 
 	"github.com/jackc/pgx/v4"
 
@@ -38,10 +36,8 @@ func NewDefault(config *config.Config) (*Default, error) {
 		return nil, err
 	}
 
-	migrations := filepath.Join(projectpath.Root, "migrations")
-
 	m, err := migrate.NewWithDatabaseInstance(
-		"file://"+migrations,
+		"file://"+config.MigrationsPath,
 		"postgres", driver)
 	if err != nil {
 		return nil, err

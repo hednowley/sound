@@ -11,6 +11,7 @@ type Config struct {
 	Port                     int
 	ArtPath                  string `yaml:"art path"`
 	Db                       string
+	MigrationsPath           string   `yaml:"migrations path"`
 	LogConfig                string   `yaml:"log config"`
 	IgnoredArticles          []string `yaml:"ignored articles"`
 	Users                    []User

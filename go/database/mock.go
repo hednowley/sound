@@ -15,8 +15,9 @@ import (
 func NewMock() *Default {
 
 	conn := "host=localhost port=5432 user=sound password=sound dbname=sound_test sslmode=disable"
+	mig := filepath.Join(projectpath.Root, "migrations")
 
-	database, err := NewDefault(&config.Config{Db: conn})
+	database, err := NewDefault(&config.Config{Db: conn, MigrationsPath: mig})
 	if err != nil {
 		log.Fatal(err)
 	}
