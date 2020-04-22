@@ -107,7 +107,7 @@ func (dal *DAL) PutArt(art *entities.CoverArtData) (*dao.Art, error) {
 
 	filePath := fmt.Sprintf("%v.%v", uuid.New().String(), art.Extension)
 
-	err := ioutil.WriteFile(path.Join(dal.artDir, "art", filePath), art.Raw, 0644)
+	err := ioutil.WriteFile(path.Join(dal.artDir, filePath), art.Raw, 0644)
 	if err != nil {
 		seelog.Errorf("Error saving artwork %v", filePath)
 		return nil, err

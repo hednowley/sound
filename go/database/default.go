@@ -590,9 +590,9 @@ func (db *Default) GetAlbum(albumID uint) (*dao.Album, error) {
 			artists.name,
 			COUNT(songs.id),
 			COALESCE(SUM(songs.duration), 0),
-			array_agg(DISTINCT songs.art) FILTER (WHERE songs.art IS NOT NULL),
-			array_agg(DISTINCT genres.name) FILTER (WHERE genres.name IS NOT NULL),
-			array_agg(DISTINCT songs.year) FILTER (WHERE songs.year != 0)
+			array_remove(array_agg(DISTINCT songs.art), NULL),
+			array_remove(array_agg(DISTINCT genres.name), NULL),
+			array_remove(array_remove(array_agg(DISTINCT songs.year), 0), NULL)
 		FROM
 			albums
 		LEFT JOIN 
@@ -830,7 +830,7 @@ func (db *Default) GetArtist(artistId uint) (*dao.Artist, error) {
 			artists.starred,
 			COUNT(DISTINCT albums.id),
 			COALESCE(SUM(songs.duration), 0),
-			array_agg(DISTINCT songs.art) FILTER (WHERE songs.art IS NOT NULL)
+			array_remove(array_agg(DISTINCT songs.art), NULL)
 		FROM
 			artists
 		LEFT JOIN 
@@ -1031,9 +1031,9 @@ func (db *Default) GetAlbums(listType dao.AlbumList2Type, limit uint, offset uin
 			artists.name,
 			COUNT(songs.id),
 			COALESCE(SUM(songs.duration), 0),
-			array_agg(DISTINCT songs.art) FILTER (WHERE songs.art IS NOT NULL),
-			array_agg(DISTINCT genres.name) FILTER (WHERE genres.name IS NOT NULL),
-			array_agg(DISTINCT songs.year) FILTER (WHERE songs.year != 0)
+			array_remove(array_agg(DISTINCT songs.art), NULL),
+			array_remove(array_agg(DISTINCT genres.name), NULL),
+			array_remove(array_remove(array_agg(DISTINCT songs.year), 0), NULL)
 		FROM
 			albums
 		LEFT JOIN 
@@ -1104,9 +1104,9 @@ func (db *Default) GetAlbumsByArtist(artistId uint) ([]dao.Album, error) {
 			artists.name,
 			COUNT(songs.id),
 			COALESCE(SUM(songs.duration), 0),
-			array_agg(DISTINCT songs.art) FILTER (WHERE songs.art IS NOT NULL),
-			array_agg(DISTINCT genres.name) FILTER (WHERE genres.name IS NOT NULL),
-			array_agg(DISTINCT songs.year) FILTER (WHERE songs.year != 0)
+			array_remove(array_agg(DISTINCT songs.art), NULL),
+			array_remove(array_agg(DISTINCT genres.name), NULL),
+			array_remove(array_remove(array_agg(DISTINCT songs.year), 0), NULL)
 		FROM
 			albums
 		LEFT JOIN 
@@ -1166,7 +1166,7 @@ func (db *Default) GetArtists() ([]dao.Artist, error) {
 			artists.starred,
 			COUNT(DISTINCT albums.id),
 			COALESCE(SUM(songs.duration), 0),
-			array_agg(DISTINCT songs.art) FILTER (WHERE songs.art IS NOT NULL)
+			array_remove(array_agg(DISTINCT songs.art), NULL)
 		FROM
 			artists
 		LEFT JOIN 
@@ -1469,9 +1469,9 @@ func (db *Default) SearchAlbums(query string, count uint, offset uint) ([]dao.Al
 			artists.name,
 			COUNT(songs.id),
 			COALESCE(SUM(songs.duration), 0),
-			array_agg(DISTINCT songs.art) FILTER (WHERE songs.art IS NOT NULL),
-			array_agg(DISTINCT genres.name) FILTER (WHERE genres.name IS NOT NULL),
-			array_agg(DISTINCT songs.year) FILTER (WHERE songs.year != 0)
+			array_remove(array_agg(DISTINCT songs.art), NULL),
+			array_remove(array_agg(DISTINCT genres.name), NULL),
+			array_remove(array_remove(array_agg(DISTINCT songs.year), 0), NULL)
 		FROM
 			albums
 		LEFT JOIN 
@@ -1538,7 +1538,7 @@ func (db *Default) SearchArtists(query string, limit uint, offset uint) ([]dao.A
 			artists.starred,
 			COUNT(DISTINCT albums.id),
 			COALESCE(SUM(songs.duration), 0),
-			array_agg(DISTINCT songs.art) FILTER (WHERE songs.art IS NOT NULL)
+			array_remove(array_agg(DISTINCT songs.art), NULL)
 		FROM
 			artists
 		LEFT JOIN 
