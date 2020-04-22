@@ -68,6 +68,8 @@ func (p *BeetsProvider) Iterate(callback func(token string) error) error {
 		return err
 	}
 
+	defer rows.Close()
+
 	var id int
 	var callbackErr error
 

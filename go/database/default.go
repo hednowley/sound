@@ -482,6 +482,8 @@ func (db *Default) GetPlaylistSongIds(playlistID uint) ([]uint, error) {
 		return nil, err
 	}
 
+	defer rows.Close()
+
 	songIDs := []uint{}
 	for rows.Next() {
 		var songID uint
@@ -540,6 +542,8 @@ func (db *Default) GetPlaylistSongs(playlistID uint) ([]dao.Song, error) {
 	if err != nil {
 		return nil, err
 	}
+
+	defer rows.Close()
 
 	songs := []dao.Song{}
 	for rows.Next() {
@@ -678,6 +682,8 @@ func (db *Default) GetAlbumSongs(albumID uint) ([]dao.Song, error) {
 		return nil, err
 	}
 
+	defer rows.Close()
+
 	songs := []dao.Song{}
 	for rows.Next() {
 		var s dao.Song
@@ -785,6 +791,8 @@ func (db *Default) GetSongsByGenre(genreName string, offset uint, limit uint) ([
 	if err != nil {
 		return nil, err
 	}
+
+	defer rows.Close()
 
 	songs := []dao.Song{}
 	for rows.Next() {
@@ -978,6 +986,8 @@ func (db *Default) GetGenres() ([]dao.Genre, error) {
 		return nil, err
 	}
 
+	defer rows.Close()
+
 	genres := []dao.Genre{}
 	for rows.Next() {
 		var g dao.Genre
@@ -1059,10 +1069,11 @@ func (db *Default) GetAlbums(listType dao.AlbumList2Type, limit uint, offset uin
 	`, order)
 
 	rows, err := db.conn.Query(context.Background(), query, limit, offset)
-
 	if err != nil {
 		return nil, err
 	}
+
+	defer rows.Close()
 
 	albums := []dao.Album{}
 	for rows.Next() {
@@ -1130,6 +1141,8 @@ func (db *Default) GetAlbumsByArtist(artistId uint) ([]dao.Album, error) {
 		return nil, err
 	}
 
+	defer rows.Close()
+
 	albums := []dao.Album{}
 	for rows.Next() {
 		var a dao.Album
@@ -1180,10 +1193,11 @@ func (db *Default) GetArtists() ([]dao.Artist, error) {
 		GROUP BY
 			artists.id
 	`)
-
 	if err != nil {
 		return nil, err
 	}
+
+	defer rows.Close()
 
 	artists := []dao.Artist{}
 	for rows.Next() {
@@ -1228,6 +1242,8 @@ func (db *Default) GetPlaylists() ([]dao.Playlist, error) {
 	if err != nil {
 		return nil, err
 	}
+
+	defer rows.Close()
 
 	playlists := []dao.Playlist{}
 	for rows.Next() {
@@ -1502,6 +1518,8 @@ func (db *Default) SearchAlbums(query string, count uint, offset uint) ([]dao.Al
 		return nil, err
 	}
 
+	defer rows.Close()
+
 	albums := []dao.Album{}
 	for rows.Next() {
 		var a dao.Album
@@ -1564,6 +1582,8 @@ func (db *Default) SearchArtists(query string, limit uint, offset uint) ([]dao.A
 	if err != nil {
 		return nil, err
 	}
+
+	defer rows.Close()
 
 	artists := []dao.Artist{}
 	for rows.Next() {
@@ -1631,6 +1651,8 @@ func (db *Default) SearchSongs(query string, count uint, offset uint) ([]dao.Son
 	if err != nil {
 		return nil, err
 	}
+
+	defer rows.Close()
 
 	songs := []dao.Song{}
 	for rows.Next() {
@@ -1735,6 +1757,8 @@ func (db *Default) GetRandomSongs(size uint, from uint, to uint, genre string) (
 	if err != nil {
 		return nil, err
 	}
+
+	defer rows.Close()
 
 	songs := []dao.Song{}
 	for rows.Next() {
