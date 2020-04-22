@@ -1,9 +1,14 @@
 package provider_test
 
 import (
+	"fmt"
+	"io/ioutil"
+	"os"
+	"path"
 	"testing"
 
 	"github.com/hednowley/sound/dao"
+	"github.com/hednowley/sound/projectpath"
 	"github.com/hednowley/sound/socket"
 	"github.com/hednowley/sound/util"
 
@@ -215,4 +220,45 @@ func TestDeleteScan(t *testing.T) {
 	} else if len(artists) != 1 {
 		t.Errorf("Haven't removed artists (have %v)", len(artists))
 	}
+}
+
+func TestBigScan(t *testing.T) {
+
+	tempDir, err := ioutil.TempDir(path.Join(projectpath.Root, "testdata"), "")
+	if err != nil {
+		t.Error(err)
+		return
+	}
+
+	defer os.RemoveAll(tempDir)
+	defer os.Remove(tempDir)
+
+	art := &entities.CoverArtData{
+		Extension: "png",
+		Raw:       []byte("Hello"),
+	}
+
+	files := []*entities.FileInfo{}
+	for i := 0; i < 100; i++ {
+		files = append(files, &entities.FileInfo{
+			Album:       "big_scan_album",
+			Artist:      fmt.Sprintf("big_scan_artist ft. %v", i),
+			AlbumArtist: "big_scan_artist",
+			Path:        fmt.Sprintf("path_%v", i),
+			Title:       fmt.Sprintf("song_%v", i),
+			Genre:       fmt.Sprintf("genre_%v", i),
+			CoverArt:    art,
+		})
+	}
+
+	p := provider.NewMockProvider("mock", files)
+	m := database.NewMock()
+	dal := dal.NewDAL(&config.Config{
+		ArtPath: tempDir,
+	}, m)
+	hub := socket.NewMockHub()
+	scanner := provider.NewScanner([]provider.Provider{p}, dal, hub)
+
+	// Scan without updating or deleting
+	scanner.StartAllScans(false, false)
 }
