@@ -35,6 +35,11 @@ func NewGetAlbumHandler(dal *dal.DAL) api.Handler {
 			return api.NewErrorReponse(dto.Generic, err.Error())
 		}
 
-		return api.NewSuccessfulReponse(dto.NewAlbum(album))
+		songs, err := dal.Db.GetAlbumSongs(conn, id)
+		if err != nil {
+			return api.NewErrorReponse(dto.Generic, err.Error())
+		}
+
+		return api.NewSuccessfulReponse(dto.NewAlbumWithSongs(album, songs))
 	}
 }

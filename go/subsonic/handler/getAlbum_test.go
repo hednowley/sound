@@ -47,9 +47,10 @@ func TestGetGoodAlbum(t *testing.T) {
 		t.Error("Not a success")
 	}
 
-	r, ok := response.Body.(*dto.Album)
+	r, ok := response.Body.(*dto.AlbumWithSongs)
 	if !ok {
 		t.Error("Not an album")
+		return
 	}
 
 	if r.ID != 1 {
