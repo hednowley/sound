@@ -47,8 +47,11 @@ func TestAddOnlyScan(t *testing.T) {
 	// Scan without updating or deleting
 	scanner.StartAllScans(false, false)
 
+	conn, _ := dal.Db.GetConn()
+	defer conn.Release()
+
 	// Title shouldn't change
-	s, err := dal.Db.GetSong(2)
+	s, err := dal.Db.GetSong(conn, 2)
 	if err != nil {
 		t.Error(err)
 	} else if s.Title != "title_2" {
@@ -56,19 +59,19 @@ func TestAddOnlyScan(t *testing.T) {
 	}
 
 	// Song shouldn't change as this song wasn't provided
-	s, err = dal.Db.GetSong(1)
+	s, err = dal.Db.GetSong(conn, 1)
 	if err != nil {
 		t.Error(err)
 	}
 
 	// Song shouldn't change as this song has another provider
-	s, err = dal.Db.GetSong(22)
+	s, err = dal.Db.GetSong(conn, 22)
 	if err != nil {
 		t.Error(err)
 	}
 
 	// New song should have been added
-	s, err = dal.Db.GetSong(10001)
+	s, err = dal.Db.GetSong(conn, 10001)
 	if err != nil {
 		t.Error(err)
 	} else if s == nil || s.Title != "new_title" {
@@ -76,7 +79,7 @@ func TestAddOnlyScan(t *testing.T) {
 	}
 
 	// New artist should have been added
-	artist, err := dal.Db.GetArtist(10001)
+	artist, err := dal.Db.GetArtist(conn, 10001)
 	if err != nil {
 		t.Error(err)
 	} else if artist == nil || artist.Name != "new_artist" {
@@ -84,7 +87,7 @@ func TestAddOnlyScan(t *testing.T) {
 	}
 
 	// New album should have been added
-	album, err := dal.Db.GetAlbum(10001)
+	album, err := dal.Db.GetAlbum(conn, 10001)
 	if err != nil {
 		t.Error(err)
 	} else if album == nil || album.Name != "new_album" || album.ArtistID != 10001 {
@@ -122,8 +125,11 @@ func TestUpdateScan(t *testing.T) {
 	// Scan without updating or deleting
 	scanner.StartAllScans(true, false)
 
+	conn, _ := dal.Db.GetConn()
+	defer conn.Release()
+
 	// Should change
-	s, err := dal.Db.GetSong(2)
+	s, err := dal.Db.GetSong(conn, 2)
 	if err != nil {
 		t.Error(err)
 	} else if s.Title != "Y.M.C.A." {
@@ -131,7 +137,7 @@ func TestUpdateScan(t *testing.T) {
 	}
 
 	// New genre should have been added
-	album, err := dal.Db.GetAlbum(s.AlbumID)
+	album, err := dal.Db.GetAlbum(conn, s.AlbumID)
 	if err != nil {
 		t.Error(err)
 	} else if !util.ContainsString(album.Genres, "Neurofunk") {
@@ -139,19 +145,19 @@ func TestUpdateScan(t *testing.T) {
 	}
 
 	// Song shouldn't change as this song wasn't provided
-	s, err = dal.Db.GetSong(1)
+	s, err = dal.Db.GetSong(conn, 1)
 	if err != nil {
 		t.Error(err)
 	}
 
 	// Song shouldn't change as this song has another provider
-	s, err = dal.Db.GetSong(22)
+	s, err = dal.Db.GetSong(conn, 22)
 	if err != nil {
 		t.Error(err)
 	}
 
 	// New song should have been added
-	s, err = dal.Db.GetSong(10001)
+	s, err = dal.Db.GetSong(conn, 10001)
 	if err != nil {
 		t.Error(err)
 	} else if s == nil {
@@ -161,7 +167,7 @@ func TestUpdateScan(t *testing.T) {
 	}
 
 	// New artist should have been added
-	artist, err := dal.Db.GetArtist(10001)
+	artist, err := dal.Db.GetArtist(conn, 10001)
 	if err != nil {
 		t.Error(err)
 	} else if artist == nil || artist.Name != "new_artist" {
@@ -169,7 +175,7 @@ func TestUpdateScan(t *testing.T) {
 	}
 
 	// New album should have been added
-	album, err = dal.Db.GetAlbum(10001)
+	album, err = dal.Db.GetAlbum(conn, 10001)
 	if err != nil {
 		t.Error(err)
 	} else if album == nil || album.Name != "new_album" || album.ArtistID != 10001 {
@@ -207,14 +213,17 @@ func TestDeleteScan(t *testing.T) {
 	// Scan without updating or deleting
 	scanner.StartAllScans(false, true)
 
-	albums, err := dal.Db.GetAlbums(dao.AlphabeticalByName, 9999, 0)
+	conn, _ := dal.Db.GetConn()
+	defer conn.Release()
+
+	albums, err := dal.Db.GetAlbums(conn, dao.AlphabeticalByName, 9999, 0)
 	if err != nil {
 		t.Error(err)
 	} else if len(albums) != 2 {
 		t.Errorf("Haven't removed albums (have %v)", len(albums))
 	}
 
-	artists, err := dal.Db.GetArtists()
+	artists, err := dal.Db.GetArtists(conn)
 	if err != nil {
 		t.Error(err)
 	} else if len(artists) != 1 {

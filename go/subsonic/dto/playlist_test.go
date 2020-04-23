@@ -13,14 +13,16 @@ import (
 func TestPlaylist(t *testing.T) {
 
 	db := database.NewMock()
+	conn, _ := db.GetConn()
+	defer conn.Release()
 
-	playlist, err := db.GetPlaylist(1)
+	playlist, err := db.GetPlaylist(conn, 1)
 	if err != nil {
 		t.Error(err)
 		return
 	}
 
-	songs, err := db.GetPlaylistSongs(1)
+	songs, err := db.GetPlaylistSongs(conn, 1)
 	if err != nil {
 		t.Error(err)
 		return
@@ -68,8 +70,10 @@ func TestPlaylist(t *testing.T) {
 func TestPlaylistWithoutComment(t *testing.T) {
 
 	db := database.NewMock()
+	conn, _ := db.GetConn()
+	defer conn.Release()
 
-	playlist, err := db.GetPlaylist(1)
+	playlist, err := db.GetPlaylist(conn, 1)
 	if err != nil {
 		t.Error(err)
 		return
@@ -77,7 +81,7 @@ func TestPlaylistWithoutComment(t *testing.T) {
 
 	playlist.Comment = ""
 
-	songs, err := db.GetPlaylistSongs(1)
+	songs, err := db.GetPlaylistSongs(conn, 1)
 	if err != nil {
 		t.Error(err)
 		return

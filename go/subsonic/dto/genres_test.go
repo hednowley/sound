@@ -19,7 +19,11 @@ func TestGenres(t *testing.T) {
 	// GenerateSongs(2, &genres[1], &albums1[0], art)
 	// GenerateSongs(3, &genres[2], &albums1[0], art)
 
-	genres, err := database.NewMock().GetGenres()
+	db := database.NewMock()
+	conn, _ := db.GetConn()
+	defer conn.Release()
+
+	genres, err := db.GetGenres(conn)
 	if err != nil {
 		t.Error(err)
 	}

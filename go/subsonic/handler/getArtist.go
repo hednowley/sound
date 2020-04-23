@@ -21,7 +21,13 @@ func NewGetArtistHandler(dal *dal.DAL) api.Handler {
 			return api.NewErrorReponse(dto.MissingParameter, "Required param (id) is missing")
 		}
 
-		artist, err := dal.Db.GetArtist(id)
+		conn, err := dal.Db.GetConn()
+		if err != nil {
+			return api.NewErrorReponse(dto.Generic, err.Error())
+		}
+		defer conn.Release()
+
+		artist, err := dal.Db.GetArtist(conn, id)
 		if err != nil {
 			if _, ok := err.(*dao.ErrNotFound); ok {
 				return api.NewErrorReponse(dto.NotFound, "Artist not found.")
@@ -29,7 +35,7 @@ func NewGetArtistHandler(dal *dal.DAL) api.Handler {
 			return api.NewErrorReponse(dto.Generic, err.Error())
 		}
 
-		albums, err := dal.Db.GetAlbumsByArtist(id)
+		albums, err := dal.Db.GetAlbumsByArtist(conn, id)
 		if err != nil {
 			return api.NewErrorReponse(dto.Generic, err.Error())
 		}

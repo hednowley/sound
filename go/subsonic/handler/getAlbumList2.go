@@ -63,7 +63,13 @@ func NewGetAlbumList2Handler(dal *dal.DAL) api.Handler {
 
 		offset := util.ParseUint(params.Get("offset"), 0)
 
-		albums, err := dal.Db.GetAlbums(*listType, size, offset)
+		conn, err := dal.Db.GetConn()
+		if err != nil {
+			return api.NewErrorReponse(dto.Generic, err.Error())
+		}
+		defer conn.Release()
+
+		albums, err := dal.Db.GetAlbums(conn, *listType, size, offset)
 		if err != nil {
 			return api.NewErrorReponse(0, "Error")
 		}

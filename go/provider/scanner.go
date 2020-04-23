@@ -67,16 +67,25 @@ func (scanner *Scanner) startScan(provider Provider, update bool, delete bool) {
 
 	scanner.hub.Notify(dto.NewScanStatusNotification(provider.IsScanning(), provider.FileCount()))
 
+	defer scanner.hub.Notify(dto.NewScanStatusNotification(provider.IsScanning(), provider.FileCount()))
+
 	tokens := []string{}
 
-	err := provider.Iterate(func(token string) error {
+	conn, err := scanner.dal.Db.GetConn()
+	if err != nil {
+		seelog.Errorf("Can't start '%v' scan: %v", providerID, err)
+		return
+	}
+	defer conn.Release()
+
+	err = provider.Iterate(func(token string) error {
 		scanner.hub.Notify(dto.NewScanStatusNotification(provider.IsScanning(), provider.FileCount()))
 
 		if delete {
 			tokens = append(tokens, token)
 		}
 
-		existing, getSongErr := scanner.dal.Db.GetSongIdFromToken(token, providerID)
+		existing, getSongErr := scanner.dal.Db.GetSongIdFromToken(conn, token, providerID)
 		if getSongErr != nil {
 			return getSongErr
 		}
@@ -94,7 +103,7 @@ func (scanner *Scanner) startScan(provider Provider, update bool, delete bool) {
 				seelog.Infof("Updating token '%v'", token)
 			}
 
-			putErr := scanner.dal.PutSong(data, token, providerID, existing)
+			putErr := scanner.dal.PutSong(conn, data, token, providerID, existing)
 			if putErr != nil {
 				return putErr
 			}
@@ -111,7 +120,7 @@ func (scanner *Scanner) startScan(provider Provider, update bool, delete bool) {
 
 	if delete {
 		seelog.Info("Deleting unscanned items")
-		err = scanner.dal.Db.DeleteMissing(tokens, providerID)
+		err = scanner.dal.Db.DeleteMissing(conn, tokens, providerID)
 
 		if err != nil {
 			seelog.Errorf("Error during '%v' scan: %v", providerID, err)
@@ -120,5 +129,4 @@ func (scanner *Scanner) startScan(provider Provider, update bool, delete bool) {
 
 	seelog.Infof("Finished '%v' scan.", providerID)
 
-	scanner.hub.Notify(dto.NewScanStatusNotification(provider.IsScanning(), provider.FileCount()))
 }

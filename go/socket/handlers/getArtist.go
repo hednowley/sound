@@ -17,12 +17,18 @@ func MakeGetArtistHandler(dal *dal.DAL) socket.Handler {
 			return "bad id"
 		}
 
-		artist, err := dal.Db.GetArtist(id)
+		conn, err := dal.Db.GetConn()
+		if err != nil {
+			return api.NewErrorReponse("Cannot make DB conn")
+		}
+		defer conn.Release()
+
+		artist, err := dal.Db.GetArtist(conn, id)
 		if err != nil {
 			return "no artist"
 		}
 
-		albums, err := dal.Db.GetAlbumsByArtist(id)
+		albums, err := dal.Db.GetAlbumsByArtist(conn, id)
 		if err != nil {
 			return api.NewErrorReponse("Error")
 		}

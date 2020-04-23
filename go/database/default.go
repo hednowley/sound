@@ -11,6 +11,7 @@ import (
 	"github.com/hednowley/sound/dao"
 
 	"github.com/jackc/pgx/v4"
+	"github.com/jackc/pgx/v4/pgxpool"
 
 	"github.com/golang-migrate/migrate/v4"
 	"github.com/golang-migrate/migrate/v4/database/postgres"
@@ -20,7 +21,7 @@ import (
 
 // Default provides access to the default application database.
 type Default struct {
-	conn *pgx.Conn
+	pool *pgxpool.Pool
 }
 
 // NewDefault constructs a new default database.
@@ -45,12 +46,9 @@ func NewDefault(config *config.Config) (*Default, error) {
 
 	m.Steps(2)
 
-	conn, err := pgx.Connect(context.Background(), config.Db)
-	if err != nil {
-		return nil, err
-	}
+	pool, err := pgxpool.Connect(context.Background(), config.Db)
 
-	database := Default{conn: conn}
+	database := Default{pool: pool}
 
 	return &database, err
 }
@@ -60,13 +58,17 @@ func (db *Default) Close() {
 	db.Close()
 }
 
+func (db *Default) GetConn() (*pgxpool.Conn, error) {
+	return db.pool.Acquire(context.Background())
+}
+
 // PutArtistByName returns the ID of the artist record with the same name,
 // or creates a new one and returns its ID if there is no such artist.
-func (db *Default) putArtistByName(name string) (uint, error) {
+func (db *Default) putArtistByName(conn *pgxpool.Conn, name string) (uint, error) {
 
 	var id uint
 
-	err := db.conn.QueryRow(context.Background(),
+	err := conn.QueryRow(context.Background(),
 		`
 		SELECT 
 			id
@@ -82,7 +84,7 @@ func (db *Default) putArtistByName(name string) (uint, error) {
 		return id, nil
 	}
 
-	err = db.conn.QueryRow(context.Background(),
+	err = conn.QueryRow(context.Background(),
 		`
 		INSERT INTO
 			artists (name, starred)
@@ -97,16 +99,16 @@ func (db *Default) putArtistByName(name string) (uint, error) {
 
 // PutAlbumByAttributes returns the ID of the album record with the same name and artist,
 // or creates a new one and returns its ID if there is no such album.
-func (db *Default) PutAlbumByAttributes(name string, artist string, disambiguator string) (uint, error) {
+func (db *Default) PutAlbumByAttributes(conn *pgxpool.Conn, name string, artist string, disambiguator string) (uint, error) {
 
-	artistID, err := db.putArtistByName(artist)
+	artistID, err := db.putArtistByName(conn, artist)
 	if err != nil {
 		return 0, err
 	}
 
 	var albumID uint
 
-	err = db.conn.QueryRow(context.Background(),
+	err = conn.QueryRow(context.Background(),
 		`
 		SELECT
 			id
@@ -124,7 +126,7 @@ func (db *Default) PutAlbumByAttributes(name string, artist string, disambiguato
 		return albumID, nil
 	}
 
-	err = db.conn.QueryRow(context.Background(),
+	err = conn.QueryRow(context.Background(),
 		`
 		INSERT INTO
 			albums (artist_id, name, disambiguator, created, starred)
@@ -139,12 +141,12 @@ func (db *Default) PutAlbumByAttributes(name string, artist string, disambiguato
 
 // PutGenreByName returns the ID of the genre record with the same name,
 // or creates a new one and returns its ID if there is no such genre.
-func (db *Default) PutGenreByName(name string) (uint, error) {
+func (db *Default) PutGenreByName(conn *pgxpool.Conn, name string) (uint, error) {
 
 	// TODO: Think about whether this needs a transaction
 	var genreID uint
 
-	err := db.conn.QueryRow(context.Background(),
+	err := conn.QueryRow(context.Background(),
 		`
 		SELECT
 			id
@@ -164,7 +166,7 @@ func (db *Default) PutGenreByName(name string) (uint, error) {
 		return 0, err
 	}
 
-	err = db.conn.QueryRow(context.Background(),
+	err = conn.QueryRow(context.Background(),
 		`
 		INSERT INTO
 			genres (name)
@@ -178,6 +180,7 @@ func (db *Default) PutGenreByName(name string) (uint, error) {
 }
 
 func (db *Default) InsertSong(
+	conn *pgxpool.Conn,
 	artist string,
 	albumID uint,
 	path string,
@@ -196,7 +199,7 @@ func (db *Default) InsertSong(
 
 	var songID uint
 
-	err := db.conn.QueryRow(context.Background(),
+	err := conn.QueryRow(context.Background(),
 		`
 		INSERT INTO
 			songs
@@ -244,6 +247,7 @@ func (db *Default) InsertSong(
 }
 
 func (db *Default) UpdateSong(
+	conn *pgxpool.Conn,
 	songID uint,
 	artist string,
 	albumID uint,
@@ -262,7 +266,7 @@ func (db *Default) UpdateSong(
 	starred bool,
 ) error {
 
-	_, err := db.conn.Exec(context.Background(),
+	_, err := conn.Exec(context.Background(),
 		`
 		UPDATE 
 			songs
@@ -308,11 +312,11 @@ func (db *Default) UpdateSong(
 	return err
 }
 
-func (db *Default) InsertArt(path string, hash string) (*dao.Art, error) {
+func (db *Default) InsertArt(conn *pgxpool.Conn, path string, hash string) (*dao.Art, error) {
 
 	var art dao.Art
 
-	err := db.conn.QueryRow(context.Background(),
+	err := conn.QueryRow(context.Background(),
 		`
 		INSERT INTO
 			arts (path, hash)
@@ -325,10 +329,10 @@ func (db *Default) InsertArt(path string, hash string) (*dao.Art, error) {
 	return &art, err
 }
 
-func (db *Default) GetArtFromHash(hash string) *dao.Art {
+func (db *Default) GetArtFromHash(conn *pgxpool.Conn, hash string) *dao.Art {
 	var a dao.Art
 
-	err := db.conn.QueryRow(context.Background(),
+	err := conn.QueryRow(context.Background(),
 		`
 		SELECT 
 			id,
@@ -354,10 +358,10 @@ func (db *Default) GetArtFromHash(hash string) *dao.Art {
 
 // GetSongIdFromToken returns a pointer to the song with the given path and provider,
 // or nil if one doesn't exist. Joined entities are not loaded.
-func (db *Default) GetSongIdFromToken(token string, providerID string) (*uint, error) {
+func (db *Default) GetSongIdFromToken(conn *pgxpool.Conn, token string, providerID string) (*uint, error) {
 	var songId uint
 
-	err := db.conn.QueryRow(context.Background(),
+	err := conn.QueryRow(context.Background(),
 		`
 		SELECT 
 			id
@@ -375,9 +379,9 @@ func (db *Default) GetSongIdFromToken(token string, providerID string) (*uint, e
 	return &songId, err
 }
 
-func (db *Default) ReplacePlaylistEntries(playlistID uint, songIDs []uint) error {
+func (db *Default) ReplacePlaylistEntries(conn *pgxpool.Conn, playlistID uint, songIDs []uint) error {
 
-	tx, err := db.conn.Begin(context.Background())
+	tx, err := conn.Begin(context.Background())
 	if err != nil {
 		return err
 	}
@@ -418,10 +422,10 @@ func (db *Default) ReplacePlaylistEntries(playlistID uint, songIDs []uint) error
 
 // Getters
 
-func (db *Default) GetPlaylist(playlistID uint) (*dao.Playlist, error) {
+func (db *Default) GetPlaylist(conn *pgxpool.Conn, playlistID uint) (*dao.Playlist, error) {
 	var p dao.Playlist
 
-	err := db.conn.QueryRow(
+	err := conn.QueryRow(
 		context.Background(),
 		`
 		SELECT 
@@ -465,9 +469,9 @@ func (db *Default) GetPlaylist(playlistID uint) (*dao.Playlist, error) {
 	return &p, err
 }
 
-func (db *Default) GetPlaylistSongIds(playlistID uint) ([]uint, error) {
+func (db *Default) GetPlaylistSongIds(conn *pgxpool.Conn, playlistID uint) ([]uint, error) {
 
-	rows, err := db.conn.Query(context.Background(),
+	rows, err := conn.Query(context.Background(),
 		`
 		SELECT 
 			song_id
@@ -496,9 +500,9 @@ func (db *Default) GetPlaylistSongIds(playlistID uint) ([]uint, error) {
 	return songIDs, nil
 }
 
-func (db *Default) GetPlaylistSongs(playlistID uint) ([]dao.Song, error) {
+func (db *Default) GetPlaylistSongs(conn *pgxpool.Conn, playlistID uint) ([]dao.Song, error) {
 
-	rows, err := db.conn.Query(context.Background(),
+	rows, err := conn.Query(context.Background(),
 		`
 		SELECT 
 			songs.id,
@@ -577,11 +581,11 @@ func (db *Default) GetPlaylistSongs(playlistID uint) ([]dao.Song, error) {
 	return songs, nil
 }
 
-func (db *Default) GetAlbum(albumID uint) (*dao.Album, error) {
+func (db *Default) GetAlbum(conn *pgxpool.Conn, albumID uint) (*dao.Album, error) {
 
 	var a dao.Album
 
-	err := db.conn.QueryRow(
+	err := conn.QueryRow(
 		context.Background(),
 		`
 		SELECT 
@@ -638,9 +642,9 @@ func (db *Default) GetAlbum(albumID uint) (*dao.Album, error) {
 	return &a, err
 }
 
-func (db *Default) GetAlbumSongs(albumID uint) ([]dao.Song, error) {
+func (db *Default) GetAlbumSongs(conn *pgxpool.Conn, albumID uint) ([]dao.Song, error) {
 
-	rows, err := db.conn.Query(context.Background(),
+	rows, err := conn.Query(context.Background(),
 		`
 		SELECT 
 			songs.id,
@@ -717,10 +721,10 @@ func (db *Default) GetAlbumSongs(albumID uint) ([]dao.Song, error) {
 	return songs, nil
 }
 
-func (db *Default) GetArt(artId uint) *dao.Art {
+func (db *Default) GetArt(conn *pgxpool.Conn, artId uint) *dao.Art {
 	var a dao.Art
 
-	err := db.conn.QueryRow(context.Background(),
+	err := conn.QueryRow(context.Background(),
 		`
 		SELECT 
 			id,
@@ -744,9 +748,9 @@ func (db *Default) GetArt(artId uint) *dao.Art {
 	return &a
 }
 
-func (db *Default) GetSongsByGenre(genreName string, offset uint, limit uint) ([]dao.Song, error) {
+func (db *Default) GetSongsByGenre(conn *pgxpool.Conn, genreName string, offset uint, limit uint) ([]dao.Song, error) {
 
-	rows, err := db.conn.Query(context.Background(),
+	rows, err := conn.Query(context.Background(),
 		`
 		SELECT 
 			songs.id,
@@ -827,10 +831,10 @@ func (db *Default) GetSongsByGenre(genreName string, offset uint, limit uint) ([
 	return songs, nil
 }
 
-func (db *Default) GetArtist(artistId uint) (*dao.Artist, error) {
+func (db *Default) GetArtist(conn *pgxpool.Conn, artistId uint) (*dao.Artist, error) {
 	var a dao.Artist
 
-	err := db.conn.QueryRow(context.Background(),
+	err := conn.QueryRow(context.Background(),
 		`
 		SELECT 
 			artists.id,
@@ -870,10 +874,10 @@ func (db *Default) GetArtist(artistId uint) (*dao.Artist, error) {
 	return &a, err
 }
 
-func (db *Default) GetSong(songId uint) (*dao.Song, error) {
+func (db *Default) GetSong(conn *pgxpool.Conn, songId uint) (*dao.Song, error) {
 	var s dao.Song
 
-	err := db.conn.QueryRow(context.Background(),
+	err := conn.QueryRow(context.Background(),
 		`
 		SELECT 
 			songs.id,
@@ -937,10 +941,10 @@ func (db *Default) GetSong(songId uint) (*dao.Song, error) {
 	return &s, err
 }
 
-func (db *Default) GetSongPath(songId uint) *string {
+func (db *Default) GetSongPath(conn *pgxpool.Conn, songId uint) *string {
 	var path string
 
-	err := db.conn.QueryRow(context.Background(),
+	err := conn.QueryRow(context.Background(),
 		`
 		SELECT 
 			path
@@ -959,9 +963,9 @@ func (db *Default) GetSongPath(songId uint) *string {
 
 // Collection getters
 
-func (db *Default) GetGenres() ([]dao.Genre, error) {
+func (db *Default) GetGenres(conn *pgxpool.Conn) ([]dao.Genre, error) {
 
-	rows, err := db.conn.Query(context.Background(),
+	rows, err := conn.Query(context.Background(),
 		`
 		SELECT 
 			genres.id,
@@ -1006,7 +1010,7 @@ func (db *Default) GetGenres() ([]dao.Genre, error) {
 	return genres, nil
 }
 
-func (db *Default) GetAlbums(listType dao.AlbumList2Type, limit uint, offset uint) ([]dao.Album, error) {
+func (db *Default) GetAlbums(conn *pgxpool.Conn, listType dao.AlbumList2Type, limit uint, offset uint) ([]dao.Album, error) {
 
 	var order string
 
@@ -1068,7 +1072,7 @@ func (db *Default) GetAlbums(listType dao.AlbumList2Type, limit uint, offset uin
 
 	`, order)
 
-	rows, err := db.conn.Query(context.Background(), query, limit, offset)
+	rows, err := conn.Query(context.Background(), query, limit, offset)
 	if err != nil {
 		return nil, err
 	}
@@ -1101,9 +1105,9 @@ func (db *Default) GetAlbums(listType dao.AlbumList2Type, limit uint, offset uin
 	return albums, nil
 }
 
-func (db *Default) GetAlbumsByArtist(artistId uint) ([]dao.Album, error) {
+func (db *Default) GetAlbumsByArtist(conn *pgxpool.Conn, artistId uint) ([]dao.Album, error) {
 
-	rows, err := db.conn.Query(context.Background(),
+	rows, err := conn.Query(context.Background(),
 		`
 		SELECT 
 			albums.id,
@@ -1169,9 +1173,9 @@ func (db *Default) GetAlbumsByArtist(artistId uint) ([]dao.Album, error) {
 	return albums, nil
 }
 
-func (db *Default) GetArtists() ([]dao.Artist, error) {
+func (db *Default) GetArtists(conn *pgxpool.Conn) ([]dao.Artist, error) {
 
-	rows, err := db.conn.Query(context.Background(),
+	rows, err := conn.Query(context.Background(),
 		`
 		SELECT 
 			artists.id,
@@ -1219,9 +1223,9 @@ func (db *Default) GetArtists() ([]dao.Artist, error) {
 	return artists, nil
 }
 
-func (db *Default) GetPlaylists() ([]dao.Playlist, error) {
+func (db *Default) GetPlaylists(conn *pgxpool.Conn) ([]dao.Playlist, error) {
 
-	rows, err := db.conn.Query(context.Background(),
+	rows, err := conn.Query(context.Background(),
 		`
 		SELECT 
 			playlists.id,
@@ -1268,11 +1272,11 @@ func (db *Default) GetPlaylists() ([]dao.Playlist, error) {
 
 // Putters
 
-func (db *Default) InsertPlaylist(name string, comment string, public bool) (uint, error) {
+func (db *Default) InsertPlaylist(conn *pgxpool.Conn, name string, comment string, public bool) (uint, error) {
 
 	var playlistID uint
 
-	err := db.conn.QueryRow(context.Background(),
+	err := conn.QueryRow(context.Background(),
 		`
 		INSERT INTO
 			playlists (name, comment, created, changed, public)
@@ -1285,11 +1289,11 @@ func (db *Default) InsertPlaylist(name string, comment string, public bool) (uin
 	return playlistID, err
 }
 
-func (db *Default) UpdatePlaylist(playlistID uint, name string, comment string) (*dao.Playlist, error) {
+func (db *Default) UpdatePlaylist(conn *pgxpool.Conn, playlistID uint, name string, comment string) (*dao.Playlist, error) {
 
 	var playlist dao.Playlist
 
-	err := db.conn.QueryRow(context.Background(),
+	err := conn.QueryRow(context.Background(),
 		`
 		UPDATE
 			playlists
@@ -1318,9 +1322,9 @@ func (db *Default) UpdatePlaylist(playlistID uint, name string, comment string) 
 
 // Deleters
 
-func (db *Default) DeletePlaylist(playlistID uint) error {
+func (db *Default) DeletePlaylist(conn *pgxpool.Conn, playlistID uint) error {
 
-	tx, err := db.conn.Begin(context.Background())
+	tx, err := conn.Begin(context.Background())
 	if err != nil {
 		return err
 	}
@@ -1364,9 +1368,9 @@ func (db *Default) DeletePlaylist(playlistID uint) error {
 
 }
 
-func (db *Default) DeleteMissing(tokens []string, providerID string) error {
+func (db *Default) DeleteMissing(conn *pgxpool.Conn, tokens []string, providerID string) error {
 
-	tx, err := db.conn.Begin(context.Background())
+	tx, err := conn.Begin(context.Background())
 	if err != nil {
 		return err
 	}
@@ -1471,9 +1475,9 @@ func (db *Default) DeleteMissing(tokens []string, providerID string) error {
 	return tx.Commit(context.Background())
 }
 
-func (db *Default) SearchAlbums(query string, count uint, offset uint) ([]dao.Album, error) {
+func (db *Default) SearchAlbums(conn *pgxpool.Conn, query string, count uint, offset uint) ([]dao.Album, error) {
 
-	rows, err := db.conn.Query(context.Background(),
+	rows, err := conn.Query(context.Background(),
 		`
 		SELECT 
 			albums.id,
@@ -1546,9 +1550,9 @@ func (db *Default) SearchAlbums(query string, count uint, offset uint) ([]dao.Al
 	return albums, nil
 }
 
-func (db *Default) SearchArtists(query string, limit uint, offset uint) ([]dao.Artist, error) {
+func (db *Default) SearchArtists(conn *pgxpool.Conn, query string, limit uint, offset uint) ([]dao.Artist, error) {
 
-	rows, err := db.conn.Query(context.Background(),
+	rows, err := conn.Query(context.Background(),
 		`
 		SELECT 
 			artists.id,
@@ -1605,8 +1609,8 @@ func (db *Default) SearchArtists(query string, limit uint, offset uint) ([]dao.A
 	return artists, nil
 }
 
-func (db *Default) SearchSongs(query string, count uint, offset uint) ([]dao.Song, error) {
-	rows, err := db.conn.Query(context.Background(),
+func (db *Default) SearchSongs(conn *pgxpool.Conn, query string, count uint, offset uint) ([]dao.Song, error) {
+	rows, err := conn.Query(context.Background(),
 		`
 		SELECT 
 			songs.id,
@@ -1687,7 +1691,7 @@ func (db *Default) SearchSongs(query string, count uint, offset uint) ([]dao.Son
 	return songs, nil
 }
 
-func (db *Default) GetRandomSongs(size uint, from uint, to uint, genre string) ([]dao.Song, error) {
+func (db *Default) GetRandomSongs(conn *pgxpool.Conn, size uint, from uint, to uint, genre string) ([]dao.Song, error) {
 
 	values := []interface{}{size}
 	wheres := []string{}
@@ -1750,7 +1754,7 @@ func (db *Default) GetRandomSongs(size uint, from uint, to uint, genre string) (
 			$1`,
 		where)
 
-	rows, err := db.conn.Query(
+	rows, err := conn.Query(
 		context.Background(),
 		query,
 		values...)

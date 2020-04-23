@@ -12,7 +12,13 @@ import (
 // NewGetIndexesHandler does http://www.subsonic.org/pages/api.jsp#getIndexes
 func NewGetIndexesHandler(dal *dal.DAL, conf *config.Config) api.Handler {
 	return func(params url.Values) *api.Response {
-		artists, err := dal.Db.GetArtists()
+		conn, err := dal.Db.GetConn()
+		if err != nil {
+			return api.NewErrorReponse(dto.Generic, err.Error())
+		}
+		defer conn.Release()
+
+		artists, err := dal.Db.GetArtists(conn)
 		if err != nil {
 			return api.NewErrorReponse(0, "Error")
 		}

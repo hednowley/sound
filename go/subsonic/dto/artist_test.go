@@ -12,7 +12,11 @@ import (
 
 func TestArtist(t *testing.T) {
 
-	artist, _ := database.NewMock().GetArtist(1)
+	db := database.NewMock()
+	conn, _ := db.GetConn()
+	defer conn.Release()
+
+	artist, _ := db.GetArtist(conn, 1)
 	DTO := NewArtist(artist)
 
 	xml := `
@@ -30,8 +34,11 @@ func TestArtist(t *testing.T) {
 }
 
 func TestArtistWithoutArt(t *testing.T) {
+	db := database.NewMock()
+	conn, _ := db.GetConn()
+	defer conn.Release()
 
-	artist, _ := database.NewMock().GetArtist(6)
+	artist, _ := db.GetArtist(conn, 6)
 	DTO := NewArtist(artist)
 
 	xml := `
@@ -49,8 +56,11 @@ func TestArtistWithoutArt(t *testing.T) {
 }
 
 func TestArtistWithoutAlbums(t *testing.T) {
+	db := database.NewMock()
+	conn, _ := db.GetConn()
+	defer conn.Release()
 
-	artist, _ := database.NewMock().GetArtist(7)
+	artist, _ := db.GetArtist(conn, 7)
 	DTO := NewArtist(artist)
 
 	xml := `
@@ -70,14 +80,16 @@ func TestArtistWithoutAlbums(t *testing.T) {
 func TestArtistWithAlbums(t *testing.T) {
 
 	db := database.NewMock()
+	conn, _ := db.GetConn()
+	defer conn.Release()
 
-	artist, err := db.GetArtist(1)
+	artist, err := db.GetArtist(conn, 1)
 	if err != nil {
 		t.Error(err)
 		return
 	}
 
-	albums, err := db.GetAlbumsByArtist(1)
+	albums, err := db.GetAlbumsByArtist(conn, 1)
 	if err != nil {
 		t.Error(err)
 		return

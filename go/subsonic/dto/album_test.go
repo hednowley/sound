@@ -12,7 +12,11 @@ import (
 
 func TestAlbum(t *testing.T) {
 
-	album, _ := database.NewMock().GetAlbum(1)
+	db := database.NewMock()
+	conn, _ := db.GetConn()
+	defer conn.Release()
+
+	album, _ := db.GetAlbum(conn, 1)
 	DTO := NewAlbum(album)
 
 	xml := `
@@ -42,7 +46,11 @@ func TestAlbum(t *testing.T) {
 
 func TestAlbumWithoutArt(t *testing.T) {
 
-	album, _ := database.NewMock().GetAlbum(2)
+	db := database.NewMock()
+	conn, _ := db.GetConn()
+	defer conn.Release()
+
+	album, _ := db.GetAlbum(conn, 2)
 	DTO := NewAlbum(album)
 
 	xml := `
@@ -71,7 +79,11 @@ func TestAlbumWithoutArt(t *testing.T) {
 
 func TestAlbumWithoutGenre(t *testing.T) {
 
-	album, _ := database.NewMock().GetAlbum(3)
+	db := database.NewMock()
+	conn, _ := db.GetConn()
+	defer conn.Release()
+
+	album, _ := db.GetAlbum(conn, 3)
 	DTO := NewAlbum(album)
 
 	xml := `
@@ -99,7 +111,11 @@ func TestAlbumWithoutGenre(t *testing.T) {
 
 func TestAlbumWithoutYear(t *testing.T) {
 
-	album, _ := database.NewMock().GetAlbum(4)
+	db := database.NewMock()
+	conn, _ := db.GetConn()
+	defer conn.Release()
+
+	album, _ := db.GetAlbum(conn, 4)
 	DTO := NewAlbum(album)
 
 	xml := `
@@ -119,9 +135,11 @@ func TestAlbumWithoutYear(t *testing.T) {
 func TestAlbumWithSongs(t *testing.T) {
 
 	db := database.NewMock()
+	conn, _ := db.GetConn()
+	defer conn.Release()
 
-	album, _ := db.GetAlbum(1)
-	songs, _ := db.GetAlbumSongs(1)
+	album, _ := db.GetAlbum(conn, 1)
+	songs, _ := db.GetAlbumSongs(conn, 1)
 
 	DTO := NewAlbumWithSongs(album, songs)
 

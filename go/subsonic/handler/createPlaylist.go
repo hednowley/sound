@@ -34,7 +34,13 @@ func NewCreatePlaylistHandler(dal *dal.DAL) api.Handler {
 			}
 		}
 
-		id, err := dal.PutPlaylist(id, name, songIdsNum, true)
+		conn, err := dal.Db.GetConn()
+		if err != nil {
+			return api.NewErrorReponse(dto.Generic, err.Error())
+		}
+		defer conn.Release()
+
+		id, err = dal.PutPlaylist(conn, id, name, songIdsNum, true)
 		if err != nil {
 			_, ok := err.(*dao.ErrNotFound)
 			if ok {
@@ -44,12 +50,12 @@ func NewCreatePlaylistHandler(dal *dal.DAL) api.Handler {
 			return api.NewErrorReponse(dto.Generic, err.Error())
 		}
 
-		p, err := dal.Db.GetPlaylist(id)
+		p, err := dal.Db.GetPlaylist(conn, id)
 		if err != nil {
 			return api.NewErrorReponse(dto.Generic, err.Error())
 		}
 
-		songs, err := dal.Db.GetPlaylistSongs(id)
+		songs, err := dal.Db.GetPlaylistSongs(conn, id)
 		if err != nil {
 			return api.NewErrorReponse(dto.Generic, err.Error())
 		}

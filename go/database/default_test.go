@@ -32,9 +32,11 @@ func TestPutArtistByName(t *testing.T) {
 
 func TestPutAlbumByAttributest(t *testing.T) {
 	m := database.NewMock()
+	conn, _ := m.GetConn()
+	defer conn.Release()
 
 	// Put existing album
-	albumID, err := m.PutAlbumByAttributes("album_without_art", "artist_without_art", "")
+	albumID, err := m.PutAlbumByAttributes(conn, "album_without_art", "artist_without_art", "")
 	if err != nil {
 		t.Error(err)
 		return
@@ -45,7 +47,7 @@ func TestPutAlbumByAttributest(t *testing.T) {
 	}
 
 	// Put album with existing name but new artist
-	albumID, err = m.PutAlbumByAttributes("album_without_art", "sdffsd", "")
+	albumID, err = m.PutAlbumByAttributes(conn, "album_without_art", "sdffsd", "")
 	if err != nil {
 		t.Error(err)
 		return
@@ -55,7 +57,7 @@ func TestPutAlbumByAttributest(t *testing.T) {
 		return
 	}
 
-	a, err := m.GetAlbum(albumID)
+	a, err := m.GetAlbum(conn, albumID)
 	if err != nil {
 		t.Error(err)
 		return
@@ -66,12 +68,12 @@ func TestPutAlbumByAttributest(t *testing.T) {
 	}
 
 	// Put album with new name but existing artist
-	albumID, err = m.PutAlbumByAttributes("ghghddh", "artist_2", "")
+	albumID, err = m.PutAlbumByAttributes(conn, "ghghddh", "artist_2", "")
 	if albumID != 10002 {
 		t.Error()
 		return
 	}
-	a, err = m.GetAlbum(albumID)
+	a, err = m.GetAlbum(conn, albumID)
 	if err != nil {
 		t.Error(err)
 		return
@@ -82,12 +84,12 @@ func TestPutAlbumByAttributest(t *testing.T) {
 	}
 
 	// Put new album and artist
-	albumID, err = m.PutAlbumByAttributes("sdfgyifs", "sduiru", "")
+	albumID, err = m.PutAlbumByAttributes(conn, "sdfgyifs", "sduiru", "")
 	if albumID != 10003 {
 		t.Error()
 		return
 	}
-	a, err = m.GetAlbum(albumID)
+	a, err = m.GetAlbum(conn, albumID)
 	if err != nil {
 		t.Error(err)
 		return
@@ -98,33 +100,33 @@ func TestPutAlbumByAttributest(t *testing.T) {
 	}
 
 	// Put existing album with new disambiguator
-	albumID, err = m.PutAlbumByAttributes("album_2", "artist_1", "d1")
+	albumID, err = m.PutAlbumByAttributes(conn, "album_2", "artist_1", "d1")
 	if albumID != 10004 {
 		t.Error()
 		return
 	}
 
 	// Put same album again
-	albumID, err = m.PutAlbumByAttributes("album_2", "artist_1", "d1")
+	albumID, err = m.PutAlbumByAttributes(conn, "album_2", "artist_1", "d1")
 	if albumID != 10004 {
 		t.Error()
 		return
 	}
 
 	// Put same album again with another new disambiguator
-	albumID, err = m.PutAlbumByAttributes("album_2", "artist_1", "d2")
+	albumID, err = m.PutAlbumByAttributes(conn, "album_2", "artist_1", "d2")
 	if albumID != 10005 {
 		t.Error()
 		return
 	}
 
 	// Put album with same artist but different capitalisation
-	albumID, err = m.PutAlbumByAttributes("album_3", "ArtisT_1", "")
+	albumID, err = m.PutAlbumByAttributes(conn, "album_3", "ArtisT_1", "")
 	if albumID != 10006 {
 		t.Error()
 		return
 	}
-	a, err = m.GetAlbum(albumID)
+	a, err = m.GetAlbum(conn, albumID)
 	if err != nil {
 		t.Error(err)
 		return
@@ -137,15 +139,17 @@ func TestPutAlbumByAttributest(t *testing.T) {
 
 func TestPutGenreByName(t *testing.T) {
 	m := database.NewMock()
+	conn, _ := m.GetConn()
+	defer conn.Release()
 
 	// Get existing genre
-	g, err := m.PutGenreByName("genre_2")
+	g, err := m.PutGenreByName(conn, "genre_2")
 	if err != nil || g != 2 {
 		t.Error("Wrong ID")
 	}
 
 	// Get new genre
-	g, err = m.PutGenreByName("crustpunk")
+	g, err = m.PutGenreByName(conn, "crustpunk")
 	if err != nil || g != 10001 {
 		t.Error("Wrong ID")
 	}

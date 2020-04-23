@@ -45,7 +45,13 @@ func NewUpdatePlaylistHandler(dal *dal.DAL) api.Handler {
 			}
 		}
 
-		err := dal.UpdatePlaylist(id, name, comment, public, addedSongs, removedSongs)
+		conn, err := dal.Db.GetConn()
+		if err != nil {
+			return api.NewErrorReponse(dto.Generic, err.Error())
+		}
+		defer conn.Release()
+
+		err = dal.UpdatePlaylist(conn, id, name, comment, public, addedSongs, removedSongs)
 		if err != nil {
 			api.NewErrorReponse(0, err.Error())
 		}

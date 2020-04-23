@@ -24,7 +24,13 @@ func NewGetSongsByGenreHandler(dal *dal.DAL) api.Handler {
 		offsetParam := params.Get("offset")
 		offset := util.ParseUint(offsetParam, 0)
 
-		songs, err := dal.Db.GetSongsByGenre(genre, offset, count)
+		conn, err := dal.Db.GetConn()
+		if err != nil {
+			return api.NewErrorReponse(dto.Generic, err.Error())
+		}
+		defer conn.Release()
+
+		songs, err := dal.Db.GetSongsByGenre(conn, genre, offset, count)
 		if err != nil {
 			return api.NewErrorReponse(dto.Generic, err.Error())
 		}

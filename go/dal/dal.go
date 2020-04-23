@@ -14,6 +14,7 @@ import (
 	"github.com/hednowley/sound/database"
 	"github.com/hednowley/sound/entities"
 	"github.com/hednowley/sound/hasher"
+	"github.com/jackc/pgx/v4/pgxpool"
 )
 
 // DAL (data access layer) allows querying and writing application data.
@@ -30,22 +31,22 @@ func NewDAL(config *config.Config, database *database.Default) *DAL {
 	}
 }
 
-func (dal *DAL) PutSong(fileInfo *entities.FileInfo, token string, providerID string, songId *uint) error {
+func (dal *DAL) PutSong(conn *pgxpool.Conn, fileInfo *entities.FileInfo, token string, providerID string, songId *uint) error {
 
-	genreID, err := dal.Db.PutGenreByName(fileInfo.Genre)
+	genreID, err := dal.Db.PutGenreByName(conn, fileInfo.Genre)
 	if err != nil {
 		return err
 	}
 
 	var art *dao.Art
 	if fileInfo.CoverArt != nil {
-		art, err = dal.PutArt(fileInfo.CoverArt)
+		art, err = dal.PutArt(conn, fileInfo.CoverArt)
 		if err != nil {
 			return err
 		}
 	}
 
-	albumID, err := dal.Db.PutAlbumByAttributes(
+	albumID, err := dal.Db.PutAlbumByAttributes(conn,
 		fileInfo.Album, fileInfo.AlbumArtist, fileInfo.Disambiguator)
 	if err != nil {
 		return err
@@ -58,6 +59,7 @@ func (dal *DAL) PutSong(fileInfo *entities.FileInfo, token string, providerID st
 
 	if songId == nil {
 		_, err = dal.Db.InsertSong(
+			conn,
 			fileInfo.Artist,
 			albumID,
 			fileInfo.Path,
@@ -78,6 +80,7 @@ func (dal *DAL) PutSong(fileInfo *entities.FileInfo, token string, providerID st
 	}
 
 	return dal.Db.UpdateSong(
+		conn,
 		*songId,
 		fileInfo.Artist,
 		albumID,
@@ -97,9 +100,9 @@ func (dal *DAL) PutSong(fileInfo *entities.FileInfo, token string, providerID st
 	)
 }
 
-func (dal *DAL) PutArt(art *entities.CoverArtData) (*dao.Art, error) {
+func (dal *DAL) PutArt(conn *pgxpool.Conn, art *entities.CoverArtData) (*dao.Art, error) {
 	hash := hasher.GetHash(art.Raw)
-	a := dal.Db.GetArtFromHash(hash)
+	a := dal.Db.GetArtFromHash(conn, hash)
 	if a != nil {
 		// Artwork already exists
 		return a, nil
@@ -114,22 +117,22 @@ func (dal *DAL) PutArt(art *entities.CoverArtData) (*dao.Art, error) {
 	}
 
 	// Save the record with the new path
-	return dal.Db.InsertArt(filePath, hash)
+	return dal.Db.InsertArt(conn, filePath, hash)
 }
 
-func (dal *DAL) PutPlaylist(id uint, name string, songIDs []uint, public bool) (uint, error) {
+func (dal *DAL) PutPlaylist(conn *pgxpool.Conn, id uint, name string, songIDs []uint, public bool) (uint, error) {
 
 	now := time.Now()
 	var playlistID uint
 
 	if id == 0 {
-		inserted, err := dal.Db.InsertPlaylist(name, "", public)
+		inserted, err := dal.Db.InsertPlaylist(conn, name, "", public)
 		if err != nil {
 			return 0, err
 		}
 		playlistID = inserted
 	} else {
-		playlist, err := dal.Db.GetPlaylist(id)
+		playlist, err := dal.Db.GetPlaylist(conn, id)
 		if err != nil {
 			return 0, err
 		}
@@ -143,7 +146,7 @@ func (dal *DAL) PutPlaylist(id uint, name string, songIDs []uint, public bool) (
 			nameUpdate = name
 		}
 
-		playlist, err = dal.Db.UpdatePlaylist(playlist.ID, nameUpdate, playlist.Comment)
+		playlist, err = dal.Db.UpdatePlaylist(conn, playlist.ID, nameUpdate, playlist.Comment)
 		if err != nil {
 			return 0, err
 		}
@@ -151,7 +154,7 @@ func (dal *DAL) PutPlaylist(id uint, name string, songIDs []uint, public bool) (
 		playlistID = playlist.ID
 	}
 
-	err := dal.Db.ReplacePlaylistEntries(playlistID, songIDs)
+	err := dal.Db.ReplacePlaylistEntries(conn, playlistID, songIDs)
 	if err != nil {
 		return 0, err
 	}
@@ -160,6 +163,7 @@ func (dal *DAL) PutPlaylist(id uint, name string, songIDs []uint, public bool) (
 }
 
 func (dal *DAL) UpdatePlaylist(
+	conn *pgxpool.Conn,
 	playlistID uint,
 	name string,
 	comment string,
@@ -168,7 +172,7 @@ func (dal *DAL) UpdatePlaylist(
 	removedSongs []uint,
 ) error {
 
-	p, err := dal.Db.GetPlaylist(playlistID)
+	p, err := dal.Db.GetPlaylist(conn, playlistID)
 	if err != nil {
 		return err
 	}
@@ -176,7 +180,7 @@ func (dal *DAL) UpdatePlaylist(
 		return &dao.ErrNotFound{}
 	}
 
-	songIDs, err := dal.Db.GetPlaylistSongIds(playlistID)
+	songIDs, err := dal.Db.GetPlaylistSongIds(conn, playlistID)
 	if err != nil {
 		return err
 	}
@@ -203,8 +207,8 @@ func (dal *DAL) UpdatePlaylist(
 		songIDs = append(songIDs, songID)
 	}
 
-	dal.Db.ReplacePlaylistEntries(playlistID, songIDs)
-	dal.Db.UpdatePlaylist(playlistID, nameUpdate, commentUpdate)
+	dal.Db.ReplacePlaylistEntries(conn, playlistID, songIDs)
+	dal.Db.UpdatePlaylist(conn, playlistID, nameUpdate, commentUpdate)
 	return nil
 }
 
