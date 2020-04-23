@@ -31,11 +31,13 @@ func NewDefault(config *config.Config) (*Default, error) {
 	if err != nil {
 		return nil, err
 	}
+	defer db.Close()
 
 	driver, err := postgres.WithInstance(db, &postgres.Config{})
 	if err != nil {
 		return nil, err
 	}
+	defer driver.Close()
 
 	m, err := migrate.NewWithDatabaseInstance(
 		"file://"+config.MigrationsPath,
@@ -47,15 +49,9 @@ func NewDefault(config *config.Config) (*Default, error) {
 	m.Steps(2)
 
 	pool, err := pgxpool.Connect(context.Background(), config.Db)
-
 	database := Default{pool: pool}
 
 	return &database, err
-}
-
-// Close the database.
-func (db *Default) Close() {
-	db.Close()
 }
 
 func (db *Default) GetConn() (*pgxpool.Conn, error) {
@@ -75,10 +71,10 @@ func (db *Default) putArtistByName(conn *pgxpool.Conn, name string) (uint, error
 		FROM
 			artists
 		WHERE
-			name ILIKE $1
+			lower(name) = $1
 		LIMIT
 			1
-	`, name).Scan(&id)
+	`, strings.ToLower(name)).Scan(&id)
 
 	if err == nil {
 		return id, nil
@@ -153,10 +149,10 @@ func (db *Default) PutGenreByName(conn *pgxpool.Conn, name string) (uint, error)
 		FROM
 			genres
 		WHERE
-			name ILIKE $1
+			lower(name) = $1
 		LIMIT
 			1
-	`, name).Scan(&genreID)
+	`, strings.ToLower(name)).Scan(&genreID)
 
 	if err == nil {
 		return genreID, nil
@@ -783,7 +779,7 @@ func (db *Default) GetSongsByGenre(conn *pgxpool.Conn, genreName string, offset 
 		ON
 			albums.id = songs.album_id
 		WHERE
-			genres.name ILIKE $1
+			lower(genres.name) = $1
 		ORDER BY
 			songs.title ASC
 		OFFSET
@@ -791,7 +787,7 @@ func (db *Default) GetSongsByGenre(conn *pgxpool.Conn, genreName string, offset 
 		LIMIT
 			$3
 	`,
-		genreName, offset, limit)
+		strings.ToLower(genreName), offset, limit)
 	if err != nil {
 		return nil, err
 	}
@@ -1707,8 +1703,8 @@ func (db *Default) GetRandomSongs(conn *pgxpool.Conn, size uint, from uint, to u
 	}
 
 	if len(genre) > 0 {
-		values = append(values, genre)
-		wheres = append(wheres, fmt.Sprintf("genres.name ILIKE $%v", len(values)))
+		values = append(values, strings.ToLower(genre))
+		wheres = append(wheres, fmt.Sprintf("lower(genres.name) = $%v", len(values)))
 	}
 
 	var where string

@@ -108,16 +108,17 @@ func (dal *DAL) PutArt(conn *pgxpool.Conn, art *entities.CoverArtData) (*dao.Art
 		return a, nil
 	}
 
-	filePath := fmt.Sprintf("%v.%v", uuid.New().String(), art.Extension)
+	filename := fmt.Sprintf("%v.%v", uuid.New().String(), art.Extension)
+	filepath := path.Join(dal.artDir, filename)
 
-	err := ioutil.WriteFile(path.Join(dal.artDir, filePath), art.Raw, 0644)
+	err := ioutil.WriteFile(filepath, art.Raw, 0644)
 	if err != nil {
-		seelog.Errorf("Error saving artwork %v", filePath)
+		seelog.Errorf("Error saving artwork %v", filepath)
 		return nil, err
 	}
 
 	// Save the record with the new path
-	return dal.Db.InsertArt(conn, filePath, hash)
+	return dal.Db.InsertArt(conn, filename, hash)
 }
 
 func (dal *DAL) PutPlaylist(conn *pgxpool.Conn, id uint, name string, songIDs []uint, public bool) (uint, error) {
@@ -215,7 +216,7 @@ func (dal *DAL) UpdatePlaylist(
 // GetArtPath checks that an artwork file exists for the given ID and returns
 // the full path if so.
 func (dal *DAL) GetArtPath(id string) (string, error) {
-	p := path.Join(dal.artDir, "art", id)
+	p := path.Join(dal.artDir, id)
 	_, err := os.Stat(p)
 	if err != nil {
 		return "", err
