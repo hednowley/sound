@@ -15,6 +15,7 @@ type AlbumSummary struct {
 	Created  *time.Time `json:"created"`
 	Year     int        `json:"year,omitempty"`
 	Genre    string     `json:"genre,omitempty"`
+	Duration int        `json:"duration"`
 }
 
 func NewAlbumSummary(album *dao.Album) *AlbumSummary {
@@ -27,5 +28,6 @@ func NewAlbumSummary(album *dao.Album) *AlbumSummary {
 		Created:  album.Created,
 		Genre:    album.GetGenre(),
 		Year:     album.GetYear(),
+		Duration: album.Duration,
 	}
 }
