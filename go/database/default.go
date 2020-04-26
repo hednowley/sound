@@ -49,9 +49,11 @@ func NewDefault(config *config.Config) (*Default, error) {
 	m.Steps(2)
 
 	pool, err := pgxpool.Connect(context.Background(), config.Db)
-	database := Default{pool: pool}
+	if err != nil {
+		return nil, err
+	}
 
-	return &database, err
+	return &Default{pool: pool}, nil
 }
 
 func (db *Default) GetConn() (*pgxpool.Conn, error) {

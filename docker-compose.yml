@@ -3,7 +3,7 @@ version: "3"
 services:
   # Database
   postgres:
-    image: postgres:11
+    image: postgres:9.3.22
     environment:
       - POSTGRES_USER=sound
       - POSTGRES_PASSWORD=sound

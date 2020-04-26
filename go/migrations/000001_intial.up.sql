@@ -17,21 +17,22 @@ CREATE TABLE "albums"
     "created" TIMESTAMPTZ NOT NULL,
     "disambiguator" TEXT NOT NULL,
     "starred" BOOL NOT NULL,
-    PRIMARY KEY ("id"),
-    CONSTRAINT "album_unique" UNIQUE ("artist_id", "name", "disambiguator")
+    PRIMARY KEY ("id")
 );
 
-CREATE INDEX "albums_artist_id" ON "albums"("artist_id");
+ALTER TABLE "albums" ADD CONSTRAINT "album_unique" UNIQUE ("artist_id", "name", "disambiguator");
 
 CREATE TABLE "arts"
 (
     "id" SERIAL,
     "hash" TEXT NOT NULL,
     "path" TEXT NOT NULL,
-    PRIMARY KEY ("id"),
-    CONSTRAINT "art_hash_unique" UNIQUE ("hash"),
-    CONSTRAINT "art_path_unique" UNIQUE ("path")
+    PRIMARY KEY ("id")
 );
+
+ALTER TABLE "arts" ADD CONSTRAINT "art_hash_unique" UNIQUE ("hash");
+ALTER TABLE "arts" ADD CONSTRAINT "art_path_unique" UNIQUE ("path");
+
 
 CREATE TABLE "genres"
 (
@@ -84,8 +85,8 @@ CREATE TABLE "playlist_entries"
     "playlist_id" INTEGER NOT NULL REFERENCES "playlists"("id"),
     "song_id" INTEGER NOT NULL REFERENCES "songs"("id"), 
     "index" INTEGER NOT NULL,
-    PRIMARY KEY ("id"),
-    CONSTRAINT "playlist_entry_unique" UNIQUE ("playlist_id", "index")
+    PRIMARY KEY ("id")
 );
 
+ALTER TABLE "playlist_entries" ADD CONSTRAINT "playlist_entry_unique" UNIQUE ("playlist_id", "index");
 CREATE INDEX "playlist_entries_playlist_id" ON "playlist_entries"("playlist_id");

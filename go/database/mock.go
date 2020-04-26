@@ -34,7 +34,6 @@ func NewMock() *Default {
 	fixtures, err := testfixtures.New(
 		testfixtures.Database(db),
 		testfixtures.Dialect("postgres"),
-		testfixtures.UseAlterConstraint(),
 		testfixtures.Directory(dataDir),
 		testfixtures.ResetSequencesTo(10000),
 	)
