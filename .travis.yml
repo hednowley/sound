@@ -1,6 +1,6 @@
 addons:
   ssh_known_hosts: hednowley.synology.me:169
-  postgresql: "9.3.22"
+  postgresql: "9.3"
 
 services:
   - postgresql
