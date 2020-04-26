@@ -20,7 +20,7 @@ before_deploy:
   - chmod 600 /tmp/deploy_rsa
   - ssh-add /tmp/deploy_rsa
 
-matrix:
+jobs:
   include:
     - language: go
       go:
@@ -39,13 +39,11 @@ matrix:
 
       deploy:
         provider: script
-        skip_cleanup: true
+        cleanup: false
         script: ./linux_dsm_build.sh &&
           ssh admin@hednowley.synology.me -p 169 "if ( sudo status sound | grep start ); then sudo stop sound; fi" &&
           scp -P 169 ./sound  admin@hednowley.synology.me:/volume1/other/soundDir/ &&
           ssh admin@hednowley.synology.me -p 169 "sudo start sound"
-      on:
-        branch: master
 
     - language: node_js
       node_js:
@@ -59,5 +57,5 @@ matrix:
 
       deploy:
         provider: script
-        skip_cleanup: true
+        cleanup: false
         script: yarn run build:prod && scp -P 169 ./dist/*  admin@hednowley.synology.me:/volume1/other/soundDir/static
