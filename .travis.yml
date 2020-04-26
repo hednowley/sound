@@ -33,7 +33,7 @@ jobs:
 
       deploy:
         provider: script
-        cleanup: false
+        skip_cleanup: true
         script: ./linux_dsm_build.sh &&
           ssh admin@hednowley.synology.me -p 169 "if ( sudo status sound | grep start ); then sudo stop sound; fi" &&
           scp -P 169 ./sound  admin@hednowley.synology.me:/volume1/other/soundDir/ &&
@@ -51,5 +51,5 @@ jobs:
 
       deploy:
         provider: script
-        cleanup: false
+        skip_cleanup: true
         script: yarn run build:prod && scp -P 169 ./dist/*  admin@hednowley.synology.me:/volume1/other/soundDir/static
