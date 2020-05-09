@@ -10,7 +10,7 @@ import (
 type Config struct {
 	Port                     int
 	ArtPath                  string `yaml:"art path"`
-	ArtSizes                 []uint
+	ArtSizes                 []int  `yaml:"art sizes"`
 	Db                       string
 	MigrationsPath           string   `yaml:"migrations path"`
 	LogConfig                string   `yaml:"log config"`

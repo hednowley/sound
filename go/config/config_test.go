@@ -20,6 +20,10 @@ func TestConfig(t *testing.T) {
 		t.Error()
 	}
 
+	if len(c.ArtSizes) != 2 {
+		t.Error()
+	}
+
 	if c.Port != 3684 ||
 		c.Secret != "changeme" ||
 		c.ArtPath != "~/temp/art" ||
