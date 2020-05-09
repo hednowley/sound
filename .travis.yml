@@ -18,7 +18,7 @@ jobs:
   include:
     - language: go
       go:
-        - 1.12.x
+        - 1.14.x
 
       before_install:
         - cd go
