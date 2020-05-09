@@ -5,6 +5,8 @@ import (
 	"io/ioutil"
 	"os"
 	"path"
+	"path/filepath"
+	"strings"
 	"time"
 
 	"github.com/cihub/seelog"
@@ -14,20 +16,23 @@ import (
 	"github.com/hednowley/sound/database"
 	"github.com/hednowley/sound/entities"
 	"github.com/hednowley/sound/hasher"
+	"github.com/hednowley/sound/services"
 	"github.com/jackc/pgx/v4/pgxpool"
 )
 
 // DAL (data access layer) allows querying and writing application data.
 type DAL struct {
-	Db     *database.Default
-	artDir string
+	Db       *database.Default
+	artDir   string
+	artSizes []uint
 }
 
 // NewDAL constructs a new DAL.
 func NewDAL(config *config.Config, database *database.Default) *DAL {
 	return &DAL{
-		Db:     database,
-		artDir: config.ArtPath,
+		Db:       database,
+		artDir:   config.ArtPath,
+		artSizes: config.ArtSizes,
 	}
 }
 
@@ -100,25 +105,63 @@ func (dal *DAL) PutSong(conn *pgxpool.Conn, fileInfo *entities.FileInfo, token s
 	)
 }
 
+// GetArtPath checks that an artwork file exists for the given ID and returns
+// the full path if so.
+func (dal *DAL) GetArtPath(filename string, size uint) string {
+
+	if size != 0 {
+		ext := filepath.Ext(filename)
+		return filepath.Join(
+			dal.artDir,
+			fmt.Sprintf("%v_%v.jpg", strings.TrimSuffix(filename, ext), size))
+	}
+
+	return path.Join(dal.artDir, filename)
+}
+
 func (dal *DAL) PutArt(conn *pgxpool.Conn, art *entities.CoverArtData) (*dao.Art, error) {
 	hash := hasher.GetHash(art.Raw)
 	a := dal.Db.GetArtFromHash(conn, hash)
-	if a != nil {
-		// Artwork already exists
-		return a, nil
+
+	var filename string
+	var artPath string
+
+	if a == nil {
+		// Save art to disk
+		filename = fmt.Sprintf("%v.%v", uuid.New().String(), art.Extension)
+		artPath = dal.GetArtPath(filename, 0)
+
+		err := ioutil.WriteFile(artPath, art.Raw, 0644)
+		if err != nil {
+			seelog.Errorf("Error saving artwork %v", artPath)
+			return nil, err
+		}
+
+		// Save the record with the new path
+		a, err = dal.Db.InsertArt(conn, filename, hash)
+		if err != nil {
+			return a, err
+		}
+	} else {
+		filename = a.Path
+		artPath = dal.GetArtPath(a.Path, 0)
 	}
 
-	filename := fmt.Sprintf("%v.%v", uuid.New().String(), art.Extension)
-	filepath := path.Join(dal.artDir, filename)
+	// Make resized versions of the art
+	for _, size := range dal.artSizes {
+		resized := dal.GetArtPath(filename, size)
 
-	err := ioutil.WriteFile(filepath, art.Raw, 0644)
-	if err != nil {
-		seelog.Errorf("Error saving artwork %v", filepath)
-		return nil, err
+		// Check if resized file already exists on disk
+		_, err := os.Stat(resized)
+		if err != nil {
+			continue
+		}
+
+		// Ignore resizing errors
+		services.Resize(artPath, resized, size)
 	}
 
-	// Save the record with the new path
-	return dal.Db.InsertArt(conn, filename, hash)
+	return a, nil
 }
 
 func (dal *DAL) PutPlaylist(conn *pgxpool.Conn, id uint, name string, songIDs []uint, public bool) (uint, error) {
@@ -211,17 +254,6 @@ func (dal *DAL) UpdatePlaylist(
 	dal.Db.ReplacePlaylistEntries(conn, playlistID, songIDs)
 	dal.Db.UpdatePlaylist(conn, playlistID, nameUpdate, commentUpdate)
 	return nil
-}
-
-// GetArtPath checks that an artwork file exists for the given ID and returns
-// the full path if so.
-func (dal *DAL) GetArtPath(id string) (string, error) {
-	p := path.Join(dal.artDir, id)
-	_, err := os.Stat(p)
-	if err != nil {
-		return "", err
-	}
-	return p, nil
 }
 
 func (dal *DAL) StarSong(songID uint, star bool) error {
