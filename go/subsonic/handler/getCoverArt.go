@@ -40,7 +40,7 @@ func NewGetCoverArtHandler(dal *dal.DAL) api.BinaryHandler {
 
 		dir, filename := filepath.Split(path)
 		ext := filepath.Ext(filename)
-		resized := filepath.Join(dir, fmt.Sprintf("%v_%v%v", strings.TrimSuffix(filename, ext), size, ext))
+		resized := filepath.Join(dir, fmt.Sprintf("%v_%v.jpg", strings.TrimSuffix(filename, ext), size))
 		_, err = os.Stat(resized)
 		if os.IsNotExist(err) {
 			seelog.Tracef("Resizing %v to %v", id, size)
