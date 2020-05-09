@@ -25,8 +25,9 @@ jobs:
         - go get github.com/mattn/goveralls
 
       before_script:
-        - psql -c "create user sound with password 'sound';" -U postgres
-        - psql -c "create database sound_test owner sound;" -U postgres
+        - psql -c "CREATE USER sound WITH PASSWORD 'sound';" -U postgres
+        - psql -c "ALTER USER sound WITH SUPERUSER; -U postgres
+        - psql -c "CREATE DATABASE sound_test OWNER sound;" -U postgres
 
       script:
         - "$GOPATH/bin/goveralls -service=travis-ci"
