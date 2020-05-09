@@ -153,7 +153,7 @@ func (dal *DAL) PutArt(conn *pgxpool.Conn, art *entities.CoverArtData) (*dao.Art
 
 		// Check if resized file already exists on disk
 		_, err := os.Stat(resized)
-		if err != nil {
+		if err == nil {
 			continue
 		}
 
