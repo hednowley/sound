@@ -3,7 +3,6 @@ package handler
 import (
 	"net/http"
 	"net/url"
-	"os"
 
 	"github.com/hednowley/sound/dal"
 	"github.com/hednowley/sound/subsonic/api"
@@ -23,14 +22,12 @@ func NewGetCoverArtHandler(dal *dal.DAL) api.BinaryHandler {
 		sizeParam := params.Get("size")
 		size := util.ParseUint(sizeParam, 0)
 
-		path := dal.GetArtPath(id, size)
-
-		_, err := os.Stat(path)
-		if err != nil {
-			return api.NewErrorReponse(dto.Generic, err.Error())
+		path := dal.GetArt(id, size)
+		if path == nil {
+			return api.NewErrorReponse(dto.Generic, "Art is not available")
 		}
 
-		http.ServeFile(*w, r, path)
+		http.ServeFile(*w, r, *path)
 		return nil
 	}
 }

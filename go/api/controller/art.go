@@ -2,7 +2,6 @@ package controller
 
 import (
 	"net/http"
-	"os"
 
 	"github.com/hednowley/sound/api/api"
 	"github.com/hednowley/sound/config"
@@ -21,14 +20,12 @@ func NewArtController(dal *dal.DAL) *api.BinaryController {
 		sizeParam := params.Get("size")
 		size := util.ParseUint(sizeParam, 0)
 
-		path := dal.GetArtPath(id, size)
-
-		_, err := os.Stat(path)
-		if err != nil {
-			return api.NewErrorReponse(err.Error())
+		path := dal.GetArt(id, size)
+		if path == nil {
+			return api.NewErrorReponse("Art is not available")
 		}
 
-		http.ServeFile(w, r, path)
+		http.ServeFile(w, r, *path)
 		return nil
 	}
 

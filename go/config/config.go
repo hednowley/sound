@@ -11,6 +11,7 @@ type Config struct {
 	Port                     int
 	ArtPath                  string `yaml:"art path"`
 	ArtSizes                 []uint `yaml:"art sizes"`
+	ResizeArt                bool   `yaml:"resize art"`
 	Db                       string
 	MigrationsPath           string   `yaml:"migrations path"`
 	LogConfig                string   `yaml:"log config"`

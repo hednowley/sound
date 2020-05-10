@@ -22,17 +22,19 @@ import (
 
 // DAL (data access layer) allows querying and writing application data.
 type DAL struct {
-	Db       *database.Default
-	artDir   string
-	artSizes []uint
+	Db        *database.Default
+	artDir    string
+	artSizes  []uint
+	resizeArt bool
 }
 
 // NewDAL constructs a new DAL.
 func NewDAL(config *config.Config, database *database.Default) *DAL {
 	return &DAL{
-		Db:       database,
-		artDir:   config.ArtPath,
-		artSizes: config.ArtSizes,
+		Db:        database,
+		artDir:    config.ArtPath,
+		artSizes:  config.ArtSizes,
+		resizeArt: config.ResizeArt,
 	}
 }
 
@@ -105,8 +107,9 @@ func (dal *DAL) PutSong(conn *pgxpool.Conn, fileInfo *entities.FileInfo, token s
 	)
 }
 
-// GetArtPath checks that an artwork file exists for the given ID and returns
-// the full path if so.
+// GetArtPath gets the full path of the artwork file with the given filename
+// scaled to the given size (where 0 means unscaled).
+// This file may or may not exist!
 func (dal *DAL) GetArtPath(filename string, size uint) string {
 
 	if size != 0 {
@@ -117,6 +120,60 @@ func (dal *DAL) GetArtPath(filename string, size uint) string {
 	}
 
 	return path.Join(dal.artDir, filename)
+}
+
+// GetArt returns the path of the art file.
+// Depending on the configuration, this file may be scaled to the requested
+// dimension.
+func (dal *DAL) GetArt(filename string, size uint) *string {
+
+	scaled := dal.GetArtPath(filename, size)
+	_, err := os.Stat(scaled)
+	if err == nil {
+		// Artwork exists at exactly the requested size 🎉
+		return &scaled
+	}
+
+	if size == 0 {
+		// We couldn't find the original artwork even though it was asked for 🤷‍♂️
+		return nil
+	}
+
+	if dal.resizeArt {
+		p := dal.GetArtPath(filename, size)
+
+		// Resize on demand
+		err = services.Resize(dal.GetArtPath(filename, 0), p, size)
+		if err == nil {
+			return &p
+		}
+
+		seelog.Errorf("Error resizing %v", p)
+		return nil
+	}
+
+	closest := uint(0)
+	for _, s := range dal.artSizes {
+		if s >= size && (closest == 0 || closest > s) {
+			closest = s
+		}
+	}
+
+	p := dal.GetArtPath(filename, closest)
+	_, err = os.Stat(p)
+	if err == nil {
+		return &p
+	}
+
+	// Make a scaled copy of the image as this size is inside our presets
+	err = services.Resize(dal.GetArtPath(filename, 0), p, closest)
+	if err == nil {
+		return &p
+	}
+
+	seelog.Errorf("Error resizing %v", p)
+	return nil
+
 }
 
 func (dal *DAL) PutArt(conn *pgxpool.Conn, art *entities.CoverArtData) (*dao.Art, error) {
