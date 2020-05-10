@@ -158,7 +158,10 @@ func (dal *DAL) PutArt(conn *pgxpool.Conn, art *entities.CoverArtData) (*dao.Art
 		}
 
 		// Ignore resizing errors
-		services.Resize(artPath, resized, size)
+		err = services.Resize(artPath, resized, size)
+		if err != nil {
+			seelog.Errorf("Error resizing %v", resized)
+		}
 	}
 
 	return a, nil
