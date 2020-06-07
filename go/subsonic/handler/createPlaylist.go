@@ -40,7 +40,7 @@ func NewCreatePlaylistHandler(dal *dal.DAL) api.Handler {
 		}
 		defer conn.Release()
 
-		id, err = dal.PutPlaylist(conn, id, name, context.User.Username, songIdsNum, true)
+		id, err = dal.PutPlaylist(conn, id, name, context.User.Username, songIdsNum, false)
 		if err != nil {
 			_, ok := err.(*dao.ErrNotFound)
 			if ok {

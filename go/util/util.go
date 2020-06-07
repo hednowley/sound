@@ -59,14 +59,13 @@ func ParseUint(param string, defaultValue uint) uint {
 // then a nil pointer is returned instead.
 func ParseBool(param string) *bool {
 
-	var b bool
 	param = strings.ToLower(param)
 	if param == "true" || param == "1" {
-		b = true
+		b := true
 		return &b
 	}
 	if param == "false" || param == "0" {
-		b = false
+		b := false
 		return &b
 	}
 
