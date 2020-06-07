@@ -26,8 +26,8 @@ func NewGetPlaylistsHandler(dal *dal.DAL) api.Handler {
 		// Pretend that all accessible playlists are owned by the requestor.
 		// Allows anyone to edit a public playlist (against the intention of
 		// the Subsonic API).
-		for _, p := range playlists {
-			p.Owner = context.User.Username
+		for i := range playlists {
+			playlists[i].Owner = context.User.Username
 		}
 
 		return api.NewSuccessfulReponse(dto.NewPlaylistCollection(playlists))
