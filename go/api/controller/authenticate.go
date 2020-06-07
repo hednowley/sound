@@ -18,7 +18,7 @@ func NewAuthenticateController(authenticator *services.Authenticator) *api.Contr
 
 		run := func(_ *config.User, w http.ResponseWriter, r *http.Request) *api.Response {
 
-			if !authenticator.AuthenticateFromPassword(credentials.Username, credentials.Password) {
+			if authenticator.AuthenticateFromPassword(credentials.Username, credentials.Password) == nil {
 				return api.NewErrorReponse("Bad credentials.")
 			}
 

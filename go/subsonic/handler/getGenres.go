@@ -10,7 +10,7 @@ import (
 
 // NewGetGenresHandler does http://www.subsonic.org/pages/api.jsp#getGenres
 func NewGetGenresHandler(dal *dal.DAL) api.Handler {
-	return func(params url.Values) *api.Response {
+	return func(params url.Values, _ *api.HandlerContext) *api.Response {
 		conn, err := dal.Db.GetConn()
 		if err != nil {
 			return api.NewErrorReponse(dto.Generic, err.Error())

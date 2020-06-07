@@ -11,7 +11,7 @@ import (
 
 func NewGetSongsByGenreHandler(dal *dal.DAL) api.Handler {
 
-	return func(params url.Values) *api.Response {
+	return func(params url.Values, _ *api.HandlerContext) *api.Response {
 
 		genre := params.Get("genre")
 		if len(genre) == 0 {

@@ -13,7 +13,7 @@ import (
 // NewUpdatePlaylistHandler does http://www.subsonic.org/pages/api.jsp#updatePlaylist
 func NewUpdatePlaylistHandler(dal *dal.DAL) api.Handler {
 
-	return func(params url.Values) *api.Response {
+	return func(params url.Values, context *api.HandlerContext) *api.Response {
 
 		idParam := params.Get("playlistId")
 		id := util.ParseUint(idParam, 0)
@@ -51,7 +51,7 @@ func NewUpdatePlaylistHandler(dal *dal.DAL) api.Handler {
 		}
 		defer conn.Release()
 
-		err = dal.UpdatePlaylist(conn, id, name, comment, public, addedSongs, removedSongs)
+		err = dal.UpdatePlaylist(conn, id, name, comment, public, addedSongs, removedSongs, context.User.Username)
 		if err != nil {
 			api.NewErrorReponse(0, err.Error())
 		}

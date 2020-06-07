@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/hednowley/sound/dal"
+	"github.com/hednowley/sound/subsonic/api"
 	"github.com/hednowley/sound/subsonic/dto"
 	"github.com/hednowley/sound/subsonic/handler"
 )
@@ -16,7 +17,7 @@ func TestSongSearch(t *testing.T) {
 	params := url.Values{}
 	params.Add("query", "TITLE_2")
 
-	response := handler(params)
+	response := handler(params, &api.HandlerContext{})
 	if !response.IsSuccess {
 		t.Error("Handler failed")
 	}
@@ -38,7 +39,7 @@ func TestArtistSearch(t *testing.T) {
 	params := url.Values{}
 	params.Add("query", "artist_")
 
-	response := handler(params)
+	response := handler(params, &api.HandlerContext{})
 	if !response.IsSuccess {
 		t.Error("Handler failed")
 	}
@@ -60,7 +61,7 @@ func TestAlbumSearch(t *testing.T) {
 	params := url.Values{}
 	params.Add("query", "album_1")
 
-	response := handler(params)
+	response := handler(params, &api.HandlerContext{})
 	if !response.IsSuccess {
 		t.Error("Handler failed")
 	}

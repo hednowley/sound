@@ -27,20 +27,20 @@ var a = services.NewAuthenticator(&c)
 func TestPasswordAuth(t *testing.T) {
 
 	// Should work
-	if !a.AuthenticateFromPassword("billy", "apple tart!!!") {
+	if a.AuthenticateFromPassword("billy", "apple tart!!!") == nil {
 		t.Error()
 	}
 
 	// Shouldn't work
-	if a.AuthenticateFromPassword("billy2", "apple tart!!!") {
+	if a.AuthenticateFromPassword("billy2", "apple tart!!!") != nil {
 		t.Error()
 	}
 
-	if a.AuthenticateFromPassword("billy", "appletart!!!") {
+	if a.AuthenticateFromPassword("billy", "appletart!!!") != nil {
 		t.Error()
 	}
 
-	if a.AuthenticateFromPassword("", "") {
+	if a.AuthenticateFromPassword("", "") != nil {
 		t.Error()
 	}
 }
@@ -48,20 +48,20 @@ func TestPasswordAuth(t *testing.T) {
 func TestTokenAuth(t *testing.T) {
 
 	// Should work
-	if !a.AuthenticateFromToken("tom tom", "saltysalt", "bbf729f2464585f1212e03519659b30a") {
+	if a.AuthenticateFromToken("tom tom", "saltysalt", "bbf729f2464585f1212e03519659b30a") == nil {
 		t.Error()
 	}
 
 	// Shouldn't work
-	if a.AuthenticateFromToken("tom tom", "saltysalt", "bbf729f2464585f12e03519659b30a") {
+	if a.AuthenticateFromToken("tom tom", "saltysalt", "bbf729f2464585f12e03519659b30a") != nil {
 		t.Error()
 	}
 
-	if a.AuthenticateFromToken("tom tom", "rocksaltt", "bbf729f2464585f1212e03519659b30a") {
+	if a.AuthenticateFromToken("tom tom", "rocksaltt", "bbf729f2464585f1212e03519659b30a") != nil {
 		t.Error()
 	}
 
-	if a.AuthenticateFromToken("", "", "") {
+	if a.AuthenticateFromToken("", "", "") != nil {
 		t.Error()
 	}
 }

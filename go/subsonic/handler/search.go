@@ -19,7 +19,7 @@ const (
 // NewSearchHandler is a handler for searching for albums, artists and songs.
 func NewSearchHandler(dal *dal.DAL, version SearchVersion) api.Handler {
 
-	return func(params url.Values) *api.Response {
+	return func(params url.Values, _ *api.HandlerContext) *api.Response {
 
 		query := params.Get("query")
 		if len(query) == 0 {

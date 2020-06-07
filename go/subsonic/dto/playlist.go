@@ -51,7 +51,7 @@ func newPlaylistCore(playlist *dao.Playlist) *PlaylistCore {
 		Created:   *playlist.Created,
 		Comment:   playlist.Comment,
 		Duration:  playlist.Duration,
-		Owner:     "ned",
+		Owner:     playlist.Owner,
 	}
 }
 

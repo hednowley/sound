@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"net/url"
 
+	"github.com/hednowley/sound/config"
 	"github.com/hednowley/sound/services"
 	"github.com/hednowley/sound/subsonic/dto"
 
@@ -27,16 +28,15 @@ func NewHandlerFactory(authenticator *services.Authenticator) *HandlerFactory {
 	}
 }
 
-func authenticate(params *url.Values, authenticator *services.Authenticator) bool {
+func authenticate(params *url.Values, authenticator *services.Authenticator) *config.User {
 
-	var auth bool
+	var user *config.User
 	var salt string
 	var token string
 	var password string
 
 	username := params.Get("u")
 	if len(username) == 0 {
-		auth = false
 		goto respond
 	}
 
@@ -49,27 +49,27 @@ func authenticate(params *url.Values, authenticator *services.Authenticator) boo
 				password = string(bytes)
 			}
 		}
-		auth = authenticator.AuthenticateFromPassword(username, password)
+		user = authenticator.AuthenticateFromPassword(username, password)
 		goto respond
 	}
 
 	token = params.Get("t")
 	salt = params.Get("s")
-	auth = authenticator.AuthenticateFromToken(username, salt, token)
+	user = authenticator.AuthenticateFromToken(username, salt, token)
 	goto respond
 
 respond:
-	if !auth {
+	if user == nil {
 		log.Infof("Bad login attempt (%v).", username)
 	}
-	return auth
+	return user
 
 }
 
 // PublishHandler converts a friendly handler into a HandlerFunc.
 func (factory *HandlerFactory) PublishHandler(handler Handler) http.HandlerFunc {
-	b := func(params url.Values, w *http.ResponseWriter, r *http.Request) *Response {
-		return handler(params)
+	b := func(params url.Values, w *http.ResponseWriter, r *http.Request, c *HandlerContext) *Response {
+		return handler(params, c)
 	}
 	return factory.PublishBinaryHandler(b)
 }
@@ -81,6 +81,8 @@ func (factory *HandlerFactory) PublishBinaryHandler(handler BinaryHandler) http.
 		var response *Response
 		var format *responseFormat
 		var params url.Values
+		var user *config.User
+		var context HandlerContext
 
 		body, err := ioutil.ReadAll(r.Body)
 		if err != nil {
@@ -99,12 +101,14 @@ func (factory *HandlerFactory) PublishBinaryHandler(handler BinaryHandler) http.
 		}
 
 		// All endpoints require authentication
-		if !authenticate(&params, factory.authenticator) {
+		user = authenticate(&params, factory.authenticator)
+		if user == nil {
 			response = NewErrorReponse(dto.WrongCredentials, "Wrong username or password.")
 			goto respond
 		}
 
-		response = handler(params, &w, r)
+		context.User = user
+		response = handler(params, &w, r, &context)
 		if response != nil {
 			goto respond
 		}

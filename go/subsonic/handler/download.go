@@ -14,7 +14,7 @@ import (
 // NewDownloadHandler does http://www.subsonic.org/pages/api.jsp#download
 func NewDownloadHandler(dal *dal.DAL) api.BinaryHandler {
 
-	return func(params url.Values, w *http.ResponseWriter, r *http.Request) *api.Response {
+	return func(params url.Values, w *http.ResponseWriter, r *http.Request, _ *api.HandlerContext) *api.Response {
 
 		idParam := params.Get("id")
 		id := util.ParseUint(idParam, 0)

@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/gorilla/websocket"
+	"github.com/hednowley/sound/config"
 )
 
 const (
@@ -34,6 +35,8 @@ type Client struct {
 
 	// Buffered channel of outbound messages.
 	send chan []byte
+
+	user *config.User
 }
 
 // readPump pumps messages from the websocket connection to the hub.

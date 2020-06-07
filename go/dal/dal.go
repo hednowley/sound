@@ -224,19 +224,26 @@ func (dal *DAL) PutArt(conn *pgxpool.Conn, art *entities.CoverArtData) (*dao.Art
 	return a, nil
 }
 
-func (dal *DAL) PutPlaylist(conn *pgxpool.Conn, id uint, name string, songIDs []uint, public bool) (uint, error) {
+func (dal *DAL) PutPlaylist(
+	conn *pgxpool.Conn,
+	id uint,
+	name string,
+	owner string,
+	songIDs []uint,
+	public bool,
+) (uint, error) {
 
 	now := time.Now()
 	var playlistID uint
 
 	if id == 0 {
-		inserted, err := dal.Db.InsertPlaylist(conn, name, "", public)
+		inserted, err := dal.Db.InsertPlaylist(conn, name, "", owner, public)
 		if err != nil {
 			return 0, err
 		}
 		playlistID = inserted
 	} else {
-		playlist, err := dal.Db.GetPlaylist(conn, id)
+		playlist, err := dal.Db.GetPlaylist(conn, id, owner)
 		if err != nil {
 			return 0, err
 		}
@@ -250,7 +257,7 @@ func (dal *DAL) PutPlaylist(conn *pgxpool.Conn, id uint, name string, songIDs []
 			nameUpdate = name
 		}
 
-		playlist, err = dal.Db.UpdatePlaylist(conn, playlist.ID, nameUpdate, playlist.Comment)
+		playlist, err = dal.Db.UpdatePlaylist(conn, playlist.ID, nameUpdate, public, playlist.Comment)
 		if err != nil {
 			return 0, err
 		}
@@ -274,9 +281,10 @@ func (dal *DAL) UpdatePlaylist(
 	public *bool,
 	addedSongs []uint,
 	removedSongs []uint,
+	requestor string,
 ) error {
 
-	p, err := dal.Db.GetPlaylist(conn, playlistID)
+	p, err := dal.Db.GetPlaylist(conn, playlistID, requestor)
 	if err != nil {
 		return err
 	}
@@ -296,6 +304,13 @@ func (dal *DAL) UpdatePlaylist(
 		nameUpdate = p.Name
 	}
 
+	var publicUpdate bool
+	if public != nil {
+		publicUpdate = *public
+	} else {
+		publicUpdate = p.Public
+	}
+
 	var commentUpdate string
 	if len(comment) != 0 {
 		commentUpdate = comment
@@ -312,7 +327,7 @@ func (dal *DAL) UpdatePlaylist(
 	}
 
 	dal.Db.ReplacePlaylistEntries(conn, playlistID, songIDs)
-	dal.Db.UpdatePlaylist(conn, playlistID, nameUpdate, commentUpdate)
+	dal.Db.UpdatePlaylist(conn, playlistID, nameUpdate, publicUpdate, commentUpdate)
 	return nil
 }
 

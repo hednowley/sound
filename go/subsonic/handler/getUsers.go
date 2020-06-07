@@ -10,7 +10,7 @@ import (
 
 func NewGetUsersHandler(config *config.Config) api.Handler {
 
-	return func(params url.Values) *api.Response {
+	return func(params url.Values, _ *api.HandlerContext) *api.Response {
 		return api.NewSuccessfulReponse(dto.NewUserCollection(config.Users))
 	}
 }

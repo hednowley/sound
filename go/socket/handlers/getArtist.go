@@ -10,7 +10,7 @@ import (
 )
 
 func MakeGetArtistHandler(dal *dal.DAL) socket.Handler {
-	return func(request *dto.Request) interface{} {
+	return func(request *dto.Request, _ *socket.HandlerContext) interface{} {
 		var id uint
 
 		if request.Params["id"] == nil || json.Unmarshal(*request.Params["id"], &id) != nil {

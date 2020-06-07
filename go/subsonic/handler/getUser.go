@@ -10,7 +10,7 @@ import (
 
 func NewGetUserHandler(config *config.Config) api.Handler {
 
-	return func(params url.Values) *api.Response {
+	return func(params url.Values, _ *api.HandlerContext) *api.Response {
 
 		username := params.Get("username")
 		if len(username) == 0 {

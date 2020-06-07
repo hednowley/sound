@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/hednowley/sound/dal"
+	"github.com/hednowley/sound/subsonic/api"
 	"github.com/hednowley/sound/subsonic/handler"
 )
 
@@ -14,7 +15,10 @@ func TestGetArtistDirectory(t *testing.T) {
 	handler := handler.NewGetMusicDirectoryHandler(dal)
 	params := url.Values{}
 	url.Values.Add(params, "id", "artist_1")
-	handler(params)
+
+	context := api.HandlerContext{}
+
+	handler(params, &context)
 
 	// TODO
 }

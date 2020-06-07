@@ -8,14 +8,14 @@ import (
 )
 
 func MakeGetPlaylistsHandler(dal *dal.DAL) socket.Handler {
-	return func(request *dto.Request) interface{} {
+	return func(request *dto.Request, context *socket.HandlerContext) interface{} {
 		conn, err := dal.Db.GetConn()
 		if err != nil {
 			return api.NewErrorReponse("Cannot make DB conn")
 		}
 		defer conn.Release()
 
-		playlists, err := dal.Db.GetPlaylists(conn)
+		playlists, err := dal.Db.GetPlaylists(conn, context.User.Username)
 		if err != nil {
 			return api.NewErrorReponse("Error")
 		}

@@ -36,24 +36,24 @@ func (a *Authenticator) getUser(username string) *config.User {
 
 // AuthenticateFromToken verifies credentials where the password has been salted and hashed
 // in the format expected by Subsonic.
-func (a *Authenticator) AuthenticateFromToken(username string, salt string, token string) bool {
+func (a *Authenticator) AuthenticateFromToken(username string, salt string, token string) *config.User {
 	user := a.getUser(username)
-	if user == nil {
-		return false
+	if user == nil || token != hasher.GetHash([]byte(user.Password+salt)) {
+		return nil
 	}
 
-	return token == hasher.GetHash([]byte(user.Password+salt))
+	return user
 }
 
 // AuthenticateFromPassword verifies credentials where the password has been provided in plain text
 // per the deprecated Subsonic API.
-func (a *Authenticator) AuthenticateFromPassword(username string, password string) bool {
+func (a *Authenticator) AuthenticateFromPassword(username string, password string) *config.User {
 	user := a.getUser(username)
-	if user == nil {
-		return false
+	if user == nil || user.Password != password {
+		return nil
 	}
 
-	return user.Password == password
+	return user
 }
 
 // AuthenticateFromJWT verifies auth claims encoded as a JSON web token.

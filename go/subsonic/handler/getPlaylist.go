@@ -12,7 +12,7 @@ import (
 
 func NewGetPlaylistHandler(dal *dal.DAL) api.Handler {
 
-	return func(params url.Values) *api.Response {
+	return func(params url.Values, context *api.HandlerContext) *api.Response {
 
 		idParam := params.Get("id")
 		id := util.ParseUint(idParam, 0)
@@ -27,12 +27,17 @@ func NewGetPlaylistHandler(dal *dal.DAL) api.Handler {
 		}
 		defer conn.Release()
 
-		p, err := dal.Db.GetPlaylist(conn, id)
+		p, err := dal.Db.GetPlaylist(conn, id, context.User.Username)
 		if err != nil {
 			return api.NewErrorReponse(dto.Generic, err.Error())
 		}
 
-		songs, err := dal.Db.GetPlaylistSongs(conn, id)
+		// Pretend that this playlist is owned by the requestor.
+		// Allows anyone to edit a public playlist (against the intention of
+		// the Subsonic API).
+		p.Owner = context.User.Username
+
+		songs, err := dal.Db.GetPlaylistSongs(conn, id, context.User.Username)
 		if err != nil {
 			return api.NewErrorReponse(dto.Generic, err.Error())
 		}

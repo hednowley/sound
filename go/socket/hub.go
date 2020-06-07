@@ -102,7 +102,8 @@ func (h *hub) runHandler(incoming *incoming) {
 
 	handler, ok := h.handlers[incoming.request.Method]
 	if ok {
-		response := handler(incoming.request)
+		context := HandlerContext{User: incoming.client.user}
+		response := handler(incoming.request, &context)
 		if response == nil {
 			return
 		}
@@ -184,8 +185,8 @@ func (h *hub) AddClient(w http.ResponseWriter, r *http.Request) {
 		hub:  h,
 		conn: c,
 		send: make(chan []byte, 256),
+		user: user,
 	}
-
 	h.register <- client
 
 	// Allow collection of memory referenced by the caller by doing all work in

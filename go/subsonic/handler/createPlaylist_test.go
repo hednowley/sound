@@ -4,7 +4,9 @@ import (
 	"net/url"
 	"testing"
 
+	"github.com/hednowley/sound/config"
 	"github.com/hednowley/sound/dal"
+	"github.com/hednowley/sound/subsonic/api"
 	"github.com/hednowley/sound/subsonic/dto"
 	"github.com/hednowley/sound/subsonic/handler"
 )
@@ -22,7 +24,13 @@ func TestCreatePlaylist(t *testing.T) {
 	params.Add("songId", "10")
 	params.Add("songId", "dfg")
 
-	response := handler(params)
+	context := api.HandlerContext{
+		User: &config.User{
+			Username: "tommy",
+		},
+	}
+
+	response := handler(params, &context)
 
 	if !response.IsSuccess {
 		t.Error("Should succeed")
@@ -35,6 +43,10 @@ func TestCreatePlaylist(t *testing.T) {
 
 	if r.Name != "dfsdf" {
 		t.Error("Wrong name")
+	}
+
+	if r.Owner != "tommy" {
+		t.Error("Wrong owner")
 	}
 
 	if len(r.Songs) != 3 || r.Songs[0].ID != 1 || r.Songs[1].ID != 15 || r.Songs[2].ID != 10 {
@@ -52,7 +64,13 @@ func TestCreatePlaylistWithBadSongs(t *testing.T) {
 	params.Add("songId", "sdf")
 	params.Add("songId", "3")
 
-	response := handler(params)
+	context := api.HandlerContext{
+		User: &config.User{
+			Username: "tommy",
+		},
+	}
+
+	response := handler(params, &context)
 
 	if response.IsSuccess {
 		t.Error("Should fail")
@@ -76,7 +94,13 @@ func TestReplacePlaylist(t *testing.T) {
 	params.Add("songId", "14")
 	params.Add("songId", "10")
 
-	response := handler(params)
+	context := api.HandlerContext{
+		User: &config.User{
+			Username: "tommy",
+		},
+	}
+
+	response := handler(params, &context)
 
 	if !response.IsSuccess {
 		t.Error("Should succeed")
@@ -108,7 +132,13 @@ func TestReplaceMissingPlaylist(t *testing.T) {
 	params.Add("songId", "14")
 	params.Add("songId", "10")
 
-	response := handler(params)
+	context := api.HandlerContext{
+		User: &config.User{
+			Username: "tommy",
+		},
+	}
+
+	response := handler(params, &context)
 
 	if response.IsSuccess {
 		t.Error("Should fail")
@@ -131,7 +161,13 @@ func TestCreatePlaylistNoParams(t *testing.T) {
 	handler := handler.NewCreatePlaylistHandler(db)
 	params := url.Values{}
 
-	response := handler(params)
+	context := api.HandlerContext{
+		User: &config.User{
+			Username: "tommy",
+		},
+	}
+
+	response := handler(params, &context)
 
 	if response.IsSuccess {
 		t.Error("Should fail")

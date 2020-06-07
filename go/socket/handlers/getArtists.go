@@ -8,7 +8,7 @@ import (
 )
 
 func MakeGetArtistsHandler(dal *dal.DAL) socket.Handler {
-	return func(request *dto.Request) interface{} {
+	return func(request *dto.Request, _ *socket.HandlerContext) interface{} {
 		conn, err := dal.Db.GetConn()
 		if err != nil {
 			return api.NewErrorReponse("Cannot make DB conn")

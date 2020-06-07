@@ -10,7 +10,7 @@ import (
 )
 
 func MakeGetPlaylistHandler(dal *dal.DAL) socket.Handler {
-	return func(request *dto.Request) interface{} {
+	return func(request *dto.Request, context *socket.HandlerContext) interface{} {
 		var id uint
 
 		if request.Params["id"] == nil || json.Unmarshal(*request.Params["id"], &id) != nil {
@@ -23,12 +23,12 @@ func MakeGetPlaylistHandler(dal *dal.DAL) socket.Handler {
 		}
 		defer conn.Release()
 
-		playlist, err := dal.Db.GetPlaylist(conn, id)
+		playlist, err := dal.Db.GetPlaylist(conn, id, context.User.Username)
 		if err != nil {
 			return "no playlist"
 		}
 
-		songs, err := dal.Db.GetPlaylistSongs(conn, id)
+		songs, err := dal.Db.GetPlaylistSongs(conn, id, context.User.Username)
 		if err != nil {
 			return "no playlist"
 		}

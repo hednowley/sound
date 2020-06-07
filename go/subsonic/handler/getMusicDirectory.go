@@ -11,7 +11,7 @@ import (
 // NewGetMusicDirectoryHandler does http://www.subsonic.org/pages/api.jsp#getMusicDirectory
 func NewGetMusicDirectoryHandler(dal *dal.DAL) api.Handler {
 
-	return func(params url.Values) *api.Response {
+	return func(params url.Values, _ *api.HandlerContext) *api.Response {
 
 		id, err := dto.ParseDirectoryID(params.Get("id"))
 		if err != nil {

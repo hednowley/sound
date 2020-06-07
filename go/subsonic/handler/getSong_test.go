@@ -14,6 +14,7 @@ type HandlerTestResource struct {
 	db      *dal.DAL
 	handler api.Handler
 	params  url.Values
+	context *api.HandlerContext
 }
 
 func NewGetSongTestResource() HandlerTestResource {
@@ -32,7 +33,7 @@ func TestGetMissingSong(t *testing.T) {
 
 	h := NewGetSongTestResource()
 	url.Values.Add(h.params, "id", "666")
-	response := h.handler(h.params)
+	response := h.handler(h.params, h.context)
 
 	if response.IsSuccess {
 		t.Error("Not a failure")
@@ -56,7 +57,7 @@ func TestGetGoodSong(t *testing.T) {
 
 	h := NewGetSongTestResource()
 	url.Values.Add(h.params, "id", "1")
-	response := h.handler(h.params)
+	response := h.handler(h.params, h.context)
 
 	if !response.IsSuccess {
 		t.Error("Not a success")
@@ -76,7 +77,7 @@ func TestGetSongWithBadId(t *testing.T) {
 
 	h := NewGetSongTestResource()
 	url.Values.Add(h.params, "id", "dfggsgs")
-	response := h.handler(h.params)
+	response := h.handler(h.params, h.context)
 
 	if response.IsSuccess {
 		t.Error("Not a failure")
@@ -99,7 +100,7 @@ func TestGetSongWithBadId(t *testing.T) {
 func TestGetSongWithNoId(t *testing.T) {
 
 	h := NewGetSongTestResource()
-	response := h.handler(h.params)
+	response := h.handler(h.params, h.context)
 
 	if response.IsSuccess {
 		t.Error("Not a failure")

@@ -13,6 +13,7 @@ type Playlist struct {
 	Created  *time.Time
 	Changed  *time.Time
 	Duration int
+	Owner    string
 
 	EntryCount int
 }

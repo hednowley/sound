@@ -4,7 +4,9 @@ import (
 	"net/url"
 	"testing"
 
+	"github.com/hednowley/sound/config"
 	"github.com/hednowley/sound/dal"
+	"github.com/hednowley/sound/subsonic/api"
 	"github.com/hednowley/sound/subsonic/dto"
 	"github.com/hednowley/sound/subsonic/handler"
 )
@@ -17,7 +19,13 @@ func TestDeletePlaylist(t *testing.T) {
 	params := url.Values{}
 	params.Add("id", "1")
 
-	response := handler(params)
+	context := api.HandlerContext{
+		User: &config.User{
+			Username: "tommy",
+		},
+	}
+
+	response := handler(params, &context)
 
 	if !response.IsSuccess {
 		t.Error("Should succeed")
@@ -36,7 +44,13 @@ func TestDeleteMissingPlaylist(t *testing.T) {
 	params := url.Values{}
 	params.Add("id", "63")
 
-	response := handler(params)
+	context := api.HandlerContext{
+		User: &config.User{
+			Username: "tommy",
+		},
+	}
+
+	response := handler(params, &context)
 
 	if response.IsSuccess {
 		t.Error("Should fail")
@@ -60,7 +74,13 @@ func TestDeleteNonsensePlaylist(t *testing.T) {
 	params := url.Values{}
 	params.Add("id", "shsd")
 
-	response := handler(params)
+	context := api.HandlerContext{
+		User: &config.User{
+			Username: "tommy",
+		},
+	}
+
+	response := handler(params, &context)
 
 	if response.IsSuccess {
 		t.Error("Should fail")
@@ -83,7 +103,13 @@ func TestDeletePlaylistNoParams(t *testing.T) {
 	handler := handler.NewDeletePlaylistHandler(db)
 	params := url.Values{}
 
-	response := handler(params)
+	context := api.HandlerContext{
+		User: &config.User{
+			Username: "tommy",
+		},
+	}
+
+	response := handler(params, &context)
 
 	if response.IsSuccess {
 		t.Error("Should fail")

@@ -9,7 +9,7 @@ import (
 )
 
 func MakeStartScanHandler(scanner *provider.Scanner) socket.Handler {
-	return func(request *dto.Request) interface{} {
+	return func(request *dto.Request, _ *socket.HandlerContext) interface{} {
 		var update bool
 		var delete bool
 

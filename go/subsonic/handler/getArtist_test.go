@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/hednowley/sound/dal"
+	"github.com/hednowley/sound/subsonic/api"
 	"github.com/hednowley/sound/subsonic/dto"
 )
 
@@ -14,7 +15,10 @@ func TestGetMissingArtist(t *testing.T) {
 	handler := NewGetArtistHandler(db)
 	params := url.Values{}
 	url.Values.Add(params, "id", "3")
-	response := handler(params)
+
+	context := api.HandlerContext{}
+
+	response := handler(params, &context)
 
 	if response.IsSuccess {
 		t.Error("Not a failure")
@@ -40,7 +44,10 @@ func TestGetGoodArtist(t *testing.T) {
 	handler := NewGetArtistHandler(db)
 	params := url.Values{}
 	url.Values.Add(params, "id", "1")
-	response := handler(params)
+
+	context := api.HandlerContext{}
+
+	response := handler(params, &context)
 
 	if !response.IsSuccess {
 		t.Error("Not a success")
@@ -66,7 +73,10 @@ func TestGetArtistWithBadId(t *testing.T) {
 	handler := NewGetArtistHandler(db)
 	params := url.Values{}
 	url.Values.Add(params, "id", "dfggsgs")
-	response := handler(params)
+
+	context := api.HandlerContext{}
+
+	response := handler(params, &context)
 
 	if response.IsSuccess {
 		t.Error("Not a failure")
@@ -91,7 +101,10 @@ func TestGetArtistWithNoId(t *testing.T) {
 	db := dal.NewMock()
 	handler := NewGetArtistHandler(db)
 	params := url.Values{}
-	response := handler(params)
+
+	context := api.HandlerContext{}
+
+	response := handler(params, &context)
 
 	if response.IsSuccess {
 		t.Error("Not a failure")

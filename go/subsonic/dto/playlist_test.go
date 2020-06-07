@@ -16,13 +16,13 @@ func TestPlaylist(t *testing.T) {
 	conn, _ := db.GetConn()
 	defer conn.Release()
 
-	playlist, err := db.GetPlaylist(conn, 1)
+	playlist, err := db.GetPlaylist(conn, 1, "tommy")
 	if err != nil {
 		t.Error(err)
 		return
 	}
 
-	songs, err := db.GetPlaylistSongs(conn, 1)
+	songs, err := db.GetPlaylistSongs(conn, 1, "tommy")
 	if err != nil {
 		t.Error(err)
 		return
@@ -37,7 +37,7 @@ func TestPlaylist(t *testing.T) {
 	}
 
 	xml := fmt.Sprintf(`
-	<playlist id="1" name="playlist_1" comment="comment_1" owner="ned" public="true" songCount="4" duration="480" created="2018-06-12T11:11:11Z" changed="2018-06-12T11:11:11Z">%v</playlist>
+	<playlist id="1" name="playlist_1" comment="comment_1" owner="tommy" public="true" songCount="4" duration="480" created="2018-06-12T11:11:11Z" changed="2018-06-12T11:11:11Z">%v</playlist>
 	`, entryXML)
 
 	entryJSON := []string{}
@@ -51,7 +51,7 @@ func TestPlaylist(t *testing.T) {
 		"id":"1",
 		"name":"playlist_1",
 		"comment":"comment_1",
-		"owner":"ned",
+		"owner":"tommy",
 		"public":true,
 		"songCount":4,
 		"duration":480,
@@ -73,7 +73,7 @@ func TestPlaylistWithoutComment(t *testing.T) {
 	conn, _ := db.GetConn()
 	defer conn.Release()
 
-	playlist, err := db.GetPlaylist(conn, 1)
+	playlist, err := db.GetPlaylist(conn, 1, "tommy")
 	if err != nil {
 		t.Error(err)
 		return
@@ -81,7 +81,7 @@ func TestPlaylistWithoutComment(t *testing.T) {
 
 	playlist.Comment = ""
 
-	songs, err := db.GetPlaylistSongs(conn, 1)
+	songs, err := db.GetPlaylistSongs(conn, 1, "tommy")
 	if err != nil {
 		t.Error(err)
 		return
@@ -96,7 +96,7 @@ func TestPlaylistWithoutComment(t *testing.T) {
 	}
 
 	xml := fmt.Sprintf(`
-	<playlist id="1" name="playlist_1" comment="" owner="ned" public="true" songCount="4" duration="480" created="2018-06-12T11:11:11Z" changed="2018-06-12T11:11:11Z">%v</playlist>
+	<playlist id="1" name="playlist_1" comment="" owner="tommy" public="true" songCount="4" duration="480" created="2018-06-12T11:11:11Z" changed="2018-06-12T11:11:11Z">%v</playlist>
 	`, entryXML)
 
 	entryJSON := []string{}
@@ -110,7 +110,7 @@ func TestPlaylistWithoutComment(t *testing.T) {
 		"id":"1",
 		"name":"playlist_1",
 		"comment":"",
-		"owner":"ned",
+		"owner":"tommy",
 		"public":true,
 		"songCount":4,
 		"duration":480,

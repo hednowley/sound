@@ -14,14 +14,14 @@ func TestPutPlaylist(t *testing.T) {
 	conn, _ := dal.Db.GetConn()
 	defer conn.Release()
 
-	id, err := dal.PutPlaylist(conn, 0, "playlist2", []uint{1, 2, 10}, true)
+	id, err := dal.PutPlaylist(conn, 0, "playlist2", "tommy", []uint{1, 2, 10}, true)
 	if err != nil {
 		t.Error(err)
 	} else if id != 10001 {
 		t.Error("Bad ID returned by PutPlaylist")
 	}
 
-	p, err := dal.Db.GetPlaylist(conn, 1)
+	p, err := dal.Db.GetPlaylist(conn, 1, "tommy")
 	if err != nil {
 		t.Error(err)
 	} else if p.EntryCount != 4 {

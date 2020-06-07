@@ -12,7 +12,7 @@ import (
 // NewGetRandomSongsHandler does http://www.subsonic.org/pages/api.jsp#getRandomSongs
 func NewGetRandomSongsHandler(dal *dal.DAL) api.Handler {
 
-	return func(params url.Values) *api.Response {
+	return func(params url.Values, _ *api.HandlerContext) *api.Response {
 
 		sizeParam := params.Get("size")
 		size := util.ParseUint(sizeParam, 10)

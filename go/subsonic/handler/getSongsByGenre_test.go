@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/hednowley/sound/dal"
+	"github.com/hednowley/sound/subsonic/api"
 	"github.com/hednowley/sound/subsonic/dto"
 	"github.com/hednowley/sound/subsonic/handler"
 )
@@ -18,6 +19,7 @@ func NewGetSongsByGenreTestResource() HandlerTestResource {
 		db:      db,
 		handler: handler,
 		params:  params,
+		context: &api.HandlerContext{},
 	}
 }
 
@@ -25,7 +27,7 @@ func TestGetSongsOfMissingGenre(t *testing.T) {
 
 	h := NewGetSongsByGenreTestResource()
 	url.Values.Add(h.params, "genre", "ss6s7 ssd")
-	response := h.handler(h.params)
+	response := h.handler(h.params, h.context)
 
 	if !response.IsSuccess {
 		t.Error("Should succeed")
@@ -45,7 +47,7 @@ func TestGetSongsByGenre(t *testing.T) {
 
 	h := NewGetSongsByGenreTestResource()
 	url.Values.Add(h.params, "genre", "genrE_1")
-	response := h.handler(h.params)
+	response := h.handler(h.params, h.context)
 
 	if !response.IsSuccess {
 		t.Error("Not a success")
@@ -64,7 +66,7 @@ func TestGetSongsByGenre(t *testing.T) {
 func TestGetSongsWithNoGenre(t *testing.T) {
 
 	h := NewGetSongsByGenreTestResource()
-	response := h.handler(h.params)
+	response := h.handler(h.params, h.context)
 
 	if response.IsSuccess {
 		t.Error("Not a failure")

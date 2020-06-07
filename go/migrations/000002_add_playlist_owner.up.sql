@@ -1,0 +1,2 @@
+ALTER TABLE "playlists" ADD COLUMN "owner" TEXT NOT NULL DEFAULT '';
+ALTER TABLE "playlists" ALTER COLUMN "owner" DROP DEFAULT;

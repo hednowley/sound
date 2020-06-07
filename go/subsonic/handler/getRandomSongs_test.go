@@ -30,7 +30,9 @@ func TestGetRandomSongs(t *testing.T) {
 	params := url.Values{}
 	url.Values.Add(params, "size", "2")
 
-	response := handler(params)
+	context := api.HandlerContext{}
+
+	response := handler(params, &context)
 
 	songs := testResponse(response, t)
 
@@ -53,7 +55,9 @@ func TestGetRandomGenreSongs(t *testing.T) {
 	params := url.Values{}
 	url.Values.Add(params, "genre", "geNRe_1")
 
-	response := handler(params)
+	context := api.HandlerContext{}
+
+	response := handler(params, &context)
 
 	if !response.IsSuccess {
 		t.Error("Should succeed")
@@ -78,7 +82,9 @@ func TestGetRandomSongsWithYears(t *testing.T) {
 	url.Values.Add(params, "fromYear", "asdiuhasdiuhasd")
 	url.Values.Add(params, "toYear", "asdiuhasdiuhasd")
 
-	response := handler(params)
+	context := api.HandlerContext{}
+
+	response := handler(params, &context)
 	songs := testResponse(response, t)
 	if len(songs.Songs) != 8 {
 		t.Error("Nonsense years should return all songs")
@@ -88,7 +94,7 @@ func TestGetRandomSongsWithYears(t *testing.T) {
 	url.Values.Add(params, "fromYear", "2000")
 	url.Values.Add(params, "toYear", "2010")
 
-	response = handler(params)
+	response = handler(params, &context)
 	songs = testResponse(response, t)
 	if len(songs.Songs) != 3 {
 		t.Error()
@@ -96,7 +102,7 @@ func TestGetRandomSongsWithYears(t *testing.T) {
 
 	url.Values.Set(params, "toYear", "2008")
 
-	response = handler(params)
+	response = handler(params, &context)
 	songs = testResponse(response, t)
 	if len(songs.Songs) != 2 {
 		t.Error()

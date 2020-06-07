@@ -11,7 +11,7 @@ import (
 
 func NewStarHandler(dal *dal.DAL, star bool) api.Handler {
 
-	return func(params url.Values) *api.Response {
+	return func(params url.Values, _ *api.HandlerContext) *api.Response {
 
 		param := params.Get("id")
 		id := util.ParseUint(param, 0)

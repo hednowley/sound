@@ -12,7 +12,7 @@ import (
 
 func NewGetCoverArtHandler(dal *dal.DAL) api.BinaryHandler {
 
-	return func(params url.Values, w *http.ResponseWriter, r *http.Request) *api.Response {
+	return func(params url.Values, w *http.ResponseWriter, r *http.Request, _ *api.HandlerContext) *api.Response {
 
 		id := params.Get("id")
 		if id == "" {

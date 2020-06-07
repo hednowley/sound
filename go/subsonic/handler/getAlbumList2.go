@@ -49,7 +49,7 @@ func parseListType(param string) *dao.AlbumList2Type {
 // NewGetAlbumList2Handler is a handler for getting information about a sample albums.
 func NewGetAlbumList2Handler(dal *dal.DAL) api.Handler {
 
-	return func(params url.Values) *api.Response {
+	return func(params url.Values, _ *api.HandlerContext) *api.Response {
 
 		listType := parseListType(params.Get("type"))
 		if listType == nil {

@@ -420,7 +420,7 @@ func (db *Default) ReplacePlaylistEntries(conn *pgxpool.Conn, playlistID uint, s
 
 // Getters
 
-func (db *Default) GetPlaylist(conn *pgxpool.Conn, playlistID uint) (*dao.Playlist, error) {
+func (db *Default) GetPlaylist(conn *pgxpool.Conn, playlistID uint, username string) (*dao.Playlist, error) {
 	var p dao.Playlist
 
 	err := conn.QueryRow(
@@ -429,6 +429,7 @@ func (db *Default) GetPlaylist(conn *pgxpool.Conn, playlistID uint) (*dao.Playli
 		SELECT 
 			playlists.id,
 			playlists.name,
+			playlists.owner,
 			playlists.comment,
 			timezone('Etc/UTC', playlists.created),
 			timezone('Etc/UTC', playlists.changed),
@@ -447,12 +448,16 @@ func (db *Default) GetPlaylist(conn *pgxpool.Conn, playlistID uint) (*dao.Playli
 			songs.id = playlist_entries.song_id
 		WHERE
 			playlists.id = $1
+			AND (playlists.public = TRUE OR playlists.owner = $2)
 		GROUP BY
-			playlists.id`,
+			playlists.id
+		`,
 		playlistID,
+		username,
 	).Scan(
 		&p.ID,
 		&p.Name,
+		&p.Owner,
 		&p.Comment,
 		&p.Created,
 		&p.Changed,
@@ -498,7 +503,7 @@ func (db *Default) GetPlaylistSongIds(conn *pgxpool.Conn, playlistID uint) ([]ui
 	return songIDs, nil
 }
 
-func (db *Default) GetPlaylistSongs(conn *pgxpool.Conn, playlistID uint) ([]dao.Song, error) {
+func (db *Default) GetPlaylistSongs(conn *pgxpool.Conn, playlistID uint, requestor string) ([]dao.Song, error) {
 
 	rows, err := conn.Query(context.Background(),
 		`
@@ -536,11 +541,16 @@ func (db *Default) GetPlaylistSongs(conn *pgxpool.Conn, playlistID uint) ([]dao.
 			genres
 		ON
 			genres.id = songs.genre_id
+		LEFT JOIN 
+			playlists
+		ON
+			playlists.id = playlist_entries.playlist_id
 		WHERE
-			playlist_entries.playlist_id = $1 
+			playlist_entries.playlist_id = $1
+			AND (playlists.public = TRUE OR playlists.owner = $2)
 		ORDER BY
 			playlist_entries.index ASC
-	`, playlistID)
+	`, playlistID, requestor)
 	if err != nil {
 		return nil, err
 	}
@@ -1221,7 +1231,7 @@ func (db *Default) GetArtists(conn *pgxpool.Conn) ([]dao.Artist, error) {
 	return artists, nil
 }
 
-func (db *Default) GetPlaylists(conn *pgxpool.Conn) ([]dao.Playlist, error) {
+func (db *Default) GetPlaylists(conn *pgxpool.Conn, username string) ([]dao.Playlist, error) {
 
 	rows, err := conn.Query(context.Background(),
 		`
@@ -1232,6 +1242,7 @@ func (db *Default) GetPlaylists(conn *pgxpool.Conn) ([]dao.Playlist, error) {
 			timezone('Etc/UTC', playlists.created),
 			timezone('Etc/UTC', playlists.changed),
 			playlists.public,
+			playlists.owner,
 			COUNT(playlist_entries.id)
 		FROM
 			playlists
@@ -1239,8 +1250,11 @@ func (db *Default) GetPlaylists(conn *pgxpool.Conn) ([]dao.Playlist, error) {
 			playlist_entries
 		ON
 			playlist_entries.playlist_id = playlists.id
+		WHERE
+			playlists.public = TRUE OR playlists.owner = $1
 		GROUP BY
-			playlists.id`)
+			playlists.id
+		`, username)
 	if err != nil {
 		return nil, err
 	}
@@ -1257,6 +1271,7 @@ func (db *Default) GetPlaylists(conn *pgxpool.Conn) ([]dao.Playlist, error) {
 			&p.Created,
 			&p.Changed,
 			&p.Public,
+			&p.Owner,
 			&p.EntryCount,
 		)
 		if err != nil {
@@ -1270,24 +1285,24 @@ func (db *Default) GetPlaylists(conn *pgxpool.Conn) ([]dao.Playlist, error) {
 
 // Putters
 
-func (db *Default) InsertPlaylist(conn *pgxpool.Conn, name string, comment string, public bool) (uint, error) {
+func (db *Default) InsertPlaylist(conn *pgxpool.Conn, name string, comment string, owner string, public bool) (uint, error) {
 
 	var playlistID uint
 
 	err := conn.QueryRow(context.Background(),
 		`
 		INSERT INTO
-			playlists (name, comment, created, changed, public)
+			playlists (name, comment, owner, created, changed, public)
 		VALUES
-			($1, $2, $3, $3, $4)
+			($1, $2, $3, $4, $4, $5)
 		RETURNING
 			id
-	`, name, comment, time.Now(), public).Scan(&playlistID)
+	`, name, comment, owner, time.Now(), public).Scan(&playlistID)
 
 	return playlistID, err
 }
 
-func (db *Default) UpdatePlaylist(conn *pgxpool.Conn, playlistID uint, name string, comment string) (*dao.Playlist, error) {
+func (db *Default) UpdatePlaylist(conn *pgxpool.Conn, playlistID uint, name string, public bool, comment string) (*dao.Playlist, error) {
 
 	var playlist dao.Playlist
 
@@ -1297,8 +1312,9 @@ func (db *Default) UpdatePlaylist(conn *pgxpool.Conn, playlistID uint, name stri
 			playlists
 		SET
 			name = $2,
-			comment = $3,
-			changed = $4
+			public = $3,
+			comment = $4,
+			changed = $5
 		WHERE
 			id = $1
 		RETURNING
@@ -1307,7 +1323,7 @@ func (db *Default) UpdatePlaylist(conn *pgxpool.Conn, playlistID uint, name stri
 			comment,
 			timezone('Etc/UTC', created),
 			timezone('Etc/UTC', changed)
-	`, playlistID, name, comment, time.Now()).Scan(
+	`, playlistID, name, public, comment, time.Now()).Scan(
 		&playlist.ID,
 		&playlist.Name,
 		&playlist.Comment,
@@ -1320,7 +1336,7 @@ func (db *Default) UpdatePlaylist(conn *pgxpool.Conn, playlistID uint, name stri
 
 // Deleters
 
-func (db *Default) DeletePlaylist(conn *pgxpool.Conn, playlistID uint) error {
+func (db *Default) DeletePlaylist(conn *pgxpool.Conn, playlistID uint, owner string) error {
 
 	tx, err := conn.Begin(context.Background())
 	if err != nil {
@@ -1334,10 +1350,22 @@ func (db *Default) DeletePlaylist(conn *pgxpool.Conn, playlistID uint) error {
 		`
 			DELETE FROM
 				playlist_entries
-			WHERE
-				playlist_id = $1
+			WHERE id IN (
+				SELECT
+					playlist_entries.id
+				FROM
+					playlist_entries
+				LEFT JOIN
+					playlists
+				ON
+					playlists.id = playlist_entries.playlist_id
+				WHERE
+					playlist_entries.playlist_id = $1
+					AND playlists.owner = $2
+			)
 		`,
 		playlistID,
+		owner,
 	)
 	if err != nil {
 		return err
@@ -1349,9 +1377,10 @@ func (db *Default) DeletePlaylist(conn *pgxpool.Conn, playlistID uint) error {
 			DELETE FROM
 				playlists
 			WHERE
-				id = $1
+				id = $1 AND owner = $2
 		`,
 		playlistID,
+		owner,
 	)
 	if err != nil {
 		return err

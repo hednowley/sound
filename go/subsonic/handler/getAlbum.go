@@ -13,7 +13,7 @@ import (
 // NewGetAlbumHandler does http://www.subsonic.org/pages/api.jsp#getAlbum
 func NewGetAlbumHandler(dal *dal.DAL) api.Handler {
 
-	return func(params url.Values) *api.Response {
+	return func(params url.Values, _ *api.HandlerContext) *api.Response {
 
 		idParam := params.Get("id")
 		id := util.ParseUint(idParam, 0)
