@@ -472,19 +472,24 @@ func (db *Default) GetPlaylist(conn *pgxpool.Conn, playlistID uint, username str
 	return &p, err
 }
 
-func (db *Default) GetPlaylistSongIds(conn *pgxpool.Conn, playlistID uint) ([]uint, error) {
+func (db *Default) GetPlaylistSongIds(conn *pgxpool.Conn, playlistID uint, requestor string) ([]uint, error) {
 
 	rows, err := conn.Query(context.Background(),
 		`
 		SELECT 
-			song_id
+			playlist_entries.song_id
 		FROM
-			playlists_entries
+			playlist_entries
+		LEFT JOIN
+			playlists
+		ON
+			playlists.id = playlist_entries.playlist_id
 		WHERE
 			playlist_id = $1
+			AND (playlists.public = TRUE OR playlists.owner = $2)
 		ORDER BY
 			playlist_entries.index ASC
-	`, playlistID)
+	`, playlistID, requestor)
 	if err != nil {
 		return nil, err
 	}

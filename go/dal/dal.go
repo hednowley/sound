@@ -292,7 +292,7 @@ func (dal *DAL) UpdatePlaylist(
 		return &dao.ErrNotFound{}
 	}
 
-	songIDs, err := dal.Db.GetPlaylistSongIds(conn, playlistID)
+	songIDs, err := dal.Db.GetPlaylistSongIds(conn, playlistID, requestor)
 	if err != nil {
 		return err
 	}
@@ -326,8 +326,16 @@ func (dal *DAL) UpdatePlaylist(
 		songIDs = append(songIDs, songID)
 	}
 
-	dal.Db.ReplacePlaylistEntries(conn, playlistID, songIDs)
-	dal.Db.UpdatePlaylist(conn, playlistID, nameUpdate, publicUpdate, commentUpdate)
+	err = dal.Db.ReplacePlaylistEntries(conn, playlistID, songIDs)
+	if err != nil {
+		return err
+	}
+
+	_, err = dal.Db.UpdatePlaylist(conn, playlistID, nameUpdate, publicUpdate, commentUpdate)
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
 
