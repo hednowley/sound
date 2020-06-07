@@ -7,7 +7,6 @@ import (
 	"path"
 	"path/filepath"
 	"strings"
-	"time"
 
 	"github.com/cihub/seelog"
 	"github.com/google/uuid"
@@ -222,55 +221,6 @@ func (dal *DAL) PutArt(conn *pgxpool.Conn, art *entities.CoverArtData) (*dao.Art
 	}
 
 	return a, nil
-}
-
-func (dal *DAL) PutPlaylist(
-	conn *pgxpool.Conn,
-	id uint,
-	name string,
-	owner string,
-	songIDs []uint,
-	public bool,
-) (uint, error) {
-
-	now := time.Now()
-	var playlistID uint
-
-	if id == 0 {
-		inserted, err := dal.Db.InsertPlaylist(conn, name, "", owner, public)
-		if err != nil {
-			return 0, err
-		}
-		playlistID = inserted
-	} else {
-		playlist, err := dal.Db.GetPlaylist(conn, id, owner)
-		if err != nil {
-			return 0, err
-		}
-
-		playlist.Changed = &now
-
-		var nameUpdate string
-		if name == "" {
-			nameUpdate = playlist.Name
-		} else {
-			nameUpdate = name
-		}
-
-		playlist, err = dal.Db.UpdatePlaylist(conn, playlist.ID, nameUpdate, public, playlist.Comment)
-		if err != nil {
-			return 0, err
-		}
-
-		playlistID = playlist.ID
-	}
-
-	err := dal.Db.ReplacePlaylistEntries(conn, playlistID, songIDs)
-	if err != nil {
-		return 0, err
-	}
-
-	return playlistID, nil
 }
 
 func (dal *DAL) UpdatePlaylist(

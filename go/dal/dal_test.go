@@ -8,27 +8,6 @@ import (
 	"github.com/hednowley/sound/database"
 )
 
-func TestPutPlaylist(t *testing.T) {
-	m := database.NewMock()
-	dal := dal.NewDAL(&config.Config{}, m)
-	conn, _ := dal.Db.GetConn()
-	defer conn.Release()
-
-	id, err := dal.PutPlaylist(conn, 0, "playlist2", "tommy", []uint{1, 2, 10}, true)
-	if err != nil {
-		t.Error(err)
-	} else if id != 10001 {
-		t.Error("Bad ID returned by PutPlaylist")
-	}
-
-	p, err := dal.Db.GetPlaylist(conn, 1, "tommy")
-	if err != nil {
-		t.Error(err)
-	} else if p.EntryCount != 4 {
-		t.Error("Wrong entry count")
-	}
-}
-
 func TestSearchArtist(t *testing.T) {
 	m := database.NewMock()
 
