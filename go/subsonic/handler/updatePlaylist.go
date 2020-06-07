@@ -53,7 +53,7 @@ func NewUpdatePlaylistHandler(dal *dal.DAL) api.Handler {
 
 		err = dal.UpdatePlaylist(conn, id, name, comment, public, addedSongs, removedSongs, context.User.Username)
 		if err != nil {
-			api.NewErrorReponse(0, err.Error())
+			return api.NewErrorReponse(0, err.Error())
 		}
 
 		return api.NewEmptyReponse()
