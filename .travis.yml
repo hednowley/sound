@@ -37,7 +37,7 @@ jobs:
         skip_cleanup: true
         script: ./linux_dsm_build.sh &&
           ssh admin@hednowley.synology.me -p 169 "if ( sudo status sound | grep start ); then sudo stop sound; fi" &&
-          scp -P 169 ./sound  admin@hednowley.synology.me:/volume1/other/soundDir/ &&
+          scp -P 169 ./sound  admin@hednowley.synology.me:/volume1/other/soundDir &&
           ssh admin@hednowley.synology.me -p 169 "sudo start sound"
 
     - language: node_js
