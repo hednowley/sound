@@ -1,8 +1,5 @@
 .app {
   &__wrap {
-    height: 100vh;
-    width: 100vw;
-
     display: grid;
     grid-template-areas:
       "header header"

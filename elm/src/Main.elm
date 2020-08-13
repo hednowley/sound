@@ -7,8 +7,10 @@ import Browser
 import Browser.Navigation as Nav exposing (Key)
 import Cache exposing (makeCache, makeModel, tryDecode)
 import Config exposing (Config)
+import Css exposing (..)
 import Dict
 import Html.Styled exposing (div, text, toUnstyled)
+import Html.Styled.Attributes exposing (css)
 import Json.Decode
 import Loadable exposing (Loadable(..))
 import Model exposing (Model, SocketModelWrap(..), getSocketModel)
@@ -191,7 +193,8 @@ view model =
     { title = "Sound"
     , body =
         [ toUnstyled <|
-            div []
+            div
+                [ css [ displayFlex, flexDirection column, height (vh 100) ] ]
                 [ div [] [ text model.message ]
                 , case model.token of
                     Absent ->

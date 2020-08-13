@@ -22,7 +22,10 @@ import Views.Sidebar
 
 containerStyle : Style
 containerStyle =
-    Css.batch [ backgroundColor (rgb 240 240 240) ]
+    Css.batch
+        [ backgroundColor (rgb 240 240 240)
+        , Css.property "flex" "1 1 auto"
+        ]
 
 
 view : Model -> Html Msg
