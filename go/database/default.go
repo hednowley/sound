@@ -1416,18 +1416,23 @@ func (db *Default) DeleteMissing(conn *pgxpool.Conn, tokens []string, providerID
 		params = append(params, fmt.Sprintf("$%d", len(values)))
 	}
 
-	query := fmt.Sprintf(`
+	query := fmt.Sprintf(
+		`
 		DELETE FROM
 			playlist_entries
-		USING
-			playlist_entries AS pe
-		INNER JOIN
-			songs
-		ON
-			songs.id = pe.song_id
-		WHERE
-			songs.provider_id = $1 AND
-			songs.token NOT IN (%v)
+		WHERE id in (
+			SELECT
+				playlist_entries.id
+			FROM
+				playlist_entries
+			INNER JOIN
+				songs
+			ON
+				songs.id = playlist_entries.song_id
+			WHERE
+				songs.provider_id = $1 AND
+				songs.token NOT IN (%v)
+		)
 	`, strings.Join(params, ","))
 
 	_, err = tx.Exec(

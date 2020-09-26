@@ -210,7 +210,6 @@ func TestDeleteScan(t *testing.T) {
 	hub := socket.NewMockHub()
 	scanner := provider.NewScanner([]provider.Provider{p}, dal, hub)
 
-	// Scan without updating or deleting
 	scanner.StartAllScans(false, true)
 
 	conn, _ := dal.Db.GetConn()
@@ -228,6 +227,15 @@ func TestDeleteScan(t *testing.T) {
 		t.Error(err)
 	} else if len(artists) != 1 {
 		t.Errorf("Haven't removed artists (have %v)", len(artists))
+	}
+
+	playlistEntries, err := dal.Db.GetPlaylistSongIds(conn, 1, "tommy")
+	if err != nil {
+		t.Error(err)
+	} else if len(playlistEntries) != 1 {
+		t.Errorf("Wrong number of playlist entries (have %v)", len(playlistEntries))
+	} else if playlistEntries[0] != 2 {
+		t.Error("Have retained wrong playlist entry")
 	}
 }
 
